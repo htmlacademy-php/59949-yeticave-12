@@ -10,7 +10,18 @@ $goodsList = [
     ['name' => 'Ботинки для сноуборда DC Mutiny Charocal', 'category' => 'Ботинки', 'price' => 10999, 'img_url' => 'img/lot-4.jpg'],
     ['name' => 'Куртка для сноуборда DC Mutiny Charocal', 'category' => 'Одежда', 'price' => 7500, 'img_url' => 'img/lot-5.jpg'],
     ['name' => 'Маска Oakley Canopy', 'category' => 'Разное', 'price' => 5400, 'img_url' => 'img/lot-6.jpg']
-]
+];
+
+function formatPrice($price) {
+    ceil($price);
+
+    if ($price <= 1000) {
+        return $price . '₽';
+    } else {
+        $formattedPrice = number_format($price, 0 , '.', ' ');
+        return $formattedPrice . '₽';
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -85,8 +96,7 @@ $goodsList = [
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
                             <span class="lot__cost">
-                                цена <?= $item['price'] ?>
-                                <b class="rub">р</b>
+                                цена <?= formatPrice($item['price']) ?>
                             </span>
                         </div>
                         <div class="lot__timer timer">
