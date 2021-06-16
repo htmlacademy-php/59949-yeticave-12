@@ -2,6 +2,7 @@
 $is_auth = rand(0, 1);
 
 $user_name = 'Sergey';
+$categoriesList = ['Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'];
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -52,10 +53,11 @@ $user_name = 'Sergey';
         <h2 class="promo__title">Нужен стафф для катки?</h2>
         <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
         <ul class="promo__list">
-            <!--заполните этот список из массива категорий-->
+            <?php foreach ($categoriesList as $category): ?>
             <li class="promo__item promo__item--boards">
-                <a class="promo__link" href="pages/all-lots.html">Имя категории</a>
+                <a class="promo__link" href="pages/all-lots.html"><?= $category ?></a>
             </li>
+            <?php endforeach; ?>
         </ul>
     </section>
     <section class="lots">
@@ -90,10 +92,11 @@ $user_name = 'Sergey';
 <footer class="main-footer">
     <nav class="nav">
         <ul class="nav__list container">
-            <!--заполните этот список из массива категорий-->
+            <?php foreach ($categoriesList as $category): ?>
             <li class="nav__item">
-                <a href="pages/all-lots.html">Название категории</a>
+                <a href="pages/all-lots.html"><?= $category ?></a>
             </li>
+            <?php endforeach; ?>
         </ul>
     </nav>
     <div class="main-footer__bottom container">
