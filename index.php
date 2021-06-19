@@ -1,7 +1,8 @@
 <?php
-$is_auth = rand(0, 1);
 
-$user_name = 'Sergey';
+$isAuth = rand(0, 1);
+
+$userName = 'Sergey';
 $categoriesList = ['Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'];
 $goodsList = [
     ['name' => '2014 Rossignol District Snowboard', 'category' => 'Доски и лыжи', 'price' => 10999, 'img_url' => 'img/lot-1.jpg'],
@@ -12,15 +13,15 @@ $goodsList = [
     ['name' => 'Маска Oakley Canopy', 'category' => 'Разное', 'price' => 5400, 'img_url' => 'img/lot-6.jpg']
 ];
 
-function formatPrice($price) {
-    ceil($price);
+function formatPrice(float $price): string
+{
+    $priceInt = ceil($price);
 
-    if ($price <= 1000) {
-        return $price . '₽';
-    } else {
-        $formattedPrice = number_format($price, 0 , '.', ' ');
-        return $formattedPrice . '₽';
+    if ($priceInt <= 1000) {
+        return $priceInt . '₽';
     }
+    $formattedPrice = number_format($priceInt, 0, '.', ' ');
+    return $formattedPrice . '₽';
 }
 ?>
 <!DOCTYPE html>
@@ -47,13 +48,13 @@ function formatPrice($price) {
         <a class="main-header__add-lot button" href="pages/add-lot.html">Добавить лот</a>
 
         <nav class="user-menu">
-            <?php if($is_auth === 1): ?>
+            <?php if ($isAuth === 1) : ?>
                 <div class="user-menu__logged">
-                    <p><?= $user_name ?></p>
+                    <p><?= $userName ?></p>
                     <a class="user-menu__bets" href="pages/my-bets.html">Мои ставки</a>
                     <a class="user-menu__logout" href="#">Выход</a>
                 </div>
-            <?php else: ?>
+            <?php else : ?>
                 <ul class="user-menu__list">
                     <li class="user-menu__item">
                         <a href="#">Регистрация</a>
@@ -70,9 +71,11 @@ function formatPrice($price) {
 <main class="container">
     <section class="promo">
         <h2 class="promo__title">Нужен стафф для катки?</h2>
-        <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
+        <p class="promo__text">
+            На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.
+        </p>
         <ul class="promo__list">
-            <?php foreach ($categoriesList as $category): ?>
+            <?php foreach ($categoriesList as $category) : ?>
             <li class="promo__item promo__item--boards">
                 <a class="promo__link" href="pages/all-lots.html"><?= $category ?></a>
             </li>
@@ -84,7 +87,7 @@ function formatPrice($price) {
             <h2>Открытые лоты</h2>
         </div>
         <ul class="lots__list">
-            <?php foreach ($goodsList as $item): ?>
+            <?php foreach ($goodsList as $item) : ?>
             <li class="lots__item lot">
                 <div class="lot__image">
                     <img src="<?= $item['img_url'] ?>" width="350" height="260" alt="">
@@ -114,7 +117,7 @@ function formatPrice($price) {
 <footer class="main-footer">
     <nav class="nav">
         <ul class="nav__list container">
-            <?php foreach ($categoriesList as $category): ?>
+            <?php foreach ($categoriesList as $category) : ?>
             <li class="nav__item">
                 <a href="pages/all-lots.html"><?= $category ?></a>
             </li>
