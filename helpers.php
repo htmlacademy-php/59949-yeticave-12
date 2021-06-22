@@ -143,4 +143,18 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
+/**
+ * Форматирует цену товара и всегда возвращает целочисленное значение с символом рубля
+ * @param int|float $price Цена лота в виде числа, целого или с плавающей точкой
+ * @return string Итоговая цена
+ */
+function formatPrice(int|float $price): string
+{
+    $priceInt = ceil($price);
 
+    if ($priceInt <= 1000) {
+        return $priceInt . '₽';
+    }
+    $formattedPrice = number_format($priceInt, 0, '.', ' ');
+    return $formattedPrice . '₽';
+}
