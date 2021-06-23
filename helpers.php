@@ -148,7 +148,7 @@ function include_template($name, array $data = []) {
  * @param int|float $price Цена лота в виде числа, целого или с плавающей точкой
  * @return string Итоговая цена
  */
-function formatPrice(int|float $price): string
+function formatPrice(float $price): string
 {
     $priceInt = ceil($price);
 
