@@ -35,9 +35,11 @@
                                 цена <?= formatPrice($item['price']); ?>
                             </span>
                         </div>
-                        <div class="lot__timer timer <?php if(lotTimeLeftCalc($item['exp_date'])[0] < 1){echo 'timer--finishing';} ?>">
-                            <?= lotTimeLeftCalc($item['exp_date'])[0]; ?>:<?= lotTimeLeftCalc($item['exp_date'])[1]; ?>
-                        </div>
+                        <?php [$hours, $minutes] = lotTimeLeftCalc($item['exp_date']) ?>
+                            <div class="lot__timer timer <?= $hours < 1 ? 'timer--finishing' : '' ?>">
+                                <?= $hours ?>:<?= $minutes ?>
+                            </div>
+                        <?php ?>
                     </div>
                 </div>
             </li>
