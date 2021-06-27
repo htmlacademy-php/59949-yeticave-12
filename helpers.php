@@ -145,7 +145,7 @@ function include_template($name, array $data = []) {
 
 /**
  * Форматирует цену товара и всегда возвращает целочисленное значение с символом рубля
- * @param int|float $price Цена лота в виде числа, целого или с плавающей точкой
+ * @param float $price Цена лота в виде числа, целого или с плавающей точкой
  * @return string Итоговая цена
  */
 function formatPrice(float $price): string
@@ -157,4 +157,33 @@ function formatPrice(float $price): string
     }
     $formattedPrice = number_format($priceInt, 0, '.', ' ');
     return $formattedPrice . '₽';
+}
+
+/**
+ * Возвращает массив, где первый элемент — целое количество часов до истечения срока жизни лота,
+ * а второй — остаток в минутах
+ * @param string $date дата окончания жизни лота
+ * @return array количество часов и минут до истечения лота
+ */
+function lotTimeLeftCalc(string $date): array
+{
+    date_default_timezone_set("Europe/Moscow");
+    $filteredDate = htmlspecialchars($date);
+
+    if (strtotime($filteredDate) <= time()) {
+        return ['00', '00'];
+    }
+
+    $lotExpDate = date_create($filteredDate);
+    $currentDate = date_create();
+
+    $dateDiff = date_diff($lotExpDate, $currentDate);
+
+    $daysLeft = date_interval_format($dateDiff, "%d");
+    $hoursLeft = date_interval_format($dateDiff, "%H");
+    $minutesLeft = date_interval_format($dateDiff, "%I");
+
+    $hoursLeft = intval($hoursLeft) + intval($daysLeft) * 24;
+
+    return [$hoursLeft, $minutesLeft];
 }

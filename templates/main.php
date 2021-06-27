@@ -33,11 +33,13 @@
                             <span class="lot__amount">Стартовая цена</span>
                             <span class="lot__cost">
                                 цена <?= formatPrice($item['price']); ?>
-                        </span>
+                            </span>
                         </div>
-                        <div class="lot__timer timer">
-                            12:23
-                        </div>
+                        <?php [$hours, $minutes] = lotTimeLeftCalc($item['exp_date']) ?>
+                            <div class="lot__timer timer <?= $hours < 1 ? 'timer--finishing' : '' ?>">
+                                <?= $hours ?>:<?= $minutes ?>
+                            </div>
+                        <?php ?>
                     </div>
                 </div>
             </li>
