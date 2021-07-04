@@ -2,9 +2,9 @@ CREATE DATABASE yeticave
     DEFAULT CHARACTER  SET utf8
     DEFAULT COLLATE utf8_general_ci;
 
-CREATE SCHEMA auction;
+USE yeticave;
 
-CREATE TABLE auction.users (
+CREATE TABLE users (
     PRIMARY KEY (id),
     id           INT           AUTO_INCREMENT,
     email        VARCHAR(128)  NOT NULL          UNIQUE,
@@ -18,9 +18,7 @@ CREATE TABLE auction.users (
     deleted_at   DATETIME
 );
 
-CREATE UNIQUE INDEX user_email ON auction.users(email);
-
-CREATE TABLE auction.lots (
+CREATE TABLE lots (
     PRIMARY KEY (id),
     id              INT           AUTO_INCREMENT,
     expiry_dt       DATETIME      NOT NULL,
@@ -38,10 +36,10 @@ CREATE TABLE auction.lots (
     deleted_at   DATETIME
 );
 
-CREATE INDEX lot_id ON auction.lots(id, category_id);
-CREATE INDEX lot_title ON auction.lots(title);
+CREATE INDEX lot_id ON lots(id, category_id);
+CREATE INDEX lot_title ON lots(title);
 
-CREATE TABLE auction.categories (
+CREATE TABLE categories (
     PRIMARY KEY (id),
     id     INT                  AUTO_INCREMENT,
     title  VARCHAR(255),
@@ -52,9 +50,8 @@ CREATE TABLE auction.categories (
     deleted_at   DATETIME
 );
 
-CREATE INDEX category_id ON auction.categories(id);
 
-CREATE TABLE auction.bets (
+CREATE TABLE bets (
     PRIMARY KEY (id),
     id           INT       AUTO_INCREMENT,
     amount       INT       NOT NULL ,
@@ -66,6 +63,4 @@ CREATE TABLE auction.bets (
     deleted_at   DATETIME
 );
 
-CREATE INDEX user_bets ON auction.bets(user_id, lot_id);
-
-USE yeticave
+CREATE INDEX user_bets ON bets(user_id, lot_id);
