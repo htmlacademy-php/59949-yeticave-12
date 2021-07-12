@@ -37,3 +37,32 @@ VALUES
     (250, 3, 5),
     (100, 2, 6),
     (100, 1, 6);
+
+-- получение списка всех категорий
+SELECT * FROM categories;
+
+-- получение списка из 5 самых свежих, открытых лотов с вычислением конечной цены и показом названия категории товара
+SELECT
+    l.title, c.title category_title, initial_price, (initial_price + SUM(b.amount)) AS current_price, img_path
+FROM lots l
+JOIN bets b ON l.id = b.lot_id
+JOIN categories c ON l.category_id = c.id
+WHERE l.expiry_dt > NOW()
+GROUP BY b.lot_id
+ORDER BY l.created_at DESC
+LIMIT 5;
+
+-- получение лота по его ID c добавлением названия категории товара
+SELECT l.*, c.title AS category_title FROM lots l
+JOIN categories c ON l.category_id = c.id
+WHERE l.id = 4;
+
+-- обновление названия лота по его ID с добавлением времени обновления записи;
+UPDATE lots
+SET title = 'VonZipper Jetpack', updated_at = NOW()
+WHERE id = 6;
+
+-- получение списка всех ставок для лота по его ID с сортировкой по дате
+SELECT * FROM bets b
+WHERE b.lot_id = 3
+ORDER BY created_at DESC;
