@@ -18,8 +18,25 @@ if ($result) {
     $categoriesList = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 else {
-    $error = mysqli_error($link);
-    return print(include_template('error.php', ['error' => $error]));
+    return print(include_template('error.php', ['error' => mysqli_error($link)]));
+}
+
+$sql = 'SELECT '
+    . 'l.title, c.title category_title, expiry_dt, initial_price, img_path '
+    . 'FROM lots l '
+    . 'JOIN bets b ON l.id = b.lot_id '
+    . 'JOIN categories c ON l.category_id = c.id '
+    . 'WHERE l.expiry_dt > NOW() '
+    . 'GROUP BY b.lot_id '
+    . 'ORDER BY l.created_at DESC '
+    . 'LIMIT 6';
+$result = mysqli_query($link, $sql);
+
+if ($result) {
+    $goodsList = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+else {
+    return print(include_template('error.php', ['error' => mysqli_error($link)]));
 }
 
 $page_content = include_template('main.php', [
