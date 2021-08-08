@@ -4,7 +4,7 @@ $isAuth = rand(0, 1);
 
 $userName = 'Sergey';
 
-$categoriesList = ['Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'];
+//$categoriesList = ['Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'];
 
 $halfAnHourFromNow = date('Y-m-d H:i', strtotime("+30 minutes"));
 

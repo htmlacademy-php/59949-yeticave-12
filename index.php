@@ -3,7 +3,7 @@
 require_once('helpers.php');
 require_once('data/data.php');
 
-$link = mysqli_connect("localhost", "rootz", "root","yeticave");
+$link = mysqli_connect("localhost", "root", "root","yeticave");
 mysqli_set_charset($link, "utf8");
 
 if (!$link) {
@@ -11,6 +11,17 @@ if (!$link) {
     $layout_content = include_template('error.php', ['error' => $error]);
 }
 else {
+    $sql = 'SELECT * FROM categories';
+    $result = mysqli_query($link, $sql);
+
+    if ($result) {
+        $categoriesList = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    else {
+        $error = mysqli_error($link);
+        $content = include_template('error.php', ['error' => $error]);
+    }
+
     $page_content = include_template('main.php', [
         'goodsList' => $goodsList,
         'categoriesList' => $categoriesList

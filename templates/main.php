@@ -5,8 +5,8 @@
     </p>
     <ul class="promo__list">
         <?php foreach ($categoriesList as $category) : ?>
-            <li class="promo__item promo__item--boards">
-                <a class="promo__link" href="pages/all-lots.html"><?= htmlspecialchars($category); ?></a>
+            <li class="promo__item promo__item--<?= $category['code'] ?>">
+                <a class="promo__link" href="pages/all-lots.html"><?= htmlspecialchars($category['title']); ?></a>
             </li>
         <?php endforeach; ?>
     </ul>
