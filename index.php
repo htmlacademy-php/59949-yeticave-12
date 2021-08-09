@@ -8,18 +8,18 @@ mysqli_set_charset($link, "utf8");
 
 if (!$link) {
     $error = mysqli_connect_error();
-    return print(include_template('error.php', ['error' => $error]));
+    print(include_template('error.php', ['error' => $error]));
+    exit();
 }
 
 $sql = 'SELECT * FROM categories';
 $result = mysqli_query($link, $sql);
 
-if ($result) {
-    $categoriesList = mysqli_fetch_all($result, MYSQLI_ASSOC);
+if(!$result) {
+    print(include_template('error.php', ['error' => mysqli_error($link)]));
+    exit();
 }
-else {
-    return print(include_template('error.php', ['error' => mysqli_error($link)]));
-}
+$categoriesList = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 $sql = 'SELECT '
     . 'l.title, c.title category_title, expiry_dt, initial_price, img_path '
@@ -32,12 +32,11 @@ $sql = 'SELECT '
     . 'LIMIT 6';
 $result = mysqli_query($link, $sql);
 
-if ($result) {
-    $goodsList = mysqli_fetch_all($result, MYSQLI_ASSOC);
+if (!$result) {
+    print(include_template('error.php', ['error' => mysqli_error($link)]));
+    exit();
 }
-else {
-    return print(include_template('error.php', ['error' => mysqli_error($link)]));
-}
+$goodsList = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 $page_content = include_template('main.php', [
     'goodsList' => $goodsList,
