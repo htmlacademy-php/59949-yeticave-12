@@ -21,10 +21,14 @@ if(!$result) {
 }
 $categoriesList = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
+$page_content = include_template('lot.php', [
+    'categoriesList' => $categoriesList
+]);
+
 $layout_content = include_template('layout.php', [
     'isAuth' => $isAuth,
     'userName' => $userName,
-    'content' => null,
+    'content' => $page_content,
     'categoriesList' => $categoriesList,
     'title' => 'GifTube - Страница лота'
 ]);
