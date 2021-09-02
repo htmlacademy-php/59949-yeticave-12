@@ -21,6 +21,13 @@ if(!$result) {
 }
 $categoriesList = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
+$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+
+if(!$id) {
+    header("Location: /pages/404.html");
+    exit();
+}
+
 $page_content = include_template('lot.php', [
     'categoriesList' => $categoriesList
 ]);
