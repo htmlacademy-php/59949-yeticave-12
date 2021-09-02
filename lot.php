@@ -28,6 +28,22 @@ if(!$id) {
     exit();
 }
 
+$sql = "SELECT l.*, c.title AS category_title FROM lots l
+    JOIN categories c ON l.category_id = c.id
+    WHERE l.id = $id";
+
+$result = mysqli_query($link, $sql);
+
+if (!$result) {
+    print(include_template('error.php', ['error' => mysqli_error($link)]));
+    exit();
+}
+$lotByID = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+echo("<pre>");
+print_r($lotByID);
+echo("</pre>");
+
 $page_content = include_template('lot.php', [
     'categoriesList' => $categoriesList
 ]);
