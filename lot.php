@@ -28,8 +28,9 @@ if(!$id) {
     exit();
 }
 
-$sql = "SELECT l.*, c.title AS category_title FROM lots l
+$sql = "SELECT l.*, c.title AS category_title, (initial_price + SUM(b.amount)) AS current_price FROM lots l
     JOIN categories c ON l.category_id = c.id
+    JOIN bets b ON l.id = b.lot_id
     WHERE l.id = $id";
 
 $result = mysqli_query($link, $sql);
@@ -40,11 +41,8 @@ if (!$result) {
 }
 $lotByID = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-echo("<pre>");
-print_r($lotByID);
-echo("</pre>");
-
 $page_content = include_template('lot.php', [
+    'lot' => $lotByID[0],
     'categoriesList' => $categoriesList
 ]);
 
