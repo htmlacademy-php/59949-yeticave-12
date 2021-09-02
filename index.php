@@ -22,7 +22,7 @@ if(!$result) {
 $categoriesList = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 $sql = 'SELECT '
-    . 'l.title, c.title category_title, expiry_dt, initial_price, img_path '
+    . 'l.id, l.title, c.title category_title, expiry_dt, initial_price, img_path '
     . 'FROM lots l '
     . 'JOIN bets b ON l.id = b.lot_id '
     . 'JOIN categories c ON l.category_id = c.id '
