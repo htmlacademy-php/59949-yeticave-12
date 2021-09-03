@@ -21,25 +21,28 @@ if(!$result) {
 }
 $categoriesList = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-$sql = 'SELECT '
-    . 'l.id, l.title, c.title category_title, expiry_dt, initial_price, img_path '
-    . 'FROM lots l '
-    . 'JOIN bets b ON l.id = b.lot_id '
-    . 'JOIN categories c ON l.category_id = c.id '
-    . 'WHERE l.expiry_dt > NOW() '
-    . 'GROUP BY b.lot_id '
-    . 'ORDER BY l.created_at DESC '
-    . 'LIMIT 6';
+$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+
+if(!$id) {
+    header("Location: /pages/404.html");
+    exit();
+}
+
+$sql = "SELECT l.*, c.title AS category_title, (initial_price + SUM(b.amount)) AS current_price FROM lots l
+    JOIN categories c ON l.category_id = c.id
+    JOIN bets b ON l.id = b.lot_id
+    WHERE l.id = $id";
+
 $result = mysqli_query($link, $sql);
 
 if (!$result) {
     print(include_template('error.php', ['error' => mysqli_error($link)]));
     exit();
 }
-$goodsList = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$lotByID = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-$page_content = include_template('main.php', [
-    'goodsList' => $goodsList,
+$page_content = include_template('lot.php', [
+    'lot' => $lotByID[0],
     'categoriesList' => $categoriesList
 ]);
 
@@ -48,7 +51,7 @@ $layout_content = include_template('layout.php', [
     'userName' => $userName,
     'content' => $page_content,
     'categoriesList' => $categoriesList,
-    'title' => 'GifTube - Главная страница'
+    'title' => 'GifTube - Страница лота'
 ]);
 
 print($layout_content);
