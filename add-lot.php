@@ -33,4 +33,17 @@ $layout_content = include_template('layout.php', [
     'title' => 'GifTube - Добавление лота'
 ]);
 
+echo("<pre>");
+print_r($_POST);
+print_r($_FILES);
+echo("</pre>");
+
 print($layout_content);
+
+if (isset($_FILES['lot-img'])) {
+    print_r('have file');
+} else {
+    print_r('no file  ');
+}
+
+
