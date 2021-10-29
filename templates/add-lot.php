@@ -18,13 +18,12 @@
         <div class="form__item">
             <label for="category">Категория <sup>*</sup></label>
             <select id="category" name="category">
-                <option>Выберите категорию</option>
-                <option>Доски и лыжи</option>
-                <option>Крепления</option>
-                <option>Ботинки</option>
-                <option>Одежда</option>
-                <option>Инструменты</option>
-                <option>Разное</option>
+                <option value="" selected="selected" hidden="hidden">Выберите категорию</option>
+                <?php foreach ($categoriesList as $category) : ?>
+                    <option value="<?= htmlspecialchars($category['code']); ?>">
+                        <?= htmlspecialchars($category['title']) ?>
+                    </option>
+                <?php endforeach; ?>
             </select>
             <span class="form__error">Выберите категорию</span>
         </div>
