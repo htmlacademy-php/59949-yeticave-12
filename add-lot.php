@@ -21,8 +21,54 @@ if(!$result) {
 }
 $categoriesList = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
+$required_fields = ['lot-name', 'lot-rate', 'lot-step', 'lot-date', 'category', 'message'];
+$errors = [];
+
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    echo("<pre>");
+    print_r("отправка формы");
+    echo("</pre>");
+
+    foreach ($required_fields as $field) {
+        if (empty($_POST[$field])) {
+            switch ($field) {
+                case "lot-name":
+                    $errors[$field] = 'Введите наименование лота';
+                    break;
+                case "lot-rate":
+                    $errors[$field] = 'Введите начальную цену';
+                    break;
+                case "lot-step":
+                    $errors[$field] = 'Введите шаг ставки';
+                    break;
+                case "lot-date":
+                    $errors[$field] = 'Введите дату завершения торгов';
+                    break;
+                case "category":
+                    $errors[$field] = 'Выберите категорию';
+                    break;
+                case "message":
+                    $errors[$field] = 'Напишите описание лота';
+                    break;
+                default:
+                    $errors[$field] = 'Заполните поле';
+            }
+        }
+    }
+
+    if (count($errors)) {
+        // показать ошибку валидации
+        echo("<pre>");
+        echo('errors: ');
+        print_r($errors);
+        echo("</pre>");
+    }
+}
+
 $page_content = include_template('add-lot.php', [
-    'categoriesList' => $categoriesList
+    'categoriesList' => $categoriesList,
+    'errors' => $errors
 ]);
 
 $layout_content = include_template('layout.php', [
@@ -34,16 +80,8 @@ $layout_content = include_template('layout.php', [
 ]);
 
 echo("<pre>");
+echo("_POST: ");
 print_r($_POST);
-print_r($_FILES);
 echo("</pre>");
 
 print($layout_content);
-
-if (isset($_FILES['lot-img'])) {
-    print_r('have file');
-} else {
-    print_r('no file  ');
-}
-
-
