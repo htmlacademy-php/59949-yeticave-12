@@ -39,6 +39,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $errors = validateRequiredFields($required_fields);
 
+    $UPLOAD_ERR_NO_FILE = 4;
+
+    if ($_FILES['lot-img']['error'] && $_FILES['lot-img']['error'] === $UPLOAD_ERR_NO_FILE) {
+        $errors['lot-img'] = 'Добавьте изображение лота';
+    } else {
+        echo("file uploaded!");
+    }
+
     if (!count($errors)) {
         $rate = $_POST['lot-rate'];
         $step = $_POST['lot-step'];
@@ -81,8 +89,8 @@ $layout_content = include_template('layout.php', [
 ]);
 
 echo("<pre>");
-echo("_POST: ");
-print_r($_POST);
+echo("_FILES: ");
+print_r($_FILES);
 echo("</pre>");
 
 print($layout_content);
