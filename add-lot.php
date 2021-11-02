@@ -21,41 +21,34 @@ if(!$result) {
 }
 $categoriesList = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-$required_fields = ['lot-name', 'lot-rate', 'lot-step', 'lot-date', 'category', 'message'];
 $errors = [];
 
+$required_fields = [
+    ['name'=>'lot-name', 'text'=>'Введите наименование лота'],
+    ['name'=>'lot-rate', 'text'=>'Введите начальную цену'],
+    ['name'=>'lot-step', 'text'=>'Введите шаг ставки'],
+    ['name'=>'lot-date', 'text'=>'Введите дату завершения торгов'],
+    ['name'=>'category', 'text'=>'Выберите категорию'],
+    ['name'=>'message', 'text'=>'Напишите описание лота']
+];
+
+function validateRequiredFields($fields) {
+    $errors = [];
+
+    foreach ($fields as $field) {
+        if (empty($_POST[$field['name']])) {
+            $errors[$field['name']] = $field['text'];
+        }
+    }
+    return $errors;
+}
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     echo("<pre>");
     print_r("отправка формы");
     echo("</pre>");
 
-    foreach ($required_fields as $field) {
-        if (empty($_POST[$field])) {
-            switch ($field) {
-                case "lot-name":
-                    $errors[$field] = 'Введите наименование лота';
-                    break;
-                case "lot-rate":
-                    $errors[$field] = 'Введите начальную цену';
-                    break;
-                case "lot-step":
-                    $errors[$field] = 'Введите шаг ставки';
-                    break;
-                case "lot-date":
-                    $errors[$field] = 'Введите дату завершения торгов';
-                    break;
-                case "category":
-                    $errors[$field] = 'Выберите категорию';
-                    break;
-                case "message":
-                    $errors[$field] = 'Напишите описание лота';
-                    break;
-                default:
-                    $errors[$field] = 'Заполните поле';
-            }
-        }
-    }
+    $errors = validateRequiredFields($required_fields);
 
     if (count($errors)) {
         // показать ошибку валидации
