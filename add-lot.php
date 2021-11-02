@@ -46,12 +46,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($img['error'] && $img['error'] === $UPLOAD_ERR_NO_FILE) {
         $errors['lot-img'] = 'Добавьте изображение лота';
     } else if ($img['size']) {
-        $fileName = $img['name'];
-        $filePath = __DIR__ . '/uploads/';
-        $fileURL = '/uploads/' . $fileName;
+        $fileType = mime_content_type($img['tmp_name']);
 
-        move_uploaded_file($img['tmp_name'], $filePath . $fileName);
-        print("<a href='$fileURL'>$fileName</a>");
+        if ($fileType !== 'image/jpeg' && $fileType !== 'image/png') {
+            $errors['lot-img'] = 'Изображение в формате jpeg/png';
+        }
+        if ($img['size'] > 2000000) {
+            $errors['lot-img'] = 'Максимальный размер файла: 2Мб';
+        }
+
+        if (!$errors['lot-img']) {
+            $fileName = $img['name'];
+            $filePath = __DIR__ . '/uploads/';
+            $fileURL = '/uploads/' . $fileName;
+
+            move_uploaded_file($img['tmp_name'], $filePath . $fileName);
+            print("<a href='$fileURL'>$fileName</a>");
+        }
     }
 
     if (!count($errors)) {
