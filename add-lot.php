@@ -39,6 +39,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $errors = validateRequiredFields($required_fields);
 
+    if (!count($errors)) {
+        $rate = $_POST['lot-rate'];
+        $step = $_POST['lot-step'];
+
+        if (!$rate || !is_numeric($rate)) {
+            $errors['lot-rate'] = 'Значение должно быть числом больше нуля';
+        }
+        if (!$step || !ctype_digit($step)) {
+            $errors['lot-step'] = 'Значение должно быть целым числом больше нуля';
+        }
+    }
+
     if (count($errors)) {
         // показать ошибку валидации
         echo("<pre>");
