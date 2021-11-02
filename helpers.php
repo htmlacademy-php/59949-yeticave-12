@@ -205,3 +205,15 @@ function validateRequiredFields(array $fields): array {
     }
     return $errors;
 }
+
+/**
+ * Проверяет переданную дату на соответствие указанному или дефолтному формату 'ГГГГ-ММ-ДД'
+ * @param string $date дата в виде строки
+ * @param string $format формат даты в ввиде строки
+ * @return bool истинное значение при совпадении форматов
+ */
+function validateDate(string $date, string $format = 'Y-m-d'): bool
+{
+    $dt = DateTime::createFromFormat($format, $date);
+    return $dt && $dt->format($format) === $date;
+}
