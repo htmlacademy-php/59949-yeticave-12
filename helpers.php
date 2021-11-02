@@ -197,7 +197,9 @@ function validateRequiredFields(array $fields): array {
     $errors = [];
 
     foreach ($fields as $field) {
-        if (empty($_POST[$field['name']])) {
+        $val = $_POST[$field['name']];
+
+        if (empty($val) && $val !== '0') {
             $errors[$field['name']] = $field['text'];
         }
     }
