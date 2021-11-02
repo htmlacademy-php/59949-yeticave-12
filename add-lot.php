@@ -42,12 +42,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (!count($errors)) {
         $rate = $_POST['lot-rate'];
         $step = $_POST['lot-step'];
+        $date = $_POST['lot-date'];
+        $dateNow = date("Y-m-d");
 
         if (!$rate || !is_numeric($rate)) {
             $errors['lot-rate'] = 'Значение должно быть числом больше нуля';
         }
         if (!$step || !ctype_digit($step)) {
             $errors['lot-step'] = 'Значение должно быть целым числом больше нуля';
+        }
+        if (!validateDate($date)) {
+            $errors['lot-date'] = 'Некорректный формат даты';
+        } else if (!$date || $date <= $dateNow) {
+            $errors['lot-date'] = 'Значение должно быть больше текущей даты, хотя бы на один день';
         }
     }
 
