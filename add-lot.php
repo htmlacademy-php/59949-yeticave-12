@@ -32,17 +32,6 @@ $required_fields = [
     ['name'=>'message', 'text'=>'Напишите описание лота']
 ];
 
-function validateRequiredFields($fields) {
-    $errors = [];
-
-    foreach ($fields as $field) {
-        if (empty($_POST[$field['name']])) {
-            $errors[$field['name']] = $field['text'];
-        }
-    }
-    return $errors;
-}
-
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     echo("<pre>");
     print_r("отправка формы");

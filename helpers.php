@@ -187,3 +187,19 @@ function lotTimeLeftCalc(string $date): array
 
     return [$hoursLeft, $minutesLeft];
 }
+
+/**
+ * Возвращает массив ошибок, где ключ - название поля, значение - текст ошибки
+ * @param array $fields список полей с названием поля и текстом ошибки
+ * @return array список ошибок
+ */
+function validateRequiredFields(array $fields): array {
+    $errors = [];
+
+    foreach ($fields as $field) {
+        if (empty($_POST[$field['name']])) {
+            $errors[$field['name']] = $field['text'];
+        }
+    }
+    return $errors;
+}
