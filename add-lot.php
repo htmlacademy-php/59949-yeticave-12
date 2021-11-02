@@ -41,10 +41,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $UPLOAD_ERR_NO_FILE = 4;
 
-    if ($_FILES['lot-img']['error'] && $_FILES['lot-img']['error'] === $UPLOAD_ERR_NO_FILE) {
+    $img = $_FILES['lot-img'];
+
+    if ($img['error'] && $img['error'] === $UPLOAD_ERR_NO_FILE) {
         $errors['lot-img'] = 'Добавьте изображение лота';
-    } else {
-        echo("file uploaded!");
+    } else if ($img['size']) {
+        $fileName = $img['name'];
+        $filePath = __DIR__ . '/uploads/';
+        $fileURL = '/uploads/' . $fileName;
+
+        move_uploaded_file($img['tmp_name'], $filePath . $fileName);
+        print("<a href='$fileURL'>$fileName</a>");
     }
 
     if (!count($errors)) {
