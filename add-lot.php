@@ -37,29 +37,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     print_r("отправка формы");
     echo("</pre>");
 
-    $errors = validateRequiredFields($required_fields);
+    $errors = validateDataAvailability($required_fields);
     $errors =  array_merge($errors, validateImgFile('lot-img'));
+    $errors = array_merge($errors, validateSpecificFields($errors));
 
     if (!count($errors)) {
-        $rate = $_POST['lot-rate'];
-        $step = $_POST['lot-step'];
-        $date = $_POST['lot-date'];
-        $dateNow = date("Y-m-d");
-
-        if (!$rate || !is_numeric($rate)) {
-            $errors['lot-rate'] = 'Значение должно быть числом больше нуля';
-        }
-        if (!$step || !ctype_digit($step)) {
-            $errors['lot-step'] = 'Значение должно быть целым числом больше нуля';
-        }
-        if (!validateDateFormat($date)) {
-            $errors['lot-date'] = 'Некорректный формат даты';
-        } else if (!$date || $date <= $dateNow) {
-            $errors['lot-date'] = 'Значение должно быть больше текущей даты, хотя бы на один день';
-        }
-
-        if (!count($errors)) {
-            copyFileToLocalPath('lot-img');
+        if (copyFileToLocalPath('lot-img')) {
+            echo('файл скопирован');
+        } else {
+            echo('что-то пошло не так...');
         }
     }
 
@@ -91,3 +77,39 @@ print_r($_FILES);
 echo("</pre>");
 
 print($layout_content);
+
+/**
+ * Проверка формата данных в конкретных полях в случае, если нет других ошибок по этим полям
+ * @param array $errorsList массив ошибок
+ * @return array возвращает массив ошибок
+ */
+function validateSpecificFields(array $errorsList): array
+{
+    $errors = [];
+
+    if (!$errorsList['lot-rate']) {
+        $rate = $_POST['lot-rate'];
+
+        if (!$rate || !is_numeric($rate)) {
+            $errors['lot-rate'] = 'Значение должно быть числом больше нуля';
+        }
+    }
+    if (!$errorsList['lot-step']) {
+        $step = $_POST['lot-step'];
+
+        if (!$step || !ctype_digit($step)) {
+            $errors['lot-step'] = 'Значение должно быть целым числом больше нуля';
+        }
+    }
+    if (!$errorsList['lot-date']) {
+        $date = $_POST['lot-date'];
+        $dateNow = date("Y-m-d");
+
+        if (!validateDateFormat($date)) {
+            $errors['lot-date'] = 'Некорректный формат даты';
+        } else if (!$date || $date <= $dateNow) {
+            $errors['lot-date'] = 'Значение должно быть больше текущей даты, хотя бы на один день';
+        }
+    }
+    return $errors;
+}

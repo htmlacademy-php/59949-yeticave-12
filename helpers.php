@@ -194,7 +194,7 @@ function lotTimeLeftCalc(string $date): array
  * @param array $fields список полей с названием поля и текстом ошибки
  * @return array список ошибок
  */
-function validateRequiredFields(array $fields): array {
+function validateDataAvailability(array $fields): array {
     $errors = [];
 
     foreach ($fields as $field) {
