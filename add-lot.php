@@ -38,32 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     echo("</pre>");
 
     $errors = validateRequiredFields($required_fields);
-
-    $UPLOAD_ERR_NO_FILE = 4;
-
-    $img = $_FILES['lot-img'];
-
-    if ($img['error'] && $img['error'] === $UPLOAD_ERR_NO_FILE) {
-        $errors['lot-img'] = 'Добавьте изображение лота';
-    } else if ($img['size']) {
-        $fileType = mime_content_type($img['tmp_name']);
-
-        if ($fileType !== 'image/jpeg' && $fileType !== 'image/png') {
-            $errors['lot-img'] = 'Изображение в формате jpeg/png';
-        }
-        if ($img['size'] > 2000000) {
-            $errors['lot-img'] = 'Максимальный размер файла: 2Мб';
-        }
-
-        if (!$errors['lot-img']) {
-            $fileName = $img['name'];
-            $filePath = __DIR__ . '/uploads/';
-            $fileURL = '/uploads/' . $fileName;
-
-            move_uploaded_file($img['tmp_name'], $filePath . $fileName);
-            print("<a href='$fileURL'>$fileName</a>");
-        }
-    }
+    $errors =  array_merge($errors, validateImgFile('lot-img'));
 
     if (!count($errors)) {
         $rate = $_POST['lot-rate'];
@@ -77,10 +52,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (!$step || !ctype_digit($step)) {
             $errors['lot-step'] = 'Значение должно быть целым числом больше нуля';
         }
-        if (!validateDate($date)) {
+        if (!validateDateFormat($date)) {
             $errors['lot-date'] = 'Некорректный формат даты';
         } else if (!$date || $date <= $dateNow) {
             $errors['lot-date'] = 'Значение должно быть больше текущей даты, хотя бы на один день';
+        }
+
+        if (!count($errors)) {
+            copyFileToLocalPath('lot-img');
         }
     }
 
