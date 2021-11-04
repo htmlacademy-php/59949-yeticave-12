@@ -42,10 +42,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $errors = array_merge($errors, validateSpecificFields($errors));
 
     if (!count($errors)) {
-        if (copyFileToLocalPath('lot-img')) {
-            echo('файл скопирован');
-        } else {
-            echo('что-то пошло не так...');
+        $fileURL = copyFileToLocalPath('lot-img');
+
+        if ($fileURL) {
+            echo('URL:  ' . $fileURL);
+            $lotDate = $_POST['lot-date'];
+            $lotRate = $_POST['lot-rate'];
+            $lotStep = $_POST['lot-step'];
+            $lotName = $_POST['lot-name'];
+            $message = $_POST['message'];
+            $categoryID = $_POST['category'];
+
+            $sql = "INSERT INTO lots (expiry_dt, title, description, img_path, initial_price, bet_step, category_id, author) "
+              . "VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
+
+            $stmt = db_get_prepare_stmt($link, $sql, [$lotDate, $lotName, $message, $fileURL, $lotRate, $lotStep, $categoryID]);
+            $res = mysqli_stmt_execute($stmt);
+
+            if ($res) {
+                $lotID = mysqli_insert_id($link);
+                echo("<br> lot ID : $lotID");
+            } else {
+                print(include_template('error.php', ['error' => mysqli_error($link)]));
+                exit();
+            }
         }
     }
 

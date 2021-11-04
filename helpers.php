@@ -249,17 +249,19 @@ function validateImgFile(string $fieldName): array
 /**
  * Проверяет наличие файла изображения в массиве $_FILES и переносит из временной папки в локальную
  * @param string $fieldName строковое название поля в массиве $_FILES
- * @return bool вернет true в случае успешного переноса файла
+ * @return string вернет ссылку на файл или пустую строку
  */
-function copyFileToLocalPath(string $fieldName): bool
+function copyFileToLocalPath(string $fieldName): string
 {
     if (isset($_FILES[$fieldName])) {
         $file = $_FILES[$fieldName];
 
         $fileName = $file['name'];
         $filePath = __DIR__ . '/uploads/';
+        $fileURL = '/uploads/' . $fileName;
 
-        return move_uploaded_file($file['tmp_name'], $filePath . $fileName);
+        move_uploaded_file($file['tmp_name'], $filePath . $fileName);
+        return $fileURL;
     }
-    return false;
+    return '';
 }
