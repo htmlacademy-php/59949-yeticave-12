@@ -33,10 +33,6 @@ $required_fields = [
 ];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    echo("<pre>");
-    print_r("отправка формы");
-    echo("</pre>");
-
     $errors = validateDataAvailability($required_fields);
     $errors =  array_merge($errors, validateImgFile('lot-img'));
     $errors = array_merge($errors, validateSpecificFields($errors));
@@ -45,7 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $fileURL = copyFileToLocalPath('lot-img');
 
         if ($fileURL) {
-            echo('URL:  ' . $fileURL);
             $lotDate = $_POST['lot-date'];
             $lotRate = $_POST['lot-rate'];
             $lotStep = $_POST['lot-step'];
@@ -61,20 +56,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             if ($res) {
                 $lotID = mysqli_insert_id($link);
-                echo("<br> lot ID : $lotID");
+                header("Location: lot.php?id=" . $lotID);
             } else {
                 print(include_template('error.php', ['error' => mysqli_error($link)]));
                 exit();
             }
         }
-    }
-
-    if (count($errors)) {
-        // показать ошибку валидации
-        echo("<pre>");
-        echo('errors: ');
-        print_r($errors);
-        echo("</pre>");
     }
 }
 
@@ -90,11 +77,6 @@ $layout_content = include_template('layout.php', [
     'categoriesList' => $categoriesList,
     'title' => 'GifTube - Добавление лота'
 ]);
-
-echo("<pre>");
-echo("_FILES: ");
-print_r($_FILES);
-echo("</pre>");
 
 print($layout_content);
 
