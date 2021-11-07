@@ -43,12 +43,12 @@ SELECT * FROM categories;
 
 -- получение списка из 5 самых свежих, открытых лотов с вычислением конечной цены и показом названия категории товара
 SELECT
-    l.title, c.title category_title, initial_price, (initial_price + SUM(b.amount)) AS current_price, img_path
+    l.title, c.title category_title, initial_price, (initial_price + IFNULL(SUM(b.amount), 0)) AS current_price, img_path
 FROM lots l
-JOIN bets b ON l.id = b.lot_id
+LEFT JOIN bets b ON l.id = b.lot_id
 JOIN categories c ON l.category_id = c.id
 WHERE l.expiry_dt > NOW()
-GROUP BY b.lot_id
+GROUP BY l.id
 ORDER BY l.created_at DESC
 LIMIT 5;
 

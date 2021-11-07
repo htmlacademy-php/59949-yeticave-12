@@ -28,9 +28,9 @@ if(!$id) {
     exit();
 }
 
-$sql = "SELECT l.*, c.title AS category_title, (initial_price + SUM(b.amount)) AS current_price FROM lots l
+$sql = "SELECT l.*, c.title AS category_title, (initial_price + IFNULL(SUM(b.amount), 0)) AS current_price FROM lots l
     JOIN categories c ON l.category_id = c.id
-    JOIN bets b ON l.id = b.lot_id
+    LEFT JOIN bets b ON l.id = b.lot_id
     WHERE l.id = $id";
 
 $result = mysqli_query($link, $sql);
