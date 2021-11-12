@@ -2,21 +2,19 @@
 
 require_once('helpers.php');
 require_once('data/data.php');
+require_once('db-config.php');
 
-$link = mysqli_connect("localhost", "root", "root","yeticave");
-mysqli_set_charset($link, "utf8");
-
-if (!$link) {
+if (!$db_conn) {
     $error = mysqli_connect_error();
     print(include_template('error.php', ['error' => $error]));
     exit();
 }
 
 $sql = 'SELECT * FROM categories';
-$result = mysqli_query($link, $sql);
+$result = mysqli_query($db_conn, $sql);
 
 if(!$result) {
-    print(include_template('error.php', ['error' => mysqli_error($link)]));
+    print(include_template('error.php', ['error' => mysqli_error($db_conn)]));
     exit();
 }
 $categoriesList = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -51,14 +49,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $sql = "INSERT INTO lots (expiry_dt, title, description, img_path, initial_price, bet_step, category_id, author) "
               . "VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
 
-            $stmt = db_get_prepare_stmt($link, $sql, [$lotDate, $lotName, $message, $fileURL, $lotRate, $lotStep, $categoryID]);
+            $stmt = db_get_prepare_stmt($db_conn, $sql, [$lotDate, $lotName, $message, $fileURL, $lotRate, $lotStep, $categoryID]);
             $res = mysqli_stmt_execute($stmt);
 
             if ($res) {
-                $lotID = mysqli_insert_id($link);
+                $lotID = mysqli_insert_id($db_conn);
                 header("Location: lot.php?id=" . $lotID);
             } else {
-                print(include_template('error.php', ['error' => mysqli_error($link)]));
+                print(include_template('error.php', ['error' => mysqli_error($db_conn)]));
                 exit();
             }
         }

@@ -2,21 +2,19 @@
 
 require_once('helpers.php');
 require_once('data/data.php');
+require_once('db-config.php');
 
-$link = mysqli_connect("localhost", "root", "root","yeticave");
-mysqli_set_charset($link, "utf8");
-
-if (!$link) {
+if (!$db_conn) {
     $error = mysqli_connect_error();
     print(include_template('error.php', ['error' => $error]));
     exit();
 }
 
 $sql = 'SELECT * FROM categories';
-$result = mysqli_query($link, $sql);
+$result = mysqli_query($db_conn, $sql);
 
 if(!$result) {
-    print(include_template('error.php', ['error' => mysqli_error($link)]));
+    print(include_template('error.php', ['error' => mysqli_error($db_conn)]));
     exit();
 }
 $categoriesList = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -30,10 +28,10 @@ $sql = 'SELECT '
     . 'GROUP BY l.id '
     . 'ORDER BY l.created_at DESC '
     . 'LIMIT 6';
-$result = mysqli_query($link, $sql);
+$result = mysqli_query($db_conn, $sql);
 
 if (!$result) {
-    print(include_template('error.php', ['error' => mysqli_error($link)]));
+    print(include_template('error.php', ['error' => mysqli_error($db_conn)]));
     exit();
 }
 $goodsList = mysqli_fetch_all($result, MYSQLI_ASSOC);
