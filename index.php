@@ -3,21 +3,7 @@
 require_once('helpers.php');
 require_once('data/data.php');
 require_once('db-config.php');
-
-if (!$db_conn) {
-    $error = mysqli_connect_error();
-    print(include_template('error.php', ['error' => $error]));
-    exit();
-}
-
-$sql = 'SELECT * FROM categories';
-$result = mysqli_query($db_conn, $sql);
-
-if(!$result) {
-    print(include_template('error.php', ['error' => mysqli_error($db_conn)]));
-    exit();
-}
-$categoriesList = mysqli_fetch_all($result, MYSQLI_ASSOC);
+require_once('queries/categories.php');
 
 $sql = 'SELECT '
     . 'l.id, l.title, c.title category_title, expiry_dt, initial_price, img_path '
@@ -38,14 +24,14 @@ $goodsList = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 $page_content = include_template('main.php', [
     'goodsList' => $goodsList,
-    'categoriesList' => $categoriesList
+    'categories_list' => $categories_list
 ]);
 
 $layout_content = include_template('layout.php', [
     'isAuth' => $isAuth,
     'userName' => $userName,
     'content' => $page_content,
-    'categoriesList' => $categoriesList,
+    'categories_list' => $categories_list,
     'title' => 'GifTube - Главная страница'
 ]);
 

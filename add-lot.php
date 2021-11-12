@@ -3,21 +3,7 @@
 require_once('helpers.php');
 require_once('data/data.php');
 require_once('db-config.php');
-
-if (!$db_conn) {
-    $error = mysqli_connect_error();
-    print(include_template('error.php', ['error' => $error]));
-    exit();
-}
-
-$sql = 'SELECT * FROM categories';
-$result = mysqli_query($db_conn, $sql);
-
-if(!$result) {
-    print(include_template('error.php', ['error' => mysqli_error($db_conn)]));
-    exit();
-}
-$categoriesList = mysqli_fetch_all($result, MYSQLI_ASSOC);
+require_once('queries/categories.php');
 
 $errors = [];
 
@@ -64,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 
 $page_content = include_template('add-lot.php', [
-    'categoriesList' => $categoriesList,
+    'categories_list' => $categories_list,
     'errors' => $errors
 ]);
 
@@ -72,7 +58,7 @@ $layout_content = include_template('layout.php', [
     'isAuth' => $isAuth,
     'userName' => $userName,
     'content' => $page_content,
-    'categoriesList' => $categoriesList,
+    'categories_list' => $categories_list,
     'title' => 'GifTube - Добавление лота'
 ]);
 

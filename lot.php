@@ -3,21 +3,7 @@
 require_once('helpers.php');
 require_once('data/data.php');
 require_once('db-config.php');
-
-if (!$db_conn) {
-    $error = mysqli_connect_error();
-    print(include_template('error.php', ['error' => $error]));
-    exit();
-}
-
-$sql = 'SELECT * FROM categories';
-$result = mysqli_query($db_conn, $sql);
-
-if(!$result) {
-    print(include_template('error.php', ['error' => mysqli_error($db_conn)]));
-    exit();
-}
-$categoriesList = mysqli_fetch_all($result, MYSQLI_ASSOC);
+require_once('queries/categories.php');
 
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 
@@ -47,14 +33,14 @@ if(!count($lotByIDList)) {
 
 $page_content = include_template('lot.php', [
     'lot' => $lotByIDList[0],
-    'categoriesList' => $categoriesList
+    'categories_list' => $categories_list
 ]);
 
 $layout_content = include_template('layout.php', [
     'isAuth' => $isAuth,
     'userName' => $userName,
     'content' => $page_content,
-    'categoriesList' => $categoriesList,
+    'categories_list' => $categories_list,
     'title' => 'GifTube - Страница лота'
 ]);
 

@@ -1,6 +1,6 @@
 <nav class="nav">
     <ul class="nav__list container">
-        <?php foreach ($categoriesList as $category) : ?>
+        <?php foreach ($categories_list as $category) : ?>
             <li class="nav__item">
                 <a href="pages/all-lots.html"><?= htmlspecialchars($category['title']); ?></a>
             </li>
@@ -25,7 +25,7 @@
             <label for="category">Категория <sup>*</sup></label>
             <select id="category" name="category">
                 <option value="" selected hidden="hidden">Выберите категорию</option>
-                <?php foreach ($categoriesList as $category) : ?>
+                <?php foreach ($categories_list as $category) : ?>
                     <option
                         value="<?= htmlspecialchars($category['id']); ?>"
                         <?php if($_POST['category'] === $category['id']){echo ' selected';} ?>
