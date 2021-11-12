@@ -1,6 +1,6 @@
 <?php
 
-$isAuth = rand(0, 1);
+$is_auth = rand(0, 1);
 
-$userName = 'Sergey';
+$user_name = 'Sergey';
 

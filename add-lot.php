@@ -22,25 +22,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $errors = array_merge($errors, validateSpecificFields($errors));
 
     if (!count($errors)) {
-        $fileURL = copyFileToLocalPath('lot-img');
+        $file_url = copyFileToLocalPath('lot-img');
 
-        if ($fileURL) {
-            $lotDate = $_POST['lot-date'];
-            $lotRate = $_POST['lot-rate'];
-            $lotStep = $_POST['lot-step'];
-            $lotName = $_POST['lot-name'];
+        if ($file_url) {
+            $lot_date = $_POST['lot-date'];
+            $lot_rate = $_POST['lot-rate'];
+            $lot_step = $_POST['lot-step'];
+            $lot_name = $_POST['lot-name'];
             $message = $_POST['message'];
-            $categoryID = $_POST['category'];
+            $category_id = $_POST['category'];
 
             $sql = "INSERT INTO lots (expiry_dt, title, description, img_path, initial_price, bet_step, category_id, author) "
               . "VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
 
-            $stmt = db_get_prepare_stmt($db_conn, $sql, [$lotDate, $lotName, $message, $fileURL, $lotRate, $lotStep, $categoryID]);
+            $stmt = db_get_prepare_stmt($db_conn, $sql, [$lot_date, $lot_name, $message, $file_url, $lot_rate, $lot_step, $category_id]);
             $res = mysqli_stmt_execute($stmt);
 
             if ($res) {
-                $lotID = mysqli_insert_id($db_conn);
-                header("Location: lot.php?id=" . $lotID);
+                $lot_id = mysqli_insert_id($db_conn);
+                header("Location: lot.php?id=" . $lot_id);
             } else {
                 print(include_template('error.php', ['error' => mysqli_error($db_conn)]));
                 exit();
@@ -55,8 +55,8 @@ $page_content = include_template('add-lot.php', [
 ]);
 
 $layout_content = include_template('layout.php', [
-    'isAuth' => $isAuth,
-    'userName' => $userName,
+    'is_auth' => $is_auth,
+    'user_name' => $user_name,
     'content' => $page_content,
     'categories_list' => $categories_list,
     'title' => 'GifTube - Добавление лота'
@@ -66,34 +66,34 @@ print($layout_content);
 
 /**
  * Проверка формата данных в конкретных полях в случае, если нет других ошибок по этим полям
- * @param array $errorsList массив ошибок
+ * @param array $errors_list массив ошибок
  * @return array возвращает массив ошибок
  */
-function validateSpecificFields(array $errorsList): array
+function validateSpecificFields(array $errors_list): array
 {
     $errors = [];
 
-    if (!$errorsList['lot-rate']) {
+    if (!$errors_list['lot-rate']) {
         $rate = $_POST['lot-rate'];
 
         if (!$rate || !is_numeric($rate)) {
             $errors['lot-rate'] = 'Значение должно быть числом больше нуля';
         }
     }
-    if (!$errorsList['lot-step']) {
+    if (!$errors_list['lot-step']) {
         $step = $_POST['lot-step'];
 
         if (!$step || !ctype_digit($step)) {
             $errors['lot-step'] = 'Значение должно быть целым числом больше нуля';
         }
     }
-    if (!$errorsList['lot-date']) {
+    if (!$errors_list['lot-date']) {
         $date = $_POST['lot-date'];
-        $dateNow = date("Y-m-d");
+        $date_now = date("Y-m-d");
 
         if (!validateDateFormat($date)) {
             $errors['lot-date'] = 'Некорректный формат даты';
-        } else if (!$date || $date <= $dateNow) {
+        } else if (!$date || $date <= $date_now) {
             $errors['lot-date'] = 'Значение должно быть больше текущей даты, хотя бы на один день';
         }
     }

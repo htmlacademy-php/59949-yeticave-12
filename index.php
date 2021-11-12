@@ -20,16 +20,16 @@ if (!$result) {
     print(include_template('error.php', ['error' => mysqli_error($db_conn)]));
     exit();
 }
-$goodsList = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$goods_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 $page_content = include_template('main.php', [
-    'goodsList' => $goodsList,
+    'goods_list' => $goods_list,
     'categories_list' => $categories_list
 ]);
 
 $layout_content = include_template('layout.php', [
-    'isAuth' => $isAuth,
-    'userName' => $userName,
+    'is_auth' => $is_auth,
+    'user_name' => $user_name,
     'content' => $page_content,
     'categories_list' => $categories_list,
     'title' => 'GifTube - Главная страница'

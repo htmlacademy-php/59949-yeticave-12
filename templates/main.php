@@ -16,10 +16,10 @@
         <h2>Открытые лоты</h2>
     </div>
     <ul class="lots__list">
-        <?php if (count($goodsList) === 0) : ?>
+        <?php if (count($goods_list) === 0) : ?>
             <h3>Лотов не обнаружено</h3>
         <?php else : ?>
-            <?php foreach ($goodsList as $item) : ?>
+            <?php foreach ($goods_list as $item) : ?>
                 <li class="lots__item lot">
                     <div class="lot__image">
                         <img src="<?= htmlspecialchars($item['img_path']); ?>" width="350" height="260" alt="">

@@ -24,21 +24,21 @@ if (!$result) {
     print(include_template('error.php', ['error' => mysqli_error($db_conn)]));
     exit();
 }
-$lotByIDList = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$lot_by_id_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-if(!count($lotByIDList)) {
+if(!count($lot_by_id_list)) {
     header("Location: /pages/404.html");
     exit();
 }
 
 $page_content = include_template('lot.php', [
-    'lot' => $lotByIDList[0],
+    'lot' => $lot_by_id_list[0],
     'categories_list' => $categories_list
 ]);
 
 $layout_content = include_template('layout.php', [
-    'isAuth' => $isAuth,
-    'userName' => $userName,
+    'is_auth' => $is_auth,
+    'user_name' => $user_name,
     'content' => $page_content,
     'categories_list' => $categories_list,
     'title' => 'GifTube - Страница лота'

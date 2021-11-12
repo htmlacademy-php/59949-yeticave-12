@@ -150,13 +150,13 @@ function include_template($name, array $data = []) {
  */
 function formatPrice(float $price): string
 {
-    $priceInt = ceil($price);
+    $price_int = ceil($price);
 
-    if ($priceInt <= 1000) {
-        return $priceInt . '₽';
+    if ($price_int <= 1000) {
+        return $price_int . '₽';
     }
-    $formattedPrice = number_format($priceInt, 0, '.', ' ');
-    return $formattedPrice . '₽';
+    $formatted_price = number_format($price_int, 0, '.', ' ');
+    return $formatted_price . '₽';
 }
 
 /**
@@ -168,24 +168,24 @@ function formatPrice(float $price): string
 function lotTimeLeftCalc(string $date): array
 {
     date_default_timezone_set("Europe/Moscow");
-    $filteredDate = htmlspecialchars($date);
+    $filtered_date = htmlspecialchars($date);
 
-    if (strtotime($filteredDate) <= time()) {
+    if (strtotime($filtered_date) <= time()) {
         return ['00', '00'];
     }
 
-    $lotExpDate = date_create($filteredDate);
-    $currentDate = date_create();
+    $lot_exp_date = date_create($filtered_date);
+    $current_date = date_create();
 
-    $dateDiff = date_diff($lotExpDate, $currentDate);
+    $date_diff = date_diff($lot_exp_date, $current_date);
 
-    $daysLeft = date_interval_format($dateDiff, "%d");
-    $hoursLeft = date_interval_format($dateDiff, "%H");
-    $minutesLeft = date_interval_format($dateDiff, "%I");
+    $days_left = date_interval_format($date_diff, "%d");
+    $hours_left = date_interval_format($date_diff, "%H");
+    $minutes_left = date_interval_format($date_diff, "%I");
 
-    $hoursLeft = intval($hoursLeft) + intval($daysLeft) * 24;
+    $hours_left = intval($hours_left) + intval($days_left) * 24;
 
-    return [$hoursLeft, $minutesLeft];
+    return [$hours_left, $minutes_left];
 }
 
 /**
@@ -221,26 +221,26 @@ function validateDateFormat(string $date, string $format = 'Y-m-d'): bool
 
 /**
  * Проверяет наличие файла изображения в массиве $_FILES и валидирует по типу и размеру
- * @param string $fieldName строковое название поля в массиве $_FILES
+ * @param string $field_name строковое название поля в массиве $_FILES
  * @return array список ошибок
  */
-function validateImgFile(string $fieldName): array
+function validateImgFile(string $field_name): array
 {
     $UPLOAD_ERR_NO_FILE = 4;
     $errors = [];
 
-    $file = $_FILES[$fieldName];
+    $file = $_FILES[$field_name];
 
     if ($file['error'] && $file['error'] === $UPLOAD_ERR_NO_FILE) {
-        $errors[$fieldName] = 'Добавьте изображение лота';
+        $errors[$field_name] = 'Добавьте изображение лота';
     } else if ($file['size']) {
         $fileType = mime_content_type($file['tmp_name']);
 
         if ($fileType !== 'image/jpeg' && $fileType !== 'image/png') {
-            $errors[$fieldName] = 'Изображение в формате jpeg/png';
+            $errors[$field_name] = 'Изображение в формате jpeg/png';
         }
         if ($file['size'] > 2000000) {
-            $errors[$fieldName] = 'Максимальный размер файла: 2Мб';
+            $errors[$field_name] = 'Максимальный размер файла: 2Мб';
         }
     }
     return $errors;
@@ -248,20 +248,20 @@ function validateImgFile(string $fieldName): array
 
 /**
  * Проверяет наличие файла изображения в массиве $_FILES и переносит из временной папки в локальную
- * @param string $fieldName строковое название поля в массиве $_FILES
+ * @param string $field_name строковое название поля в массиве $_FILES
  * @return string вернет ссылку на файл или пустую строку
  */
-function copyFileToLocalPath(string $fieldName): string
+function copyFileToLocalPath(string $field_name): string
 {
-    if (isset($_FILES[$fieldName])) {
-        $file = $_FILES[$fieldName];
+    if (isset($_FILES[$field_name])) {
+        $file = $_FILES[$field_name];
 
-        $fileName = $file['name'];
-        $filePath = __DIR__ . '/uploads/';
-        $fileURL = '/uploads/' . $fileName;
+        $file_name = $file['name'];
+        $file_path = __DIR__ . '/uploads/';
+        $file_url = '/uploads/' . $file_name;
 
-        move_uploaded_file($file['tmp_name'], $filePath . $fileName);
-        return $fileURL;
+        move_uploaded_file($file['tmp_name'], $file_path . $file_name);
+        return $file_url;
     }
     return '';
 }
