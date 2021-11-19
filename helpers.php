@@ -249,26 +249,27 @@ function validateImgFile(string $field_name): array
 /**
  * Проверяет наличие файла изображения в массиве $_FILES и переносит из временной папки в локальную
  * @param string $field_name строковое название поля в массиве $_FILES
- * @return string вернет ссылку на файл или пустую строку
+ * @return string|null вернет ссылку на файл или null
  */
-function copyFileToLocalPath(string $field_name): string
+function copyFileToLocalPath(string $field_name): ?string
 {
-    if (isset($_FILES[$field_name])) {
-        $file = $_FILES[$field_name];
+    $file = $_FILES[$field_name];
 
-        $file_name = $file['name'];
-        $file_path = __DIR__ . '/uploads/';
-        $file_url = '/uploads/' . $file_name;
-
-        move_uploaded_file($file['tmp_name'], $file_path . $file_name);
-        return $file_url;
+    if (!isset($file) || $file['size'] === 0) {
+        return null;
     }
-    return '';
+    $file_name = $file['name'];
+    $file_path = __DIR__ . '/uploads/';
+    $file_url = '/uploads/' . $file_name;
+
+    move_uploaded_file($file['tmp_name'], $file_path . $file_name);
+    return $file_url;
 }
 
 /**
  * Отрисовывает шаблон страницы с ошибкой и её текстом
  * @param string $error текст ошибки в виде строки
+ * @return void
  */
 function show_error(string $error) {
     print(include_template('error.php', ['error' => $error]));
