@@ -4,31 +4,17 @@ require_once('helpers.php');
 require_once('data/data.php');
 require_once('db-config.php');
 require_once('queries/categories.php');
+require_once('queries/lot_by_id.php');
 
 $categories_list = fetch_categories($db_conn);
 
-$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-
-if(!$id) {
+$lot_id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+if(!$lot_id) {
     header("Location: /pages/404.html");
     exit();
 }
 
-$sql = "SELECT l.*, c.title AS category_title, (initial_price + IFNULL(SUM(b.amount), 0)) AS current_price FROM lots l
-    JOIN categories c ON l.category_id = c.id
-    LEFT JOIN bets b ON l.id = b.lot_id
-    WHERE l.id = $id
-    HAVING l.id";
-
-$result = mysqli_query($db_conn, $sql);
-
-if (!$result) {
-    $error = mysqli_error($db_conn);
-    show_error($error);
-    exit();
-}
-$lot_by_id_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
+$lot_by_id_list = fetch_lot_by_id($db_conn, $lot_id);
 if(!count($lot_by_id_list)) {
     header("Location: /pages/404.html");
     exit();
