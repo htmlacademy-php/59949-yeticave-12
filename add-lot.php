@@ -5,6 +5,8 @@ require_once('data/data.php');
 require_once('db-config.php');
 require_once('queries/categories.php');
 
+$categories_list = fetch_categories($db_conn);
+
 $errors = [];
 
 $required_fields = [

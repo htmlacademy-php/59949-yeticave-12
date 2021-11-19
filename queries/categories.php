@@ -1,19 +1,12 @@
 <?php
 
-require_once('db-config.php');
+require_once ('db-methods.php');
 
-if (!$db_conn) {
-    $error = mysqli_connect_error();
-    print(include_template('error.php', ['error' => $error]));
-    exit();
+function fetch_categories($conn) {
+    $sql = 'SELECT * FROM categories';
+
+    check_db_connection($conn);
+
+    set_charset($conn, "utf8");
+    return fetch_from_db($conn, $sql);
 }
-
-$sql = 'SELECT * FROM categories';
-$result = mysqli_query($db_conn, $sql);
-
-if(!$result) {
-    print(include_template('error.php', ['error' => mysqli_error($link)]));
-    exit();
-}
-
-$categories_list = mysqli_fetch_all($result, MYSQLI_ASSOC);

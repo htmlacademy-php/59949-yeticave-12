@@ -5,6 +5,8 @@ require_once('data/data.php');
 require_once('db-config.php');
 require_once('queries/categories.php');
 
+$categories_list = fetch_categories($db_conn);
+
 $sql = 'SELECT '
     . 'l.id, l.title, c.title category_title, expiry_dt, initial_price, img_path '
     . 'FROM lots l '
