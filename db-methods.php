@@ -19,7 +19,7 @@ function check_db_connection($conn) {
 function fetch_from_db($conn, string $sql) {
     $result = mysqli_query($conn, $sql);
 
-    if(!$result) {
+    if (!$result) {
         $error = mysqli_error($conn);
         show_error($error);
         exit();

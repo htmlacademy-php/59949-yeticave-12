@@ -4,29 +4,13 @@ require_once('helpers.php');
 require_once('data/data.php');
 require_once('db-config.php');
 require_once('queries/categories.php');
+require_once('queries/lots.php');
 
+$lots_list = fetch_lots($db_conn);
 $categories_list = fetch_categories($db_conn);
 
-$sql = 'SELECT '
-    . 'l.id, l.title, c.title category_title, expiry_dt, initial_price, img_path '
-    . 'FROM lots l '
-    . 'LEFT JOIN bets b ON l.id = b.lot_id '
-    . 'JOIN categories c ON l.category_id = c.id '
-    . 'WHERE l.expiry_dt > NOW() '
-    . 'GROUP BY l.id '
-    . 'ORDER BY l.created_at DESC '
-    . 'LIMIT 6';
-$result = mysqli_query($db_conn, $sql);
-
-if (!$result) {
-    $error = mysqli_error($db_conn);
-    show_error($error);
-    exit();
-}
-$goods_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
 $page_content = include_template('main.php', [
-    'goods_list' => $goods_list,
+    'goods_list' => $lots_list,
     'categories_list' => $categories_list
 ]);
 
