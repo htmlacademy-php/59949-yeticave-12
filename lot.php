@@ -2,7 +2,6 @@
 
 require_once('helpers.php');
 require_once('data/data.php');
-require_once('db-config.php');
 require_once('queries/categories.php');
 require_once('queries/lot-by-id.php');
 
