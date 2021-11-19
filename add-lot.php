@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $errors =  array_merge($errors, validateImgFile('lot-img'));
     $errors = array_merge($errors, validateSpecificFields($errors));
 
-    if (!count($errors)) {
+    if (empty($errors)) {
         $file_url = copyFileToLocalPath('lot-img');
 
         if ($file_url) {

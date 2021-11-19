@@ -15,7 +15,7 @@ if(!$lot_id) {
 }
 
 $lot_by_id_list = fetch_lot_by_id($db_conn, $lot_id);
-if(!count($lot_by_id_list)) {
+if(empty($lot_by_id_list)) {
     header("Location: /pages/404.html");
     exit();
 }
