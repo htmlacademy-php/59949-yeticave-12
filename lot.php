@@ -4,7 +4,7 @@ require_once('helpers.php');
 require_once('data/data.php');
 require_once('db-config.php');
 require_once('queries/categories.php');
-require_once('queries/lot_by_id.php');
+require_once('queries/lot-by-id.php');
 
 $categories_list = fetch_categories($db_conn);
 
