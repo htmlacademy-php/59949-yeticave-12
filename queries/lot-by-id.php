@@ -7,7 +7,7 @@ function fetch_lot_by_id($conn, $id) {
     JOIN categories c ON l.category_id = c.id
     LEFT JOIN bets b ON l.id = b.lot_id
     WHERE l.id = $id
-    HAVING l.id";
+    GROUP BY l.id";
 
     check_db_connection($conn);
 
