@@ -23,7 +23,8 @@ $sql = "SELECT l.*, c.title AS category_title, (initial_price + IFNULL(SUM(b.amo
 $result = mysqli_query($db_conn, $sql);
 
 if (!$result) {
-    print(include_template('error.php', ['error' => mysqli_error($db_conn)]));
+    $error = mysqli_error($db_conn);
+    show_error($error);
     exit();
 }
 $lot_by_id_list = mysqli_fetch_all($result, MYSQLI_ASSOC);

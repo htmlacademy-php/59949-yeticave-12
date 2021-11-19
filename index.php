@@ -19,7 +19,8 @@ $sql = 'SELECT '
 $result = mysqli_query($db_conn, $sql);
 
 if (!$result) {
-    print(include_template('error.php', ['error' => mysqli_error($db_conn)]));
+    $error = mysqli_error($db_conn);
+    show_error($error);
     exit();
 }
 $goods_list = mysqli_fetch_all($result, MYSQLI_ASSOC);

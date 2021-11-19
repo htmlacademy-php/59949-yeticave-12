@@ -265,3 +265,11 @@ function copyFileToLocalPath(string $field_name): string
     }
     return '';
 }
+
+/**
+ * Отрисовывает шаблон страницы с ошибкой и её текстом
+ * @param string $error текст ошибки в виде строки
+ */
+function show_error(string $error) {
+    print(include_template('error.php', ['error' => $error]));
+}

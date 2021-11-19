@@ -44,7 +44,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $lot_id = mysqli_insert_id($db_conn);
                 header("Location: lot.php?id=" . $lot_id);
             } else {
-                print(include_template('error.php', ['error' => mysqli_error($db_conn)]));
+                $error = mysqli_error($db_conn);
+                show_error($error);
                 exit();
             }
         }

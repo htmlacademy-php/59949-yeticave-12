@@ -11,7 +11,7 @@ function set_charset($conn, $charset) {
 function check_db_connection($conn) {
     if (!$conn) {
         $error = mysqli_connect_error();
-        print(include_template('error.php', ['error' => $error]));
+        show_error($error);
         exit();
     }
 }
@@ -21,7 +21,7 @@ function fetch_from_db($conn, string $sql) {
 
     if(!$result) {
         $error = mysqli_error($conn);
-        print(include_template('error.php', ['error' => $error]));
+        show_error($error);
         exit();
     }
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
