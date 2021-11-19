@@ -3,6 +3,7 @@
 require_once('helpers.php');
 require_once('data/data.php');
 require_once('queries/categories.php');
+require_once('queries/create-lot.php');
 
 $categories_list = fetch_categories($db_conn);
 
@@ -33,20 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $message = $_POST['message'];
             $category_id = $_POST['category'];
 
-            $sql = "INSERT INTO lots (expiry_dt, title, description, img_path, initial_price, bet_step, category_id, author) "
-              . "VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
-
-            $stmt = db_get_prepare_stmt($db_conn, $sql, [$lot_date, $lot_name, $message, $file_url, $lot_rate, $lot_step, $category_id]);
-            $res = mysqli_stmt_execute($stmt);
-
-            if ($res) {
-                $lot_id = mysqli_insert_id($db_conn);
-                header("Location: lot.php?id=" . $lot_id);
-            } else {
-                $error = mysqli_error($db_conn);
-                show_error($error);
-                exit();
-            }
+            $lot_id = create_lot($db_conn, [$lot_date, $lot_name, $message, $file_url, $lot_rate, $lot_step, $category_id]);
+            header("Location: lot.php?id=" . $lot_id);
         }
     }
 }
