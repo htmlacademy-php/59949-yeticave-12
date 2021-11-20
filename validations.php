@@ -94,3 +94,20 @@ function validateSpecificFields(array $errors_list): array
     }
     return $errors;
 }
+
+/**
+ * Валидирует форму по заданному списку обязательных полей и возвращает массив ошибок
+ * @param array $required_fields список обязательных полей
+ * @param string|null $file_name необязательное имя файлового поля
+ * @return array массив ошибок
+ */
+function validateForm(array $required_fields, ?string $file_name = null):array
+{
+    $errors = validateRequiredFields($required_fields);
+
+    if ($file_name) {
+        $errors =  array_merge($errors, validateImgFile($file_name));
+    }
+
+    return array_merge($errors, validateSpecificFields($errors));
+}

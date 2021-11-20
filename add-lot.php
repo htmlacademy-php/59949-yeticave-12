@@ -20,9 +20,7 @@ $form_required_fields = [
 ];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $errors = validateDataAvailability($required_fields);
-    $errors =  array_merge($errors, validateImgFile('lot-img'));
-    $errors = array_merge($errors, validateSpecificFields($errors));
+    $errors = validateForm($form_required_fields, 'lot-img');
 
     if (empty($errors)) {
         $file_url = copyFileToLocalPath('lot-img');
