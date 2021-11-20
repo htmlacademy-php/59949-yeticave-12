@@ -10,13 +10,13 @@ $categories_list = fetch_categories($db_conn);
 
 $errors = [];
 
-$required_fields = [
-    ['name'=>'lot-name', 'text'=>'Введите наименование лота'],
-    ['name'=>'lot-rate', 'text'=>'Введите начальную цену'],
-    ['name'=>'lot-step', 'text'=>'Введите шаг ставки'],
-    ['name'=>'lot-date', 'text'=>'Введите дату завершения торгов'],
-    ['name'=>'category', 'text'=>'Выберите категорию'],
-    ['name'=>'message', 'text'=>'Напишите описание лота']
+$form_required_fields = [
+    ['name'=>'lot-name', 'error_msg'=>'Введите наименование лота'],
+    ['name'=>'lot-rate', 'error_msg'=>'Введите начальную цену'],
+    ['name'=>'lot-step', 'error_msg'=>'Введите шаг ставки'],
+    ['name'=>'lot-date', 'error_msg'=>'Введите дату завершения торгов'],
+    ['name'=>'category', 'error_msg'=>'Выберите категорию'],
+    ['name'=>'message', 'error_msg'=>'Напишите описание лота']
 ];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {

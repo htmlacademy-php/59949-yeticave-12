@@ -18,7 +18,7 @@ function validateDateFormat(string $date, string $format = 'Y-m-d'): bool
  * @param array $fields список полей с названием поля и текстом ошибки
  * @return array список ошибок
  */
-function validateDataAvailability(array $fields): array
+function validateRequiredFields(array $fields): array
 {
     $errors = [];
 
@@ -26,7 +26,7 @@ function validateDataAvailability(array $fields): array
         $val = $_POST[$field['name']];
 
         if (empty($val) && $val !== '0') {
-            $errors[$field['name']] = $field['text'];
+            $errors[$field['name']] = $field['error_msg'];
         }
     }
     return $errors;
