@@ -189,64 +189,6 @@ function lotTimeLeftCalc(string $date): array
 }
 
 /**
- * Проверяет список обязательных полей на наличие данных переданных методом POST
- * Возвращает массив ошибок, где ключ - название поля, значение - текст ошибки
- * @param array $fields список полей с названием поля и текстом ошибки
- * @return array список ошибок
- */
-function validateDataAvailability(array $fields): array {
-    $errors = [];
-
-    foreach ($fields as $field) {
-        $val = $_POST[$field['name']];
-
-        if (empty($val) && $val !== '0') {
-            $errors[$field['name']] = $field['text'];
-        }
-    }
-    return $errors;
-}
-
-/**
- * Проверяет переданную дату на соответствие указанному или дефолтному формату 'ГГГГ-ММ-ДД'
- * @param string $date дата в виде строки
- * @param string $format формат даты в ввиде строки
- * @return bool истинное значение при совпадении форматов
- */
-function validateDateFormat(string $date, string $format = 'Y-m-d'): bool
-{
-    $dt = DateTime::createFromFormat($format, $date);
-    return $dt && $dt->format($format) === $date;
-}
-
-/**
- * Проверяет наличие файла изображения в массиве $_FILES и валидирует по типу и размеру
- * @param string $field_name строковое название поля в массиве $_FILES
- * @return array список ошибок
- */
-function validateImgFile(string $field_name): array
-{
-    $UPLOAD_ERR_NO_FILE = 4;
-    $errors = [];
-
-    $file = $_FILES[$field_name];
-
-    if ($file['error'] && $file['error'] === $UPLOAD_ERR_NO_FILE) {
-        $errors[$field_name] = 'Добавьте изображение лота';
-    } else if ($file['size']) {
-        $fileType = mime_content_type($file['tmp_name']);
-
-        if ($fileType !== 'image/jpeg' && $fileType !== 'image/png') {
-            $errors[$field_name] = 'Изображение в формате jpeg/png';
-        }
-        if ($file['size'] > 2000000) {
-            $errors[$field_name] = 'Максимальный размер файла: 2Мб';
-        }
-    }
-    return $errors;
-}
-
-/**
  * Проверяет наличие файла изображения в массиве $_FILES и переносит из временной папки в локальную
  * @param string $field_name строковое название поля в массиве $_FILES
  * @return string|null вернет ссылку на файл или null
