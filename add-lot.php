@@ -20,6 +20,12 @@ $form_required_fields = [
 ];
 
 $form_validate_rules = [
+    'lot-name' => function() {
+        return isCorrectLength('lot-name', 3, 50);
+    },
+    'message' => function() {
+        return isCorrectLength('message', 10, 1000);
+    },
     'lot-rate' => function() {
         return isNumGreaterThanZero('lot-rate');
     },

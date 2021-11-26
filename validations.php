@@ -88,6 +88,22 @@ function isIntGreaterThanZero(string $name): ?string {
 }
 
 /**
+ * Проверяет строку на соответствие заданной длине
+ * @param string $name
+ * @param int $min
+ * @param int $max
+ * @return string|null
+ */
+function isCorrectLength(string $name, int $min, int $max): ?string {
+    $len = strlen($_POST[$name]);
+
+    if ($len && $len < $min || $len > $max) {
+        return "Значение должно быть от $min до $max символов";
+    }
+    return null;
+}
+
+/**
  * Проверяет формат даты и что она больше текущей
  * @param string $name имя поля в массиве $_POST
  * @return string|null
