@@ -60,42 +60,6 @@ function validateImgFile(string $field_name): array
 }
 
 /**
- * Проверка формата данных в конкретных полях в случае, если нет других ошибок по этим полям
- * @param array $errors_list массив ошибок
- * @return array возвращает массив ошибок
- */
-function validateSpecificFields(array $errors_list): array
-{
-    $errors = [];
-
-    if (!$errors_list['lot-rate']) {
-        $rate = $_POST['lot-rate'];
-
-        if (!$rate || !is_numeric($rate)) {
-            $errors['lot-rate'] = 'Значение должно быть числом больше нуля';
-        }
-    }
-    if (!$errors_list['lot-step']) {
-        $step = $_POST['lot-step'];
-
-        if (!$step || !ctype_digit($step)) {
-            $errors['lot-step'] = 'Значение должно быть целым числом больше нуля';
-        }
-    }
-    if (!$errors_list['lot-date']) {
-        $date = $_POST['lot-date'];
-        $date_now = date("Y-m-d");
-
-        if (!validateDateFormat($date)) {
-            $errors['lot-date'] = 'Некорректный формат даты';
-        } else if (!$date || $date <= $date_now) {
-            $errors['lot-date'] = 'Значение должно быть больше текущей даты, хотя бы на один день';
-        }
-    }
-    return $errors;
-}
-
-/**
  * Проверяет что значение является числом больше нуля
  * @param string $name имя поля в массиве $_POST
  * @return string|null
