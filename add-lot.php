@@ -21,13 +21,13 @@ $form_required_fields = [
 
 $form_validate_rules = [
     'lot-rate' => function() {
-        return validateNumGreaterThanZero('lot-rate');
+        return isNumGreaterThanZero('lot-rate');
     },
     'lot-step' => function() {
-        return validateIntGreaterThanZero('lot-step');
+        return isIntGreaterThanZero('lot-step');
     },
     'lot-date' => function() {
-        return validateDate('lot-date');
+        return isCorrectDate('lot-date');
     }
 ];
 

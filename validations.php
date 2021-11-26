@@ -64,7 +64,7 @@ function validateImgFile(string $field_name): array
  * @param string $name имя поля в массиве $_POST
  * @return string|null
  */
-function validateNumGreaterThanZero(string $name): ?string {
+function isNumGreaterThanZero(string $name): ?string {
     $val = $_POST[$name];
 
     if (!empty($val) && !is_numeric($val) || is_numeric($val) && $val < 1) {
@@ -78,7 +78,7 @@ function validateNumGreaterThanZero(string $name): ?string {
  * @param string $name имя поля в массиве $_POST
  * @return string|null
  */
-function validateIntGreaterThanZero(string $name): ?string {
+function isIntGreaterThanZero(string $name): ?string {
     $val = $_POST[$name];
 
     if (!empty($val) && !ctype_digit($val) || ctype_digit($val) && $val < 1) {
@@ -92,7 +92,7 @@ function validateIntGreaterThanZero(string $name): ?string {
  * @param string $name имя поля в массиве $_POST
  * @return string|null
  */
-function validateDate(string $name): ?string {
+function isCorrectDate(string $name): ?string {
     $val = $_POST[$name];
     $date_now = date("Y-m-d");
 
