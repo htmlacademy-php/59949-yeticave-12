@@ -96,12 +96,58 @@ function validateSpecificFields(array $errors_list): array
 }
 
 /**
+ * Проверяет что значение является числом больше нуля
+ * @param string $name имя поля в массиве $_POST
+ * @return string|null
+ */
+function validateNumGreaterThanZero(string $name): ?string {
+    $val = $_POST[$name];
+
+    if (!empty($val) && !is_numeric($val) || is_numeric($val) && $val < 1) {
+        return 'Значение должно быть числом больше нуля';
+    }
+    return null;
+}
+
+/**
+ * Проверяет что значение является целым числом больше нуля
+ * @param string $name имя поля в массиве $_POST
+ * @return string|null
+ */
+function validateIntGreaterThanZero(string $name): ?string {
+    $val = $_POST[$name];
+
+    if (!empty($val) && !ctype_digit($val) || ctype_digit($val) && $val < 1) {
+        return 'Значение должно быть целым числом больше нуля';
+    }
+    return null;
+}
+
+/**
+ * Проверяет формат даты и что она больше текущей
+ * @param string $name имя поля в массиве $_POST
+ * @return string|null
+ */
+function validateDate(string $name): ?string {
+    $val = $_POST[$name];
+    $date_now = date("Y-m-d");
+
+    if ($val && !validateDateFormat($val)) {
+        return 'Некорректный формат даты';
+    }
+    if ($val && $val <= $date_now) {
+        return 'Значение должно быть больше текущей даты, хотя бы на один день';
+    }
+    return null;
+}
+
+/**
  * Валидирует форму по заданному списку обязательных полей и возвращает массив ошибок
  * @param array $required_fields список обязательных полей
  * @param string|null $file_name необязательное имя файлового поля
  * @return array массив ошибок
  */
-function validateForm(array $required_fields, ?string $file_name = null):array
+function validateForm(array $required_fields, array $rules, ?string $file_name = null):array
 {
     $errors = validateRequiredFields($required_fields);
 
@@ -109,5 +155,15 @@ function validateForm(array $required_fields, ?string $file_name = null):array
         $errors =  array_merge($errors, validateImgFile($file_name));
     }
 
-    return array_merge($errors, validateSpecificFields($errors));
+    foreach ($_POST as $key => $value) {
+        if (isset($rules[$key])) {
+            $rule = $rules[$key];
+            $errorMsg = $rule();
+
+            if ($errorMsg) {
+                $errors[$key] = $errorMsg;
+            }
+        }
+    }
+    return $errors;
 }

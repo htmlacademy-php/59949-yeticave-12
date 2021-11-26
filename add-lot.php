@@ -19,8 +19,20 @@ $form_required_fields = [
     ['name'=>'message', 'error_msg'=>'Напишите описание лота']
 ];
 
+$form_validate_rules = [
+    'lot-rate' => function() {
+        return validateNumGreaterThanZero('lot-rate');
+    },
+    'lot-step' => function() {
+        return validateIntGreaterThanZero('lot-step');
+    },
+    'lot-date' => function() {
+        return validateDate('lot-date');
+    }
+];
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $errors = validateForm($form_required_fields, 'lot-img');
+    $errors = validateForm($form_required_fields, $form_validate_rules, 'lot-img');
 
     if (empty($errors)) {
         $file_url = copyFileToLocalPath('lot-img');
