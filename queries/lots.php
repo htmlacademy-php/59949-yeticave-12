@@ -1,7 +1,5 @@
 <?php
 
-require_once ('db-methods.php');
-
 function fetch_lots($conn) {
     $sql = 'SELECT '
         . 'l.id, l.title, c.title category_title, expiry_dt, initial_price, img_path '
@@ -13,8 +11,5 @@ function fetch_lots($conn) {
         . 'ORDER BY l.created_at DESC '
         . 'LIMIT 6';
 
-    check_db_connection($conn);
-
-    set_charset($conn, "utf8");
     return fetch_from_db($conn, $sql);
 }

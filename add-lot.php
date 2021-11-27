@@ -1,12 +1,30 @@
 <?php
 
+require_once('db-methods.php');
 require_once('helpers.php');
 require_once('data/data.php');
 require_once('queries/categories.php');
 require_once('queries/create-lot.php');
 require_once ('validations.php');
 
-$categories_list = fetch_categories($db_conn);
+$db_conn = get_db_connect();
+$conn_error = check_db_connection($db_conn);
+
+if ($conn_error) {
+    show_error($conn_error);
+    exit();
+}
+
+mysqli_set_charset($db_conn, "utf8");
+
+$result = fetch_categories($db_conn);
+
+if (!$result) {
+    $error = mysqli_error($db_conn);
+    show_error($error);
+    exit();
+}
+$categories_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 $errors = [];
 
@@ -51,7 +69,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $message = $_POST['message'];
             $category_id = $_POST['category'];
 
-            $lot_id = create_lot($db_conn, [$lot_date, $lot_name, $message, $file_url, $lot_rate, $lot_step, $category_id]);
+            $result = create_lot($db_conn, [$lot_date, $lot_name, $message, $file_url, $lot_rate, $lot_step, $category_id]);
+
+            if (!$result) {
+                $error = mysqli_error($db_conn);
+                show_error($error);
+                exit();
+            }
+
+            $lot_id = mysqli_insert_id($db_conn);
+
             header("Location: lot.php?id=" . $lot_id);
         }
     }
@@ -61,6 +88,8 @@ $page_content = include_template('add-lot.php', [
     'categories_list' => $categories_list,
     'errors' => $errors
 ]);
+
+global $is_auth, $user_name;
 
 $layout_content = include_template('layout.php', [
     'is_auth' => $is_auth,
