@@ -214,5 +214,14 @@ function copyFileToLocalPath(string $field_name): ?string
  * @return void
  */
 function show_error(string $error) {
-    print(include_template('error.php', ['error' => $error]));
+    print(include_template('error.php', ['error' => $error, 'title' => 'GifTube - Страница ошибки']));
+}
+
+/**
+ * Получение значение переменной из url
+ * @param string $name имя переменной в url
+ * @return string|null
+ */
+function get_by_name_from_url(string $name): ?string {
+    return filter_input(INPUT_GET, $name, FILTER_SANITIZE_NUMBER_INT);
 }

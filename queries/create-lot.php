@@ -1,10 +1,13 @@
 <?php
 
-function create_lot($conn, $data) {
+/**
+ * @param mysqli $conn
+ * @param array $data
+ * @return false|int|string
+ */
+function create_lot(mysqli $conn, array $data) {
     $sql = "INSERT INTO lots (expiry_dt, title, description, img_path, initial_price, bet_step, category_id, author) "
         . "VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
 
-    $stmt = db_get_prepare_stmt($conn, $sql, $data);
-
-    return mysqli_stmt_execute($stmt);
+    return db_create_lot_get_lot_id($conn, $sql, $data);
 }
