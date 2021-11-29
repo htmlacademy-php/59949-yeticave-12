@@ -7,32 +7,28 @@ require_once('queries/categories.php');
 require_once('queries/lots.php');
 
 $db_conn = get_db_connect();
-$conn_error = check_db_connection($db_conn);
 
-if ($conn_error) {
-    show_error($conn_error);
-    exit();
-}
-
-mysqli_set_charset($db_conn, "utf8");
-
-$result = fetch_categories($db_conn);
-
-if (!$result) {
-    $error = mysqli_error($db_conn);
+if (!$db_conn) {
+    $error = get_db_connection_error();
     show_error($error);
     exit();
 }
-$categories_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-$result = fetch_lots($db_conn);
+$categories_list = fetch_categories($db_conn);
 
-if (!$result) {
-    $error = mysqli_error($db_conn);
+if (!$categories_list) {
+    $error = get_db_error($db_conn);
     show_error($error);
     exit();
 }
-$lots_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+$lots_list = fetch_lots($db_conn);
+
+if (!$lots_list) {
+    $error = get_db_error($db_conn);
+    show_error($error);
+    exit();
+}
 
 $page_content = include_template('main.php', [
     'goods_list' => $lots_list,
