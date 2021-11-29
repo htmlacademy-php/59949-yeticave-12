@@ -42,19 +42,4 @@ if (empty($lot_by_id_list)) {
     exit();
 }
 
-$page_content = include_template('lot.php', [
-    'lot' => $lot_by_id_list[0],
-    'categories_list' => $categories_list
-]);
-
-global $is_auth, $user_name;
-
-$layout_content = include_template('layout.php', [
-    'is_auth' => $is_auth,
-    'user_name' => $user_name,
-    'content' => $page_content,
-    'categories_list' => $categories_list,
-    'title' => 'GifTube - Страница лота'
-]);
-
-print($layout_content);
+show_screen('lot.php', 'Страница лота', 'lot', $lot_by_id_list[0], $categories_list);

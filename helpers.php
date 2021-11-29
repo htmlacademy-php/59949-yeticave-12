@@ -218,6 +218,34 @@ function show_error(string $error) {
 }
 
 /**
+ * Отрисовывает экран страницы на основе переданных параметров
+ * @param string $screen_name название файла страницы
+ * @param string $screen_title заголовок страницы
+ * @param string $data_title название ключа в шаблоне для обращения к данным
+ * @param array $data данные для отрисовки в шаблоне
+ * @param array $categories список категорий
+ * @return void
+ */
+function show_screen(string $screen_name, string $screen_title, string $data_title, array $data, array $categories) {
+    $page_content = include_template($screen_name, [
+        $data_title => $data,
+        'categories_list' => $categories
+    ]);
+
+    global $is_auth, $user_name;
+
+    $layout_content = include_template('layout.php', [
+        'is_auth' => $is_auth,
+        'user_name' => $user_name,
+        'content' => $page_content,
+        'categories_list' => $categories,
+        'title' => 'GifTube - ' . $screen_title
+    ]);
+
+    print($layout_content);
+}
+
+/**
  * Получение значение переменной из url
  * @param string $name имя переменной в url
  * @return string|null

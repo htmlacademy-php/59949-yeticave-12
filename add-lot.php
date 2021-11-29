@@ -79,19 +79,4 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-$page_content = include_template('add-lot.php', [
-    'categories_list' => $categories_list,
-    'errors' => $errors
-]);
-
-global $is_auth, $user_name;
-
-$layout_content = include_template('layout.php', [
-    'is_auth' => $is_auth,
-    'user_name' => $user_name,
-    'content' => $page_content,
-    'categories_list' => $categories_list,
-    'title' => 'GifTube - Добавление лота'
-]);
-
-print($layout_content);
+show_screen('add-lot.php', 'Добавление лота', 'errors', $errors, $categories_list);

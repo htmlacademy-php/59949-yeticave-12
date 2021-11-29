@@ -30,19 +30,4 @@ if (!$lots_list) {
     exit();
 }
 
-$page_content = include_template('main.php', [
-    'goods_list' => $lots_list,
-    'categories_list' => $categories_list
-]);
-
-global $is_auth, $user_name;
-
-$layout_content = include_template('layout.php', [
-    'is_auth' => $is_auth,
-    'user_name' => $user_name,
-    'content' => $page_content,
-    'categories_list' => $categories_list,
-    'title' => 'GifTube - Главная страница'
-]);
-
-print($layout_content);
+show_screen('main.php', 'Главная страница', 'goods_list', $lots_list, $categories_list );
