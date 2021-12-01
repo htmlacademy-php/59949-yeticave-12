@@ -25,33 +25,6 @@ if (!$categories_list) {
 
 $errors = [];
 
-$form_required_fields = [
-    ['name'=>'lot-name', 'error_msg'=>'Введите наименование лота'],
-    ['name'=>'lot-rate', 'error_msg'=>'Введите начальную цену'],
-    ['name'=>'lot-step', 'error_msg'=>'Введите шаг ставки'],
-    ['name'=>'lot-date', 'error_msg'=>'Введите дату завершения торгов'],
-    ['name'=>'category', 'error_msg'=>'Выберите категорию'],
-    ['name'=>'message', 'error_msg'=>'Напишите описание лота']
-];
-
-$form_validate_rules = [
-    'lot-name' => function() {
-        return isCorrectLength('lot-name', 3, 50);
-    },
-    'message' => function() {
-        return isCorrectLength('message', 10, 1000);
-    },
-    'lot-rate' => function() {
-        return isNumGreaterThanZero('lot-rate');
-    },
-    'lot-step' => function() {
-        return isIntGreaterThanZero('lot-step');
-    },
-    'lot-date' => function() {
-        return isCorrectDate('lot-date');
-    }
-];
-
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $errors = validateForm($form_required_fields, $form_validate_rules, 'lot-img');
 

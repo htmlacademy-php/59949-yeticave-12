@@ -25,26 +25,6 @@ function isCorrectDateFormat(string $date, string $format): bool
 }
 
 /**
- * Проверяет список обязательных полей на наличие данных переданных методом POST
- * Возвращает массив ошибок, где ключ - название поля, значение - текст ошибки
- * @param array $fields список полей с названием поля и текстом ошибки
- * @return array список ошибок
- */
-function validateRequiredFields(array $fields): array
-{
-    $errors = [];
-
-    foreach ($fields as $field) {
-        $val = $_POST[$field['name']];
-
-        if (empty($val) && $val !== '0') {
-            $errors[$field['name']] = $field['error_msg'];
-        }
-    }
-    return $errors;
-}
-
-/**
  * Проверяет наличие файла изображения в массиве $_FILES и валидирует по типу и размеру
  * @param string $field_name строковое название поля в массиве $_FILES
  * @return array список ошибок
@@ -125,33 +105,6 @@ function isDateMinOneDayGreater(string $val): bool {
     }
 
     return true;
-}
-
-/**
- * Валидирует форму по заданному списку обязательных полей и возвращает массив ошибок
- * @param array $required_fields список обязательных полей
- * @param string|null $file_name необязательное имя файлового поля
- * @return array массив ошибок
- */
-function validateForm(array $required_fields, array $rules, ?string $file_name = null):array
-{
-    $errors = validateRequiredFields($required_fields);
-
-    if ($file_name) {
-        $errors =  array_merge($errors, validateImgFile($file_name));
-    }
-
-    foreach ($_POST as $key => $value) {
-        if (isset($rules[$key])) {
-            $rule = $rules[$key];
-            $errorMsg = $rule();
-
-            if ($errorMsg) {
-                $errors[$key] = $errorMsg;
-            }
-        }
-    }
-    return $errors;
 }
 
 /**
