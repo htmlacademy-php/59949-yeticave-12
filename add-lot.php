@@ -28,9 +28,14 @@ $errors = [];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $formData = getFormPostedData();
+    $formFiles = getFormPostedFiles();
 
-    global $validation_rules;
-    $errors = validateForm($formData, $validation_rules);
+    global $lot_create_data_validation_rules, $lot_create_files_validation_rules;
+
+    $data_errors = validateForm($formData, $lot_create_data_validation_rules);
+    $file_errors = validateFiles($formFiles, $lot_create_files_validation_rules);
+
+    $errors = array_merge($data_errors, $file_errors);
 
     if (empty($errors)) {
         $file_url = copyFileToLocalPath('lot-img');
