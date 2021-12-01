@@ -189,14 +189,12 @@ function lotTimeLeftCalc(string $date): array
 }
 
 /**
- * Проверяет наличие файла изображения в массиве $_FILES и переносит из временной папки в локальную
- * @param string $field_name строковое название поля в массиве $_FILES
+ * Проверяет наличие файла и переносит из временной папки в локальную
+ * @param array $file
  * @return string|null вернет ссылку на файл или null
  */
-function copyFileToLocalPath(string $field_name): ?string
+function moveFileToLocalPath(array $file): ?string
 {
-    $file = $_FILES[$field_name];
-
     if (!isset($file) || $file['size'] === 0) {
         return null;
     }

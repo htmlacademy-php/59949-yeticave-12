@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $errors = array_merge($data_errors, $file_errors);
 
     if (empty($errors)) {
-        $file_url = copyFileToLocalPath('lot-img');
+        $file_url = moveFileToLocalPath($formFiles['lot-img']);
 
         if ($file_url) {
             $lot_id = create_lot($db_conn, [
