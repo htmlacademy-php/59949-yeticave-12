@@ -25,30 +25,46 @@ function isCorrectDateFormat(string $date, string $format): bool
 }
 
 /**
- * Проверяет наличие файла изображения в массиве $_FILES и валидирует по типу и размеру
- * @param string $field_name строковое название поля в массиве $_FILES
- * @return array список ошибок
+ * Проверяет что файл выбран
+ * @param array $file
+ * @return bool
  */
-function validateImgFile(string $field_name): array
-{
+function isFileSelected(array $file): bool {
     $UPLOAD_ERR_NO_FILE = 4;
-    $errors = [];
-
-    $file = $_FILES[$field_name];
 
     if ($file['error'] && $file['error'] === $UPLOAD_ERR_NO_FILE) {
-        $errors[$field_name] = 'Добавьте изображение лота';
-    } else if ($file['size']) {
-        $fileType = mime_content_type($file['tmp_name']);
-
-        if ($fileType !== 'image/jpeg' && $fileType !== 'image/png') {
-            $errors[$field_name] = 'Изображение в формате jpeg/png';
-        }
-        if ($file['size'] > 2000000) {
-            $errors[$field_name] = 'Максимальный размер файла: 2Мб';
-        }
+        return false;
     }
-    return $errors;
+    return true;
+}
+
+/**
+ * Проверяет тип переданного файла на основе указанных параметров
+ * @param array $file
+ * @param string $type1
+ * @param string $type2
+ * @return bool
+ */
+function isFileTypeCorrect(array $file, string $type1, string $type2): bool {
+    $fileType = mime_content_type($file['tmp_name']);
+
+    if ($fileType !== $type1 && $fileType !== $type2) {
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Проверяет размер файла на максимально допустимый размер
+ * @param array $file
+ * @param int $maxSize
+ * @return bool
+ */
+function isFileSizeCorrect(array $file, int $maxSize):bool {
+    if ($file['size'] > $maxSize) {
+        return false;
+    }
+    return true;
 }
 
 /**
