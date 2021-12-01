@@ -253,3 +253,16 @@ function show_screen(string $screen_name, string $screen_title, string $data_tit
 function get_by_name_from_url(string $name): ?string {
     return filter_input(INPUT_GET, $name, FILTER_SANITIZE_NUMBER_INT);
 }
+
+/**
+ * Возвращает новый массив данных на основе массива $_POST
+ * @return array
+ */
+function getFormPostedData(): array {
+    $data = [];
+    foreach ($_POST as $key => $value) {
+        $data[$key] = $value;
+    }
+
+    return $data;
+}
