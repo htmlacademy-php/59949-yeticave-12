@@ -266,3 +266,16 @@ function getFormPostedData(): array {
 
     return $data;
 }
+
+/**
+ * Возвращает новый массив данных на основе массива $_FILES
+ * @return array
+ */
+function getFormPostedFiles(): array {
+    $data = [];
+    foreach ($_FILES as $key => $value) {
+        $data[$key] = $value;
+    }
+
+    return $data;
+}
