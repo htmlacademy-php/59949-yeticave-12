@@ -1,12 +1,24 @@
 <?php
 
 /**
- * Проверяет переданную дату на соответствие указанному или дефолтному формату 'ГГГГ-ММ-ДД'
+ * Проверяет переданное значение на пустоту и неравенство нулю
+ * @param string $val строкове значение
+ * @return bool результат проверки
+ */
+function isNotEmpty(string $val): bool {
+    if (empty($val) && $val !== '0') {
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Проверяет переданную дату на соответствие указанному формату
  * @param string $date дата в виде строки
  * @param string $format формат даты в ввиде строки
  * @return bool истинное значение при совпадении форматов
  */
-function validateDateFormat(string $date, string $format = 'Y-m-d'): bool
+function isCorrectDateFormat(string $date, string $format): bool
 {
     $dt = DateTime::createFromFormat($format, $date);
     return $dt && $dt->format($format) === $date;
@@ -61,64 +73,58 @@ function validateImgFile(string $field_name): array
 
 /**
  * Проверяет что значение является числом больше нуля
- * @param string $name имя поля в массиве $_POST
- * @return string|null
+ * @param string $val строковое значение
+ * @return boolean результат проверки
  */
-function isNumGreaterThanZero(string $name): ?string {
-    $val = $_POST[$name];
-
-    if (!empty($val) && !is_numeric($val) || is_numeric($val) && $val < 1) {
-        return 'Значение должно быть числом больше нуля';
+function isNumGreaterThanZero(string $val): bool {
+    if (empty($val) || !is_numeric($val) || $val <= 0) {
+        return false;
     }
-    return null;
+    return true;
 }
 
 /**
  * Проверяет что значение является целым числом больше нуля
- * @param string $name имя поля в массиве $_POST
- * @return string|null
+ * @param string $val строковое значение
+ * @return boolean результат проверки
  */
-function isIntGreaterThanZero(string $name): ?string {
-    $val = $_POST[$name];
-
-    if (!empty($val) && !ctype_digit($val) || ctype_digit($val) && $val < 1) {
-        return 'Значение должно быть целым числом больше нуля';
+function isIntGreaterThanZero(string $val): bool {
+    if (empty($val) || !ctype_digit($val) || $val <= 0) {
+        return false;
     }
-    return null;
+    return true;
 }
 
 /**
  * Проверяет строку на соответствие заданной длине
- * @param string $name
- * @param int $min
- * @param int $max
- * @return string|null
+ * @param string $val строковое значение
+ * @param int $min значение минимальной длины строки
+ * @param int $max значение максимальной длины строки
+ * @return boolean
  */
-function isCorrectLength(string $name, int $min, int $max): ?string {
-    $len = strlen($_POST[$name]);
+function isCorrectLength(string $val, int $min, int $max): bool {
+    $len = strlen($val);
 
-    if ($len && $len < $min || $len > $max) {
-        return "Значение должно быть от $min до $max символов";
+    if (!$len || $len < $min || $len > $max) {
+        return false;
     }
-    return null;
+
+    return true;
 }
 
 /**
- * Проверяет формат даты и что она больше текущей
- * @param string $name имя поля в массиве $_POST
- * @return string|null
+ * Проверяет что переданная дата больше текущей минимум на день
+ * @param string $val дата в виде строки
+ * @return boolean
  */
-function isCorrectDate(string $name): ?string {
-    $val = $_POST[$name];
+function isDateMinOneDayGreater(string $val): bool {
     $date_now = date("Y-m-d");
 
-    if ($val && !validateDateFormat($val)) {
-        return 'Некорректный формат даты';
+    if (!$val || $val <= $date_now) {
+        return false;
     }
-    if ($val && $val <= $date_now) {
-        return 'Значение должно быть больше текущей даты, хотя бы на один день';
-    }
-    return null;
+
+    return true;
 }
 
 /**
