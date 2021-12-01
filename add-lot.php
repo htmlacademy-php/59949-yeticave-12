@@ -1,6 +1,7 @@
 <?php
 
 require_once('db-methods.php');
+require_once('rules.php');
 require_once('helpers.php');
 require_once('data/data.php');
 require_once('queries/categories.php');
@@ -26,20 +27,24 @@ if (!$categories_list) {
 $errors = [];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $errors = validateForm($form_required_fields, $form_validate_rules, 'lot-img');
+    $formData = getFormPostedData();
+
+    global $validation_rules;
+    $errors = validateForm($formData, $validation_rules);
 
     if (empty($errors)) {
         $file_url = copyFileToLocalPath('lot-img');
 
         if ($file_url) {
-            $lot_date = $_POST['lot-date'];
-            $lot_rate = $_POST['lot-rate'];
-            $lot_step = $_POST['lot-step'];
-            $lot_name = $_POST['lot-name'];
-            $message = $_POST['message'];
-            $category_id = $_POST['category'];
-
-            $lot_id = create_lot($db_conn, [$lot_date, $lot_name, $message, $file_url, $lot_rate, $lot_step, $category_id]);
+            $lot_id = create_lot($db_conn, [
+                $formData['lot-date'],
+                $formData['lot-name'],
+                $formData['message'],
+                $formData['lot-rate'],
+                $formData['lot-step'],
+                $formData['category'],
+                $file_url
+            ]);
 
             if (!$lot_id) {
                 $error = get_db_error($db_conn);
