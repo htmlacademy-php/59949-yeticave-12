@@ -147,3 +147,28 @@ function validateForm(array $required_fields, array $rules, ?string $file_name =
     }
     return $errors;
 }
+
+/**
+ * Валидирует переданные данные на основе переданных правил
+ * @param array $data данные
+ * @param array $rules правила
+ * @return array массив ошибок
+ */
+function validateForm(array $data, array $rules): array {
+    $errors = [];
+
+    foreach ($rules as $rule) {
+        $data_value = $data[$rule['field_name']];
+
+        foreach ($rule['validations'] as $validation) {
+            $is_valid = $validation['method']($data_value, $validation['param1'], $validation['param2']);
+
+            if (!$is_valid) {
+                $errors[$rule['field_name']] = $validation['error_msg'];
+                break;
+            }
+        }
+    }
+
+    return $errors;
+}
