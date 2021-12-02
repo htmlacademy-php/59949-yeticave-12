@@ -4,7 +4,7 @@
         На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.
     </p>
     <ul class="promo__list">
-        <?php foreach ($categoriesList as $category) : ?>
+        <?php foreach ($categories_list as $category) : ?>
             <li class="promo__item promo__item--<?= $category['code'] ?>">
                 <a class="promo__link" href="pages/all-lots.html"><?= htmlspecialchars($category['title']); ?></a>
             </li>
@@ -16,10 +16,10 @@
         <h2>Открытые лоты</h2>
     </div>
     <ul class="lots__list">
-        <?php if (count($goodsList) === 0) : ?>
+        <?php if (count($goods_list) === 0) : ?>
             <h3>Лотов не обнаружено</h3>
         <?php else : ?>
-            <?php foreach ($goodsList as $item) : ?>
+            <?php foreach ($goods_list as $item) : ?>
                 <li class="lots__item lot">
                     <div class="lot__image">
                         <img src="<?= htmlspecialchars($item['img_path']); ?>" width="350" height="260" alt="">

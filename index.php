@@ -1,54 +1,33 @@
 <?php
 
+require_once('db-methods.php');
 require_once('helpers.php');
 require_once('data/data.php');
+require_once('queries/categories.php');
+require_once('queries/lots.php');
 
-$link = mysqli_connect("localhost", "root", "root","yeticave");
-mysqli_set_charset($link, "utf8");
+$db_conn = get_db_connect();
 
-if (!$link) {
-    $error = mysqli_connect_error();
-    print(include_template('error.php', ['error' => $error]));
+if (!$db_conn) {
+    $error = get_db_connection_error();
+    show_error($error);
     exit();
 }
 
-$sql = 'SELECT * FROM categories';
-$result = mysqli_query($link, $sql);
+$categories_list = get_categories($db_conn);
 
-if(!$result) {
-    print(include_template('error.php', ['error' => mysqli_error($link)]));
+if (!$categories_list) {
+    $error = get_db_error($db_conn);
+    show_error($error);
     exit();
 }
-$categoriesList = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-$sql = 'SELECT '
-    . 'l.id, l.title, c.title category_title, expiry_dt, initial_price, img_path '
-    . 'FROM lots l '
-    . 'JOIN bets b ON l.id = b.lot_id '
-    . 'JOIN categories c ON l.category_id = c.id '
-    . 'WHERE l.expiry_dt > NOW() '
-    . 'GROUP BY b.lot_id '
-    . 'ORDER BY l.created_at DESC '
-    . 'LIMIT 6';
-$result = mysqli_query($link, $sql);
+$lots_list = get_lots($db_conn);
 
-if (!$result) {
-    print(include_template('error.php', ['error' => mysqli_error($link)]));
+if (!$lots_list) {
+    $error = get_db_error($db_conn);
+    show_error($error);
     exit();
 }
-$goodsList = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-$page_content = include_template('main.php', [
-    'goodsList' => $goodsList,
-    'categoriesList' => $categoriesList
-]);
-
-$layout_content = include_template('layout.php', [
-    'isAuth' => $isAuth,
-    'userName' => $userName,
-    'content' => $page_content,
-    'categoriesList' => $categoriesList,
-    'title' => 'GifTube - Главная страница'
-]);
-
-print($layout_content);
+show_screen('main.php', 'Главная страница', 'goods_list', $lots_list, $categories_list );

@@ -1,57 +1,45 @@
 <?php
 
+require_once('db-methods.php');
 require_once('helpers.php');
 require_once('data/data.php');
+require_once('queries/categories.php');
+require_once('queries/lot-by-id.php');
 
-$link = mysqli_connect("localhost", "root", "root","yeticave");
-mysqli_set_charset($link, "utf8");
+$db_conn = get_db_connect();
 
-if (!$link) {
-    $error = mysqli_connect_error();
-    print(include_template('error.php', ['error' => $error]));
+if (!$db_conn) {
+    $error = get_db_connection_error();
+    show_error($error);
     exit();
 }
 
-$sql = 'SELECT * FROM categories';
-$result = mysqli_query($link, $sql);
+$categories_list = get_categories($db_conn);
 
-if(!$result) {
-    print(include_template('error.php', ['error' => mysqli_error($link)]));
+if (!$categories_list) {
+    $error = get_db_error($db_conn);
+    show_error($error);
     exit();
 }
-$categoriesList = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+$lot_id = get_by_name_from_url('id');
 
-if(!$id) {
+if (!$lot_id) {
     header("Location: /pages/404.html");
     exit();
 }
 
-$sql = "SELECT l.*, c.title AS category_title, (initial_price + SUM(b.amount)) AS current_price FROM lots l
-    JOIN categories c ON l.category_id = c.id
-    JOIN bets b ON l.id = b.lot_id
-    WHERE l.id = $id";
+$lot_by_id_list = get_lot_by_id($db_conn, $lot_id);
 
-$result = mysqli_query($link, $sql);
-
-if (!$result) {
-    print(include_template('error.php', ['error' => mysqli_error($link)]));
+if (!is_array($lot_by_id_list) && !$lot_by_id_list) {
+    $error = get_db_error($db_conn);
+    show_error($error);
     exit();
 }
-$lotByID = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-$page_content = include_template('lot.php', [
-    'lot' => $lotByID[0],
-    'categoriesList' => $categoriesList
-]);
+if (empty($lot_by_id_list)) {
+    header("Location: /pages/404.html");
+    exit();
+}
 
-$layout_content = include_template('layout.php', [
-    'isAuth' => $isAuth,
-    'userName' => $userName,
-    'content' => $page_content,
-    'categoriesList' => $categoriesList,
-    'title' => 'GifTube - Страница лота'
-]);
-
-print($layout_content);
+show_screen('lot.php', 'Страница лота', 'lot', $lot_by_id_list[0], $categories_list);

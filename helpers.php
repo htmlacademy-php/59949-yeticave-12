@@ -150,13 +150,13 @@ function include_template($name, array $data = []) {
  */
 function formatPrice(float $price): string
 {
-    $priceInt = ceil($price);
+    $price_int = ceil($price);
 
-    if ($priceInt <= 1000) {
-        return $priceInt . '₽';
+    if ($price_int <= 1000) {
+        return $price_int . '₽';
     }
-    $formattedPrice = number_format($priceInt, 0, '.', ' ');
-    return $formattedPrice . '₽';
+    $formatted_price = number_format($price_int, 0, '.', ' ');
+    return $formatted_price . '₽';
 }
 
 /**
@@ -168,22 +168,106 @@ function formatPrice(float $price): string
 function lotTimeLeftCalc(string $date): array
 {
     date_default_timezone_set("Europe/Moscow");
-    $filteredDate = htmlspecialchars($date);
+    $filtered_date = htmlspecialchars($date);
 
-    if (strtotime($filteredDate) <= time()) {
+    if (strtotime($filtered_date) <= time()) {
         return ['00', '00'];
     }
 
-    $lotExpDate = date_create($filteredDate);
-    $currentDate = date_create();
+    $lot_exp_date = date_create($filtered_date);
+    $current_date = date_create();
 
-    $dateDiff = date_diff($lotExpDate, $currentDate);
+    $date_diff = date_diff($lot_exp_date, $current_date);
 
-    $daysLeft = date_interval_format($dateDiff, "%d");
-    $hoursLeft = date_interval_format($dateDiff, "%H");
-    $minutesLeft = date_interval_format($dateDiff, "%I");
+    $days_left = date_interval_format($date_diff, "%d");
+    $hours_left = date_interval_format($date_diff, "%H");
+    $minutes_left = date_interval_format($date_diff, "%I");
 
-    $hoursLeft = intval($hoursLeft) + intval($daysLeft) * 24;
+    $hours_left = intval($hours_left) + intval($days_left) * 24;
 
-    return [$hoursLeft, $minutesLeft];
+    return [$hours_left, $minutes_left];
+}
+
+/**
+ * Проверяет наличие файла и переносит из временной папки в локальную
+ * @param array $file
+ * @return string|null вернет ссылку на файл или null
+ */
+function moveFileToLocalPath(array $file): ?string
+{
+    if (!isset($file) || $file['size'] === 0) {
+        return null;
+    }
+    $file_name = $file['name'];
+    $file_path = __DIR__ . '/uploads/';
+    $file_url = '/uploads/' . $file_name;
+
+    move_uploaded_file($file['tmp_name'], $file_path . $file_name);
+    return $file_url;
+}
+
+/**
+ * Отрисовывает шаблон страницы с ошибкой и её текстом
+ * @param string $error текст ошибки в виде строки
+ * @return void
+ */
+function show_error(string $error) {
+    print(include_template('error.php', ['error' => $error, 'title' => 'GifTube - Страница ошибки']));
+}
+
+/**
+ * Отрисовывает экран страницы на основе переданных параметров
+ * @param string $screen_name название файла страницы
+ * @param string $screen_title заголовок страницы
+ * @param string $data_title название ключа в шаблоне для обращения к данным
+ * @param array $data данные для отрисовки в шаблоне
+ * @param array $categories список категорий
+ * @return void
+ */
+function show_screen(string $screen_name, string $screen_title, string $data_title, array $data, array $categories) {
+    $page_content = include_template($screen_name, [
+        $data_title => $data,
+        'categories_list' => $categories
+    ]);
+
+    global $is_auth, $user_name;
+
+    $layout_content = include_template('layout.php', [
+        'is_auth' => $is_auth,
+        'user_name' => $user_name,
+        'content' => $page_content,
+        'categories_list' => $categories,
+        'title' => 'GifTube - ' . $screen_title
+    ]);
+
+    print($layout_content);
+}
+
+/**
+ * Получение значение переменной из url
+ * @param string $name имя переменной в url
+ * @return string|null
+ */
+function get_by_name_from_url(string $name): ?string {
+    return filter_input(INPUT_GET, $name, FILTER_SANITIZE_NUMBER_INT);
+}
+
+/**
+ * Фильтрует массив данных на основе совпадения с ключами из массива правил
+ * @param array $data
+ * @param array $rules
+ * @return array
+ */
+function filterDataByRules(array $data, array $rules): array {
+    $filteredData = [];
+
+    foreach ($rules as $rule) {
+        $key = $rule['field_name'];
+
+        if (array_key_exists($key, $data)) {
+            $filteredData[$key] = $data[$key];
+        }
+    }
+
+    return $filteredData;
 }
