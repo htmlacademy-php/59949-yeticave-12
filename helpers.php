@@ -253,27 +253,21 @@ function get_by_name_from_url(string $name): ?string {
 }
 
 /**
- * Возвращает новый массив данных на основе массива $_POST
+ * Фильтрует массив данных на основе совпадения с ключами из массива правил
+ * @param array $data
+ * @param array $rules
  * @return array
  */
-function getFormPostedData(): array {
-    $data = [];
-    foreach ($_POST as $key => $value) {
-        $data[$key] = $value;
+function filterDataByRules(array $data, array $rules): array {
+    $filteredData = [];
+
+    foreach ($rules as $rule) {
+        $key = $rule['field_name'];
+
+        if (array_key_exists($key, $data)) {
+            $filteredData[$key] = $data[$key];
+        }
     }
 
-    return $data;
-}
-
-/**
- * Возвращает новый массив данных на основе массива $_FILES
- * @return array
- */
-function getFormPostedFiles(): array {
-    $data = [];
-    foreach ($_FILES as $key => $value) {
-        $data[$key] = $value;
-    }
-
-    return $data;
+    return $filteredData;
 }

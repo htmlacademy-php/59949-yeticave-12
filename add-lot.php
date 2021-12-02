@@ -30,8 +30,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     global $lot_create_validation_rules;
 
     $formData = array_merge($_POST, $_FILES);
+    $filteredData = filterDataByRules($formData, $lot_create_validation_rules);
 
-    $errors = validateForm($formData, $lot_create_validation_rules);
+    $errors = validateForm($filteredData, $lot_create_validation_rules);
 
     if (empty($errors)) {
         $file_url = moveFileToLocalPath($formData['lot-img']);
