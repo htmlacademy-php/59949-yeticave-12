@@ -48,7 +48,7 @@ function fetch_from_db(mysqli $conn, string $sql) {
  * @param array $data
  * @return false|int|string
  */
-function db_create_lot_get_lot_id(mysqli $conn, string $sql, array $data) {
+function db_insert(mysqli $conn, string $sql, array $data) {
     $stmt = db_get_prepare_stmt($conn, $sql, $data);
     $result = mysqli_stmt_execute($stmt);
 
