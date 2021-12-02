@@ -27,18 +27,14 @@ if (!$categories_list) {
 $errors = [];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $formData = getFormPostedData();
-    $formFiles = getFormPostedFiles();
+    global $lot_create_validation_rules;
 
-    global $lot_create_data_validation_rules, $lot_create_files_validation_rules;
+    $formData = array_merge($_POST, $_FILES);
 
-    $data_errors = validateForm($formData, $lot_create_data_validation_rules);
-    $file_errors = validateFiles($formFiles, $lot_create_files_validation_rules);
-
-    $errors = array_merge($data_errors, $file_errors);
+    $errors = validateForm($formData, $lot_create_validation_rules);
 
     if (empty($errors)) {
-        $file_url = moveFileToLocalPath($formFiles['lot-img']);
+        $file_url = moveFileToLocalPath($formData['lot-img']);
 
         if ($file_url) {
             $lot_id = create_lot($db_conn, [

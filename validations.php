@@ -133,38 +133,14 @@ function validateForm(array $data, array $rules): array {
     $errors = [];
 
     foreach ($rules as $rule) {
-        $data_value = $data[$rule['field_name']];
+        $key = $rule['field_name'];
+        $data_value = $data[$key];
 
         foreach ($rule['validations'] as $validation) {
             $is_valid = $validation['method']($data_value, $validation['param1'], $validation['param2']);
 
             if (!$is_valid) {
-                $errors[$rule['field_name']] = $validation['error_msg'];
-                break;
-            }
-        }
-    }
-
-    return $errors;
-}
-
-/**
- * Валидирует переданные файлы на основе переданных правил
- * @param array $files файлы
- * @param array $rules правила
- * @return array массив ошибок
- */
-function validateFiles(array $files, array $rules): array {
-    $errors = [];
-
-    foreach ($rules as $rule) {
-        $file = $files[$rule['file_name']];
-
-        foreach ($rule['validations'] as $validation) {
-            $is_valid = $validation['method']($file, $validation['param1'], $validation['param2']);
-
-            if (!$is_valid) {
-                $errors[$rule['file_name']] = $validation['error_msg'];
+                $errors[$key] = $validation['error_msg'];
                 break;
             }
         }

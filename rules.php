@@ -7,7 +7,7 @@ $lot_descr_min_len = 10;
 $lot_descr_max_len = 1000;
 
 
-$lot_create_data_validation_rules = [
+$lot_create_validation_rules = [
     [
         'field_name' => 'lot-name',
         'validations' => [
@@ -49,12 +49,9 @@ $lot_create_data_validation_rules = [
             ['method' => 'isNotEmpty', 'error_msg' => 'Напишите описание лота'],
             ['method' => 'isCorrectLength', 'param1' => $lot_descr_min_len, 'param2' => $lot_descr_max_len, 'error_msg' => "Значение должно быть от $lot_descr_min_len до $lot_descr_max_len символов"]
         ]
-    ]
-];
-
-$lot_create_files_validation_rules = [
+    ],
     [
-        'file_name' => 'lot-img',
+        'field_name' => 'lot-img',
         'validations' => [
             ['method' => 'isFileSelected', 'error_msg' => 'Добавьте изображение лота'],
             ['method' => 'isFileTypeCorrect', 'param1' => 'image/jpeg', 'param2' => 'image/png', 'error_msg' => 'Изображение в формате jpeg/png'],
