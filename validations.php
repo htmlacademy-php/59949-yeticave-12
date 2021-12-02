@@ -2,10 +2,10 @@
 
 /**
  * Проверяет переданное значение на пустоту и неравенство нулю
- * @param string $val строкове значение
+ * @param null|string $val строкове значение
  * @return bool результат проверки
  */
-function isNotEmpty(string $val): bool {
+function isNotEmpty(?string $val): bool {
     if (empty($val) && $val !== '0') {
         return false;
     }
@@ -26,13 +26,13 @@ function isCorrectDateFormat(string $date, string $format): bool
 
 /**
  * Проверяет что файл выбран
- * @param array $file
+ * @param null|array $file
  * @return bool
  */
-function isFileSelected(array $file): bool {
+function isFileSelected(?array $file): bool {
     $UPLOAD_ERR_NO_FILE = 4;
 
-    if ($file['error'] && $file['error'] === $UPLOAD_ERR_NO_FILE) {
+    if (!$file || $file['error'] && $file['error'] === $UPLOAD_ERR_NO_FILE) {
         return false;
     }
     return true;
