@@ -1,9 +1,11 @@
 <?php
 
 require_once('db-methods.php');
+require_once('validations.php');
 require_once('queries/categories.php');
 require_once('data/data.php');
 require_once('helpers.php');
+require_once('rules.php');
 
 $db_conn = get_db_connect();
 
@@ -21,4 +23,13 @@ if (!$categories_list) {
     exit();
 }
 
-show_screen('registration.php', 'Регистрация', 'data-title', [], $categories_list);
+$errors = [];
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    global $registration_validation_rules;
+    $filteredData = filterDataByRules($_POST, $registration_validation_rules);
+
+    $errors = validateForm($filteredData, $registration_validation_rules);
+}
+
+show_screen('registration.php', 'Регистрация', 'errors', $errors, $categories_list);
