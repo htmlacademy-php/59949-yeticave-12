@@ -59,3 +59,30 @@ $lot_create_validation_rules = [
         ]
     ]
 ];
+
+$registration_validation_rules = [
+    [
+        'field_name' => 'email',
+        'validations' => [
+            ['method' => 'isNotEmpty', 'error_msg' => 'Введите e-mail']
+        ]
+    ],
+    [
+        'field_name' => 'password',
+        'validations' => [
+            ['method' => 'isNotEmpty', 'error_msg' => 'Введите пароль']
+        ]
+    ],
+    [
+        'field_name' => 'name',
+        'validations' => [
+            ['method' => 'isNotEmpty', 'error_msg' => 'Введите имя']
+        ]
+    ],
+    [
+        'field_name' => 'message',
+        'validations' => [
+            ['method' => 'isNotEmpty', 'error_msg' => 'Напишите как с вами связаться']
+        ]
+    ]
+];
