@@ -74,7 +74,8 @@ $registration_validation_rules = [
     [
         'field_name' => 'email',
         'validations' => [
-            ['method' => 'isNotEmpty', 'error_msg' => 'Введите e-mail']
+            ['method' => 'isNotEmpty', 'error_msg' => 'Введите e-mail'],
+            ['method' => 'isCorrectEmailFormat', 'error_msg' => 'E-mail не соответсвует формату example@mail.domain']
         ]
     ],
     [

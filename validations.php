@@ -13,6 +13,18 @@ function isNotEmpty(?string $val): bool {
 }
 
 /**
+ * Проверяет переданный почтовый адрес на корректность формата
+ * @param string $email адрес электронной почты
+ * @return bool результат проверки
+ */
+function isCorrectEmailFormat(string $email): bool {
+    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return true;
+    }
+    return false;
+}
+
+/**
  * Проверяет переданную дату на соответствие указанному формату
  * @param string $date дата в виде строки
  * @param string $format формат даты в ввиде строки
