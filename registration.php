@@ -25,7 +25,7 @@ if (!$categories_list) {
 
 $errors = [];
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     global $registration_validation_rules;
     $filteredData = filterDataByRules($_POST, $registration_validation_rules);
 
