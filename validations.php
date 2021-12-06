@@ -99,7 +99,7 @@ function isIntGreaterThanZero(string $val): bool {
  * @return boolean
  */
 function isCorrectLength(string $val, int $min, int $max): bool {
-    $len = strlen($val);
+    $len = mb_strlen($val, "UTF-8");
 
     if (!$len || $len < $min || $len > $max) {
         return false;
