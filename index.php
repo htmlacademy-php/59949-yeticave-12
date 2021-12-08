@@ -1,19 +1,10 @@
 <?php
 
-require_once('db-methods.php');
-require_once('helpers.php');
+require_once('init.php');
 require_once('data/data.php');
-require_once('queries/categories.php');
 require_once('queries/lots.php');
 
-$db_conn = get_db_connect();
-
-if (!$db_conn) {
-    $error = get_db_connection_error();
-    show_error($error);
-    exit();
-}
-
+global $db_conn;
 $categories_list = get_categories($db_conn);
 
 if (!$categories_list) {
