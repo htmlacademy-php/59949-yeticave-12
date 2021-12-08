@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit();
             }
 
-            header("Location: pages/login.html");
+            header("Location: login.php");
         }
     }
 }
