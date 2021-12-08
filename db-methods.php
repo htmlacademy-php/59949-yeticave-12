@@ -35,18 +35,10 @@ function get_db_error(mysqli $conn): string {
 function fetch_from_db(mysqli $conn, string $sql) {
     $result = mysqli_query($conn, $sql);
 
-    echo("<pre>");
-    echo(gettype($result));
-    print_r($result);
-    echo("</pre>");
-    exit();
-
     if (!$result) {
-//        echo 'fetch_from_db NO result';
         return false;
     }
-//    echo 'fetch_from_db DATA set';
-//    return  false;
+
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
@@ -56,9 +48,10 @@ function fetch_from_db(mysqli $conn, string $sql) {
  * @param array $data
  * @return false|int|string
  */
-function db_create_lot_get_lot_id(mysqli $conn, string $sql, array $data) {
+function db_insert(mysqli $conn, string $sql, array $data) {
     $stmt = db_get_prepare_stmt($conn, $sql, $data);
     $result = mysqli_stmt_execute($stmt);
+
     if (!$result) {
         return  false;
     }

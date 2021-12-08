@@ -189,14 +189,12 @@ function lotTimeLeftCalc(string $date): array
 }
 
 /**
- * Проверяет наличие файла изображения в массиве $_FILES и переносит из временной папки в локальную
- * @param string $field_name строковое название поля в массиве $_FILES
+ * Проверяет наличие файла и переносит из временной папки в локальную
+ * @param array $file
  * @return string|null вернет ссылку на файл или null
  */
-function copyFileToLocalPath(string $field_name): ?string
+function moveFileToLocalPath(array $file): ?string
 {
-    $file = $_FILES[$field_name];
-
     if (!isset($file) || $file['size'] === 0) {
         return null;
     }
@@ -218,10 +216,58 @@ function show_error(string $error) {
 }
 
 /**
+ * Отрисовывает экран страницы на основе переданных параметров
+ * @param string $screen_name название файла страницы
+ * @param string $screen_title заголовок страницы
+ * @param string $data_title название ключа в шаблоне для обращения к данным
+ * @param array $data данные для отрисовки в шаблоне
+ * @param array $categories список категорий
+ * @return void
+ */
+function show_screen(string $screen_name, string $screen_title, string $data_title, array $data, array $categories) {
+    $page_content = include_template($screen_name, [
+        $data_title => $data,
+        'categories_list' => $categories
+    ]);
+
+    global $is_auth, $user_name;
+
+    $layout_content = include_template('layout.php', [
+        'is_auth' => $is_auth,
+        'user_name' => $user_name,
+        'content' => $page_content,
+        'categories_list' => $categories,
+        'title' => 'GifTube - ' . $screen_title
+    ]);
+
+    print($layout_content);
+}
+
+/**
  * Получение значение переменной из url
  * @param string $name имя переменной в url
  * @return string|null
  */
 function get_by_name_from_url(string $name): ?string {
     return filter_input(INPUT_GET, $name, FILTER_SANITIZE_NUMBER_INT);
+}
+
+/**
+ * Фильтрует массив данных на основе совпадения с ключами из массива правил
+ * @param array $data
+ * @param array $rules
+ * @return array
+ */
+function filterDataByRules(array $data, array $rules): array {
+    $filteredData = [];
+
+    foreach ($rules as $rule) {
+        $key = $rule['field_name'];
+
+        if (array_key_exists($key, $data)) {
+            $filteredData[$key] = $data[$key];
+        }
+    }
+
+    return $filteredData;
 }

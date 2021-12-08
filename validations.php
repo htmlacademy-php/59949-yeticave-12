@@ -1,149 +1,162 @@
 <?php
 
 /**
- * Проверяет переданную дату на соответствие указанному или дефолтному формату 'ГГГГ-ММ-ДД'
+ * Проверяет переданное значение на пустоту и неравенство нулю
+ * @param null|string $val строкове значение
+ * @return bool результат проверки
+ */
+function isNotEmpty(?string $val): bool {
+    if (empty($val) && $val !== '0') {
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Проверяет переданный почтовый адрес на корректность формата
+ * @param string $email адрес электронной почты
+ * @return bool результат проверки
+ */
+function isCorrectEmailFormat(string $email): bool {
+    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Проверяет переданную дату на соответствие указанному формату
  * @param string $date дата в виде строки
  * @param string $format формат даты в ввиде строки
  * @return bool истинное значение при совпадении форматов
  */
-function validateDateFormat(string $date, string $format = 'Y-m-d'): bool
+function isCorrectDateFormat(string $date, string $format): bool
 {
     $dt = DateTime::createFromFormat($format, $date);
     return $dt && $dt->format($format) === $date;
 }
 
 /**
- * Проверяет список обязательных полей на наличие данных переданных методом POST
- * Возвращает массив ошибок, где ключ - название поля, значение - текст ошибки
- * @param array $fields список полей с названием поля и текстом ошибки
- * @return array список ошибок
+ * Проверяет что файл выбран
+ * @param null|array $file
+ * @return bool
  */
-function validateRequiredFields(array $fields): array
-{
-    $errors = [];
+function isFileSelected(?array $file): bool {
+    $UPLOAD_ERR_NO_FILE = 4;
 
-    foreach ($fields as $field) {
-        $val = $_POST[$field['name']];
-
-        if (empty($val) && $val !== '0') {
-            $errors[$field['name']] = $field['error_msg'];
-        }
+    if (!$file || $file['error'] && $file['error'] === $UPLOAD_ERR_NO_FILE) {
+        return false;
     }
-    return $errors;
+    return true;
 }
 
 /**
- * Проверяет наличие файла изображения в массиве $_FILES и валидирует по типу и размеру
- * @param string $field_name строковое название поля в массиве $_FILES
- * @return array список ошибок
+ * Проверяет тип переданного файла на основе указанных параметров
+ * @param array $file
+ * @param string $type1
+ * @param string $type2
+ * @return bool
  */
-function validateImgFile(string $field_name): array
-{
-    $UPLOAD_ERR_NO_FILE = 4;
-    $errors = [];
+function isFileTypeCorrect(array $file, string $type1, string $type2): bool {
+    $fileType = mime_content_type($file['tmp_name']);
 
-    $file = $_FILES[$field_name];
-
-    if ($file['error'] && $file['error'] === $UPLOAD_ERR_NO_FILE) {
-        $errors[$field_name] = 'Добавьте изображение лота';
-    } else if ($file['size']) {
-        $fileType = mime_content_type($file['tmp_name']);
-
-        if ($fileType !== 'image/jpeg' && $fileType !== 'image/png') {
-            $errors[$field_name] = 'Изображение в формате jpeg/png';
-        }
-        if ($file['size'] > 2000000) {
-            $errors[$field_name] = 'Максимальный размер файла: 2Мб';
-        }
+    if ($fileType !== $type1 && $fileType !== $type2) {
+        return false;
     }
-    return $errors;
+    return true;
+}
+
+/**
+ * Проверяет размер файла на максимально допустимый размер
+ * @param array $file
+ * @param int $maxSize
+ * @return bool
+ */
+function isFileSizeCorrect(array $file, int $maxSize):bool {
+    if ($file['size'] > $maxSize) {
+        return false;
+    }
+    return true;
 }
 
 /**
  * Проверяет что значение является числом больше нуля
- * @param string $name имя поля в массиве $_POST
- * @return string|null
+ * @param string $val строковое значение
+ * @return boolean результат проверки
  */
-function isNumGreaterThanZero(string $name): ?string {
-    $val = $_POST[$name];
-
-    if (!empty($val) && !is_numeric($val) || is_numeric($val) && $val < 1) {
-        return 'Значение должно быть числом больше нуля';
+function isNumGreaterThanZero(string $val): bool {
+    if (empty($val) || !is_numeric($val) || $val <= 0) {
+        return false;
     }
-    return null;
+    return true;
 }
 
 /**
  * Проверяет что значение является целым числом больше нуля
- * @param string $name имя поля в массиве $_POST
- * @return string|null
+ * @param string $val строковое значение
+ * @return boolean результат проверки
  */
-function isIntGreaterThanZero(string $name): ?string {
-    $val = $_POST[$name];
-
-    if (!empty($val) && !ctype_digit($val) || ctype_digit($val) && $val < 1) {
-        return 'Значение должно быть целым числом больше нуля';
+function isIntGreaterThanZero(string $val): bool {
+    if (empty($val) || !ctype_digit($val) || $val <= 0) {
+        return false;
     }
-    return null;
+    return true;
 }
 
 /**
  * Проверяет строку на соответствие заданной длине
- * @param string $name
- * @param int $min
- * @param int $max
- * @return string|null
+ * @param string $val строковое значение
+ * @param int $min значение минимальной длины строки
+ * @param int $max значение максимальной длины строки
+ * @return boolean
  */
-function isCorrectLength(string $name, int $min, int $max): ?string {
-    $len = strlen($_POST[$name]);
+function isCorrectLength(string $val, int $min, int $max): bool {
+    $len = mb_strlen($val, "UTF-8");
 
-    if ($len && $len < $min || $len > $max) {
-        return "Значение должно быть от $min до $max символов";
+    if (!$len || $len < $min || $len > $max) {
+        return false;
     }
-    return null;
+
+    return true;
 }
 
 /**
- * Проверяет формат даты и что она больше текущей
- * @param string $name имя поля в массиве $_POST
- * @return string|null
+ * Проверяет что переданная дата больше текущей минимум на день
+ * @param string $val дата в виде строки
+ * @return boolean
  */
-function isCorrectDate(string $name): ?string {
-    $val = $_POST[$name];
+function isDateMinOneDayGreater(string $val): bool {
     $date_now = date("Y-m-d");
 
-    if ($val && !validateDateFormat($val)) {
-        return 'Некорректный формат даты';
+    if (!$val || $val <= $date_now) {
+        return false;
     }
-    if ($val && $val <= $date_now) {
-        return 'Значение должно быть больше текущей даты, хотя бы на один день';
-    }
-    return null;
+
+    return true;
 }
 
 /**
- * Валидирует форму по заданному списку обязательных полей и возвращает массив ошибок
- * @param array $required_fields список обязательных полей
- * @param string|null $file_name необязательное имя файлового поля
+ * Валидирует переданные данные на основе переданных правил
+ * @param array $data данные
+ * @param array $rules правила
  * @return array массив ошибок
  */
-function validateForm(array $required_fields, array $rules, ?string $file_name = null):array
-{
-    $errors = validateRequiredFields($required_fields);
+function validateForm(array $data, array $rules): array {
+    $errors = [];
 
-    if ($file_name) {
-        $errors =  array_merge($errors, validateImgFile($file_name));
-    }
+    foreach ($rules as $rule) {
+        $key = $rule['field_name'];
+        $data_value = $data[$key];
 
-    foreach ($_POST as $key => $value) {
-        if (isset($rules[$key])) {
-            $rule = $rules[$key];
-            $errorMsg = $rule();
+        foreach ($rule['validations'] as $validation) {
+            $is_valid = $validation['method']($data_value, $validation['param1'], $validation['param2']);
 
-            if ($errorMsg) {
-                $errors[$key] = $errorMsg;
+            if (!$is_valid) {
+                $errors[$key] = $validation['error_msg'];
+                break;
             }
         }
     }
+
     return $errors;
 }

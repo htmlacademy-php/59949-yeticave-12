@@ -4,7 +4,7 @@
  * @param mysqli $conn
  * @return array|false
  */
-function fetch_lots(mysqli $conn) {
+function get_lots(mysqli $conn) {
     $sql = 'SELECT '
         . 'l.id, l.title, c.title category_title, expiry_dt, initial_price, img_path '
         . 'FROM lots l '
