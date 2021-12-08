@@ -45,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             if (password_verify($filteredData['password'], $user_by_email[0]['password'])) {
                 $_SESSION['user'] = $user_by_email;
+                header("Location: index.php");
             } else {
                 $errors['password'] = 'Неверный пароль';
             }
