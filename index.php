@@ -24,7 +24,7 @@ if (!$categories_list) {
 
 $lots_list = get_lots($db_conn);
 
-if (!$lots_list) {
+if (!is_array($lots_list) && !$lots_list) {
     $error = get_db_error($db_conn);
     show_error($error);
     exit();
