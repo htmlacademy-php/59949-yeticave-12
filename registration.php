@@ -4,6 +4,7 @@ require_once('db-methods.php');
 require_once('validations.php');
 require_once('queries/categories.php');
 require_once('queries/user-by-email.php');
+require_once('queries/create-user.php');
 require_once('data/data.php');
 require_once('helpers.php');
 require_once('rules.php');
@@ -43,6 +44,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (count($user_by_email)) {
             $errors['email'] = 'Пользователь с такой почтой уже зарегистрирован';
+        } else {
+            $password = password_hash($filteredData['password'], PASSWORD_DEFAULT);
+
+            $user = create_user($db_conn, [
+                $filteredData['email'],
+                $filteredData['name'],
+                $password,
+                $filteredData['message']
+            ]);
+
+            if (!$user) {
+                $error = get_db_error($db_conn);
+                show_error($error);
+                exit();
+            }
+
+            header("Location: pages/login.html");
         }
     }
 }
