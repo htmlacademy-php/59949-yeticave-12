@@ -4,6 +4,11 @@ require_once('init.php');
 require_once('data/data.php');
 require_once('queries/create-lot.php');
 
+if (empty($_SESSION['user'])) {
+    header("Location: /pages/404.html");
+    exit();
+}
+
 global $db_conn;
 $categories_list = get_categories($db_conn);
 
