@@ -16,7 +16,7 @@ if (!$categories_list) {
 $lot_id = get_by_name_from_url('id');
 
 if (!$lot_id) {
-    header("Location: /pages/404.html");
+    header("Location: 404.php");
     exit();
 }
 
@@ -29,7 +29,7 @@ if (!is_array($lot_by_id_list) && !$lot_by_id_list) {
 }
 
 if (empty($lot_by_id_list)) {
-    header("Location: /pages/404.html");
+    header("Location: 404.php");
     exit();
 }
 

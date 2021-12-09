@@ -5,7 +5,7 @@ require_once('data/data.php');
 require_once('queries/create-lot.php');
 
 if (empty($_SESSION['user'])) {
-    header("Location: /pages/404.html");
+    header("Location: 404.php");
     exit();
 }
 
