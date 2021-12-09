@@ -6,6 +6,8 @@ require_once('rules.php');
 require_once('validations.php');
 require_once('queries/categories.php');
 
+session_start();
+
 $db_conn = get_db_connect();
 
 if (!$db_conn) {

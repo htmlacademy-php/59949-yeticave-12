@@ -230,11 +230,13 @@ function show_screen(string $screen_name, string $screen_title, string $data_tit
         'categories_list' => $categories
     ]);
 
-    global $is_auth, $user_name;
+    $user = null;
+    if (isset($_SESSION['user'])) {
+        $user = $_SESSION['user'][0];
+    }
 
     $layout_content = include_template('layout.php', [
-        'is_auth' => $is_auth,
-        'user_name' => $user_name,
+        'user' => $user,
         'content' => $page_content,
         'categories_list' => $categories,
         'title' => 'GifTube - ' . $screen_title
