@@ -59,3 +59,44 @@ $lot_create_validation_rules = [
         ]
     ]
 ];
+
+
+$user_name_min_len = 4;
+$user_name_max_len = 30;
+
+$user_password_min_len = 8;
+$user_password_max_len = 30;
+
+$user_contacts_min_len = 10;
+$user_contacts_max_len = 200;
+
+$registration_validation_rules = [
+    [
+        'field_name' => 'email',
+        'validations' => [
+            ['method' => 'isNotEmpty', 'error_msg' => 'Введите e-mail'],
+            ['method' => 'isCorrectEmailFormat', 'error_msg' => 'E-mail не соответсвует формату example@mail.domain']
+        ]
+    ],
+    [
+        'field_name' => 'password',
+        'validations' => [
+            ['method' => 'isNotEmpty', 'error_msg' => 'Введите пароль'],
+            ['method' => 'isCorrectLength', 'param1' => $user_password_min_len, 'param2' => $user_password_max_len, 'error_msg' => "Значение должно быть от $user_password_min_len до $user_password_max_len символов"]
+        ]
+    ],
+    [
+        'field_name' => 'name',
+        'validations' => [
+            ['method' => 'isNotEmpty', 'error_msg' => 'Введите имя'],
+            ['method' => 'isCorrectLength', 'param1' => $user_name_min_len, 'param2' => $user_name_max_len, 'error_msg' => "Значение должно быть от $user_name_min_len до $user_name_max_len символов"]
+        ]
+    ],
+    [
+        'field_name' => 'message',
+        'validations' => [
+            ['method' => 'isNotEmpty', 'error_msg' => 'Напишите как с вами связаться'],
+            ['method' => 'isCorrectLength', 'param1' => $user_contacts_min_len, 'param2' => $user_contacts_max_len, 'error_msg' => "Значение должно быть от $user_contacts_min_len до $user_contacts_max_len символов"]
+        ]
+    ]
+];
