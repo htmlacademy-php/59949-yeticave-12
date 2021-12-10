@@ -3,7 +3,6 @@
 require_once('init.php');
 require_once('queries/user-by-email.php');
 require_once('queries/create-user.php');
-require_once('data/data.php');
 
 if (isset($_SESSION['user'])) {
     header("Location: 404.php");

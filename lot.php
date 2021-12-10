@@ -1,7 +1,6 @@
 <?php
 
 require_once('init.php');
-require_once('data/data.php');
 require_once('queries/lot-by-id.php');
 
 global $db_conn;

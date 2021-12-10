@@ -1,7 +1,6 @@
 <?php
 
 require_once('init.php');
-require_once('data/data.php');
 require_once('queries/create-lot.php');
 
 if (empty($_SESSION['user'])) {
