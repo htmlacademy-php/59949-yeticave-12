@@ -4,7 +4,8 @@ require_once('init.php');
 require_once('queries/create-lot.php');
 
 if (empty($_SESSION['user'])) {
-    header("Location: 404.php");
+    http_response_code(403);
+    show_error('Доступ запрещен ' . http_response_code());
     exit();
 }
 

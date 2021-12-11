@@ -4,7 +4,7 @@ require_once('init.php');
 require_once('queries/user-by-email.php');
 
 if (isset($_SESSION['user'])) {
-    header("Location: 404.php");
+    header("Location: index.php");
     exit();
 }
 

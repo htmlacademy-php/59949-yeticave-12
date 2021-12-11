@@ -5,7 +5,8 @@ require_once('queries/user-by-email.php');
 require_once('queries/create-user.php');
 
 if (isset($_SESSION['user'])) {
-    header("Location: 404.php");
+    http_response_code(403);
+    show_error('Доступ запрещен ' . http_response_code());
     exit();
 }
 
