@@ -39,14 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (count($user_by_email)) {
             $errors['email'] = 'Пользователь с такой почтой уже зарегистрирован';
         } else {
-            $password = password_hash($filteredData['password'], PASSWORD_DEFAULT);
-
-            $user = create_user($db_conn, [
-                $filteredData['email'],
-                $filteredData['name'],
-                $password,
-                $filteredData['message']
-            ]);
+            $user = create_user($db_conn, $filteredData);
 
             if (!$user) {
                 $error = get_db_error($db_conn);
