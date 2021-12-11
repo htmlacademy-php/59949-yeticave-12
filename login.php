@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
 
-        if (!count($user)) {
+        if (empty($user)) {
             $errors['email'] = 'Пользователь с такой почтой не найден';
         } else {
             if (password_verify($filteredData['password'], $user[0]['password'])) {

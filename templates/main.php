@@ -17,7 +17,7 @@
             <h2>Открытые лоты</h2>
         </div>
         <ul class="lots__list">
-            <?php if (count($goods_list) === 0) : ?>
+            <?php if (empty($goods_list)) : ?>
                 <h3>Лотов не обнаружено</h3>
             <?php else : ?>
                 <?php foreach ($goods_list as $item) : ?>

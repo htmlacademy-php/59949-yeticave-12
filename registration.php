@@ -28,15 +28,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = validateForm($filteredData, $registration_validation_rules);
 
     if (empty($errors)) {
-        $user_by_email = get_user_by_email($db_conn, $filteredData['email']);
+        $user = get_user_by_email($db_conn, $filteredData['email']);
 
-        if (!is_array($user_by_email) && !$user_by_email) {
+        if (!is_array($user) && !$user) {
             $error = get_db_error($db_conn);
             show_error($error);
             exit();
         }
 
-        if (count($user_by_email)) {
+        if (!empty($user)) {
             $errors['email'] = 'Пользователь с такой почтой уже зарегистрирован';
         } else {
             $user = create_user($db_conn, $filteredData);

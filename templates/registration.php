@@ -9,7 +9,7 @@
         </ul>
     </nav>
 
-    <form class="form container <?= count($errors) ? 'form--invalid' : ''; ?>" action="registration.php" method="post" autocomplete="off">
+    <form class="form container <?= !empty($errors) ? 'form--invalid' : ''; ?>" action="registration.php" method="post" autocomplete="off">
       <h2>Регистрация нового аккаунта</h2>
 
       <div class="form__item <?= isset($errors['email']) ? 'form__item--invalid' : '' ?>">
