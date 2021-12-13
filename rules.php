@@ -100,3 +100,25 @@ $registration_validation_rules = [
         ]
     ]
 ];
+
+$login_validation_rules = [
+    [
+        'field_name' => 'email',
+        'validations' => [
+            ['method' => 'isNotEmpty', 'error_msg' => 'Введите e-mail'],
+            ['method' => 'isCorrectEmailFormat', 'error_msg' => 'E-mail не соответсвует формату example@mail.domain']
+        ]
+    ],
+    [
+        'field_name' => 'password',
+        'validations' => [
+            ['method' => 'isNotEmpty', 'error_msg' => 'Введите пароль']
+        ]
+    ]
+];
+
+return [
+    'lot-create' => $lot_create_validation_rules,
+    'registration' => $registration_validation_rules,
+    'login' => $login_validation_rules
+];

@@ -9,7 +9,7 @@
         </ul>
     </nav>
 
-    <form class="form container <?= count($errors) ? 'form--invalid' : ''; ?>" action="registration.php" method="post" autocomplete="off">
+    <form class="form container <?= !empty($errors) ? 'form--invalid' : ''; ?>" action="registration.php" method="post" autocomplete="off">
       <h2>Регистрация нового аккаунта</h2>
 
       <div class="form__item <?= isset($errors['email']) ? 'form__item--invalid' : '' ?>">
@@ -34,6 +34,6 @@
       </div>
       <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>
       <button type="submit" class="button">Зарегистрироваться</button>
-      <a class="text-link" href="#">Уже есть аккаунт</a>
+      <a class="text-link" href="login.php">Уже есть аккаунт</a>
     </form>
 </main>

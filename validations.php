@@ -18,10 +18,7 @@ function isNotEmpty(?string $val): bool {
  * @return bool результат проверки
  */
 function isCorrectEmailFormat(string $email): bool {
-    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        return true;
-    }
-    return false;
+    return (boolean)filter_var($email, FILTER_VALIDATE_EMAIL);
 }
 
 /**

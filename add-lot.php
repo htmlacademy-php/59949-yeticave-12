@@ -1,18 +1,12 @@
 <?php
 
-require_once('db-methods.php');
-require_once('rules.php');
-require_once('helpers.php');
-require_once('data/data.php');
-require_once('queries/categories.php');
+$db_conn = require_once('init.php');
+$rules = require_once('rules.php');
 require_once('queries/create-lot.php');
-require_once ('validations.php');
 
-$db_conn = get_db_connect();
-
-if (!$db_conn) {
-    $error = get_db_connection_error();
-    show_error($error);
+if (empty($_SESSION['user'])) {
+    http_response_code(403);
+    show_error('Доступ запрещен ' . http_response_code());
     exit();
 }
 
@@ -27,26 +21,16 @@ if (!$categories_list) {
 $errors = [];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    global $lot_create_validation_rules;
-
     $formData = array_merge($_POST, $_FILES);
-    $filteredData = filterDataByRules($formData, $lot_create_validation_rules);
+    $filteredData = filterDataByRules($formData, $rules['lot-create']);
 
-    $errors = validateForm($filteredData, $lot_create_validation_rules);
+    $errors = validateForm($filteredData, $rules['lot-create']);
 
     if (empty($errors)) {
         $file_url = moveFileToLocalPath($formData['lot-img']);
 
         if ($file_url) {
-            $lot_id = create_lot($db_conn, [
-                $formData['lot-date'],
-                $formData['lot-name'],
-                $formData['message'],
-                $formData['lot-rate'],
-                $formData['lot-step'],
-                $formData['category'],
-                $file_url
-            ]);
+            $lot_id = create_lot($db_conn, $formData, $file_url, $_SESSION['user'][0]['id']);
 
             if (!$lot_id) {
                 $error = get_db_error($db_conn);
