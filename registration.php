@@ -1,6 +1,7 @@
 <?php
 
-require_once('init.php');
+$db_conn = require_once('init.php');
+$rules = require_once('rules.php');
 require_once('queries/user-by-email.php');
 require_once('queries/create-user.php');
 
@@ -10,7 +11,6 @@ if (isset($_SESSION['user'])) {
     exit();
 }
 
-global $db_conn;
 $categories_list = get_categories($db_conn);
 
 if (!$categories_list) {
@@ -22,10 +22,9 @@ if (!$categories_list) {
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    global $registration_validation_rules;
-    $filteredData = filterDataByRules($_POST, $registration_validation_rules);
+    $filteredData = filterDataByRules($_POST, $rules['registration']);
 
-    $errors = validateForm($filteredData, $registration_validation_rules);
+    $errors = validateForm($filteredData, $rules['registration']);
 
     if (empty($errors)) {
         $user = get_user_by_email($db_conn, $filteredData['email']);

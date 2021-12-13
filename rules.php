@@ -116,3 +116,9 @@ $login_validation_rules = [
         ]
     ]
 ];
+
+return [
+    'lot-create' => $lot_create_validation_rules,
+    'registration' => $registration_validation_rules,
+    'login' => $login_validation_rules
+];

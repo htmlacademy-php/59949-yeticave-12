@@ -2,7 +2,6 @@
 
 require_once('db-methods.php');
 require_once('helpers.php');
-require_once('rules.php');
 require_once('validations.php');
 require_once('queries/categories.php');
 
@@ -15,3 +14,5 @@ if (!$db_conn) {
     show_error($error);
     exit();
 }
+
+return $db_conn;

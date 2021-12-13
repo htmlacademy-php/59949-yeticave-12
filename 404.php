@@ -1,8 +1,7 @@
 <?php
 
-require_once('init.php');
+$db_conn = require_once('init.php');
 
-global $db_conn;
 $categories_list = get_categories($db_conn);
 
 if (!$categories_list) {

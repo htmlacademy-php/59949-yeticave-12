@@ -1,6 +1,7 @@
 <?php
 
-require_once('init.php');
+$db_conn = require_once('init.php');
+$rules = require_once('rules.php');
 require_once('queries/create-lot.php');
 
 if (empty($_SESSION['user'])) {
@@ -9,7 +10,6 @@ if (empty($_SESSION['user'])) {
     exit();
 }
 
-global $db_conn;
 $categories_list = get_categories($db_conn);
 
 if (!$categories_list) {
@@ -21,12 +21,10 @@ if (!$categories_list) {
 $errors = [];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    global $lot_create_validation_rules;
-
     $formData = array_merge($_POST, $_FILES);
-    $filteredData = filterDataByRules($formData, $lot_create_validation_rules);
+    $filteredData = filterDataByRules($formData, $rules['lot-create']);
 
-    $errors = validateForm($filteredData, $lot_create_validation_rules);
+    $errors = validateForm($filteredData, $rules['lot-create']);
 
     if (empty($errors)) {
         $file_url = moveFileToLocalPath($formData['lot-img']);
