@@ -10,7 +10,7 @@ function search_lots(mysqli $conn, string $search) {
     FROM lots l
     LEFT JOIN bets b ON l.id = b.lot_id
     JOIN categories c ON l.category_id = c.id
-    WHERE MATCH(l.title, description) AGAINST('$search')
+    WHERE MATCH(l.title, description) AGAINST('$search' IN BOOLEAN MODE)
     GROUP BY l.id
     ORDER BY l.created_at DESC";
 
