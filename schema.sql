@@ -38,6 +38,7 @@ CREATE TABLE lots (
 
 CREATE INDEX lot_id ON lots(id, category_id);
 CREATE INDEX lot_title ON lots(title);
+CREATE FULLTEXT INDEX lot_ft_search ON lots(title, description);
 
 CREATE TABLE categories (
     PRIMARY KEY (id),
