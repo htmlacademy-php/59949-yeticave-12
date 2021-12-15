@@ -232,16 +232,21 @@ function show_screen(string $screen_name, string $screen_title, string $data_tit
         'cur_page' => $cur_page
     ]);
 
+    $categories_list = include_template('categories-list.php', [
+        'categories_list' => $categories,
+    ]);
+
     $page_content = include_template($screen_name, [
         $data_title => $data,
-        'categories_list' => $categories,
+        'categories' => $categories,
+        'categories_list' => $categories_list,
         'pagination' => $pagination
     ]);
 
     $layout_content = include_template('layout.php', [
         'user' => get_session_user(),
         'content' => $page_content,
-        'categories_list' => $categories,
+        'categories_list' => $categories_list,
         'title' => 'GifTube - ' . $screen_title
     ]);
 
