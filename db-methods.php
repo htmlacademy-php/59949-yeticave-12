@@ -62,6 +62,24 @@ function fetch_one_from_db(mysqli $conn, string $sql, string $key) {
 /**
  * @param mysqli $conn
  * @param string $sql
+ * @param array $search
+ * @return array|false
+ */
+function get_by_search_from_db(mysqli $conn, string $sql, array $search) {
+    $stmt = db_get_prepare_stmt($conn, $sql, $search);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    if (!$result) {
+        return  false;
+    }
+
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
+/**
+ * @param mysqli $conn
+ * @param string $sql
  * @param array $data
  * @return false|int|string
  */
