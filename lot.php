@@ -18,17 +18,18 @@ if (!$lot_id) {
     exit();
 }
 
-$lot_by_id_list = get_lot_by_id($db_conn, $lot_id);
+$lot = get_lot_by_id($db_conn, $lot_id);
 
-if (!is_array($lot_by_id_list) && !$lot_by_id_list) {
-    $error = get_db_error($db_conn);
+$error = get_db_error($db_conn);
+
+if ($error) {
     show_error($error);
     exit();
 }
 
-if (empty($lot_by_id_list)) {
+if (empty($lot)) {
     header("Location: 404.php");
     exit();
 }
 
-show_screen('lot.php', 'Страница лота', 'lot', $lot_by_id_list[0], $categories_list);
+show_screen('lot.php', 'Страница лота', 'lot', $lot, $categories_list);

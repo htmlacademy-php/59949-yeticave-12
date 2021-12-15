@@ -13,5 +13,5 @@ function get_lot_by_id(mysqli $conn, int $id) {
     WHERE l.id = $id
     GROUP BY l.id";
 
-    return fetch_from_db($conn, $sql);
+    return fetch_one_from_db($conn, $sql);
 }
