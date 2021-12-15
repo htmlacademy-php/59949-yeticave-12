@@ -227,11 +227,15 @@ function show_error(string $error) {
  * @return void
  */
 function show_screen(string $screen_name, string $screen_title, string $data_title, array $data, array $categories, array $pages = [], int $cur_page = 1) {
+    $pagination = include_template('pagination.php', [
+        'pages' => $pages,
+        'cur_page' => $cur_page
+    ]);
+
     $page_content = include_template($screen_name, [
         $data_title => $data,
         'categories_list' => $categories,
-        'pages' => $pages,
-        'cur_page' => $cur_page
+        'pagination' => $pagination
     ]);
 
     $user = null;
