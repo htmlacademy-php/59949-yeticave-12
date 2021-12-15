@@ -273,3 +273,19 @@ function filterDataByRules(array $data, array $rules): array {
 
     return $filteredData;
 }
+
+/**
+ * Вычисляет количество страниц и смещение на основе общего количества элементов, элементов на страницу и текущей страницы
+ * @param string $items_count общее количество элементов
+ * @param int $items_per_page количество элементов на страницу
+ * @return array параметры пагинации
+ */
+function getPaginationParams(string $items_count, int $items_per_page): array {
+    $current_page = $_GET['page'] ?? 1;
+
+    $pages_count = ceil($items_count / $items_per_page);
+    $offset = ($current_page - 1) * $items_per_page;
+    $pages = range(1, $pages_count);
+
+    return [$pages, $offset, $current_page];
+}
