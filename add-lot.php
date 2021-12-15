@@ -29,8 +29,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (empty($errors)) {
         $file_url = moveFileToLocalPath($formData['lot-img']);
 
+        $formData['file'] = $file_url;
+        $formData['user_id'] = get_session_user()['id'];
+
         if ($file_url) {
-            $lot_id = create_lot($db_conn, $formData, $file_url, get_session_user()['id']);
+            $lot_id = create_lot($db_conn, $formData);
 
             if (!$lot_id) {
                 $error = get_db_error($db_conn);

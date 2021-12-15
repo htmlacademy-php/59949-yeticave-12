@@ -35,13 +35,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (empty($user)) {
             $errors['email'] = 'Пользователь с такой почтой не найден';
+        } else if (password_verify($filteredData['password'], $user[0]['password'])) {
+            $_SESSION['user'] = $user;
+            header("Location: index.php");
         } else {
-            if (password_verify($filteredData['password'], $user[0]['password'])) {
-                $_SESSION['user'] = $user;
-                header("Location: index.php");
-            } else {
-                $errors['password'] = 'Неверный пароль';
-            }
+            $errors['password'] = 'Неверный пароль';
         }
     }
 }
