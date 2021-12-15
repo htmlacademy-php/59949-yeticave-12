@@ -238,13 +238,8 @@ function show_screen(string $screen_name, string $screen_title, string $data_tit
         'pagination' => $pagination
     ]);
 
-    $user = null;
-    if (isset($_SESSION['user'])) {
-        $user = $_SESSION['user'][0];
-    }
-
     $layout_content = include_template('layout.php', [
-        'user' => $user,
+        'user' => get_session_user(),
         'content' => $page_content,
         'categories_list' => $categories,
         'title' => 'GifTube - ' . $screen_title
@@ -296,4 +291,18 @@ function getPaginationParams(string $items_count, int $items_per_page): array {
     $pages = range(1, $pages_count);
 
     return [$pages, $offset, $current_page];
+}
+
+/**
+ * Проверяет наличие пользовательской сессии и возвращает данные пользователя
+ * @return array|null
+ */
+function get_session_user(): ?array {
+    $user = null;
+
+    if (isset($_SESSION['user'])) {
+        $user = $_SESSION['user'][0];
+    }
+
+    return $user;
 }
