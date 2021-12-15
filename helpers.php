@@ -222,12 +222,20 @@ function show_error(string $error) {
  * @param string $data_title название ключа в шаблоне для обращения к данным
  * @param array $data данные для отрисовки в шаблоне
  * @param array $categories список категорий
+ * @param array $pages количество страниц для пагинации
+ * @param int $cur_page номер текущей страницы пагинации
  * @return void
  */
-function show_screen(string $screen_name, string $screen_title, string $data_title, array $data, array $categories) {
+function show_screen(string $screen_name, string $screen_title, string $data_title, array $data, array $categories, array $pages = [], int $cur_page = 1) {
+    $pagination = include_template('pagination.php', [
+        'pages' => $pages,
+        'cur_page' => $cur_page
+    ]);
+
     $page_content = include_template($screen_name, [
         $data_title => $data,
-        'categories_list' => $categories
+        'categories_list' => $categories,
+        'pagination' => $pagination
     ]);
 
     $user = null;
@@ -272,4 +280,20 @@ function filterDataByRules(array $data, array $rules): array {
     }
 
     return $filteredData;
+}
+
+/**
+ * Вычисляет количество страниц и смещение на основе общего количества элементов, элементов на страницу и текущей страницы
+ * @param string $items_count общее количество элементов
+ * @param int $items_per_page количество элементов на страницу
+ * @return array параметры пагинации
+ */
+function getPaginationParams(string $items_count, int $items_per_page): array {
+    $current_page = $_GET['page'] ?? 1;
+
+    $pages_count = ceil($items_count / $items_per_page);
+    $offset = ($current_page - 1) * $items_per_page;
+    $pages = range(1, $pages_count);
+
+    return [$pages, $offset, $current_page];
 }

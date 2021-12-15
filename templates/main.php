@@ -50,5 +50,7 @@
                 <?php endforeach; ?>
             <?php endif; ?>
         </ul>
+
+        <?= $pagination; ?>
     </section>
 </main>
