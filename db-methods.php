@@ -45,6 +45,23 @@ function fetch_from_db(mysqli $conn, string $sql) {
 /**
  * @param mysqli $conn
  * @param string $sql
+ * @param string $key
+ * @return false|mixed|string
+ */
+function fetch_one_from_db(mysqli $conn, string $sql, string $key) {
+    $result = mysqli_query($conn, $sql);
+
+    if (!$result) {
+        return false;
+    }
+
+    $row = mysqli_fetch_assoc($result);
+    return $row[$key];
+}
+
+/**
+ * @param mysqli $conn
+ * @param string $sql
  * @param array $data
  * @return false|int|string
  */
