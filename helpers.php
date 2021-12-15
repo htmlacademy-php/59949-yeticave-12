@@ -222,12 +222,16 @@ function show_error(string $error) {
  * @param string $data_title название ключа в шаблоне для обращения к данным
  * @param array $data данные для отрисовки в шаблоне
  * @param array $categories список категорий
+ * @param array $pages количество страниц для пагинации
+ * @param int $cur_page номер текущей страницы пагинации
  * @return void
  */
-function show_screen(string $screen_name, string $screen_title, string $data_title, array $data, array $categories) {
+function show_screen(string $screen_name, string $screen_title, string $data_title, array $data, array $categories, array $pages = [], int $cur_page = 1) {
     $page_content = include_template($screen_name, [
         $data_title => $data,
-        'categories_list' => $categories
+        'categories_list' => $categories,
+        'pages' => $pages,
+        'cur_page' => $cur_page
     ]);
 
     $user = null;
