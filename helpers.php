@@ -236,8 +236,13 @@ function show_screen(string $screen_name, string $screen_title, string $data_tit
         'categories_list' => $categories,
     ]);
 
-    $page_content = include_template($screen_name, [
+    $lot_cards_list = include_template('lot-cards-list.php', [
+        'goods_list' => $data
+    ]);
+
+    $page_content = include_template($template_name, [
         $data_title => $data,
+        'lot_cards_list' => $lot_cards_list,
         'categories' => $categories,
         'categories_list' => $categories_list,
         'pagination' => $pagination
