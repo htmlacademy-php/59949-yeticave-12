@@ -44,4 +44,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-show_screen('login.php', 'Аутентификация', 'errors', $errors, $categories_list);
+$categories_list_tmpl = get_categories_list_template($categories_list);
+
+$display_params = [
+    'file' => 'login.php',
+    'title' => 'Аутентификация',
+    'errors' => $errors,
+    'categories_list_tmpl' => $categories_list_tmpl
+];
+
+show_screen($display_params);

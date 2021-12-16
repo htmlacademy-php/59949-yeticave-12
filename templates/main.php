@@ -17,7 +17,7 @@
             <h2>Открытые лоты</h2>
         </div>
         <ul class="lots__list">
-            <?php if (empty($goods_list)) : ?>
+            <?php if (empty($lot_cards_list)) : ?>
                 <h3>Лотов не обнаружено</h3>
             <?php else : ?>
                 <?= $lot_cards_list; ?>

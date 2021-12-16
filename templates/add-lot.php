@@ -19,7 +19,7 @@
                 <label for="category">Категория <sup>*</sup></label>
                 <select id="category" name="category">
                     <option value="" selected hidden="hidden">Выберите категорию</option>
-                    <?php foreach ($categories_list as $category) : ?>
+                    <?php foreach ($categories as $category) : ?>
                         <option
                             value="<?= htmlspecialchars($category['id']); ?>"
                             <?php if($_POST['category'] === $category['id']){echo ' selected';} ?>

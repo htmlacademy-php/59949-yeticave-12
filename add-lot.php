@@ -46,4 +46,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-show_screen('add-lot.php', 'Добавление лота', 'errors', $errors, $categories_list);
+$categories_list_tmpl = get_categories_list_template($categories_list);
+
+$display_params = [
+    'file' => 'add-lot.php',
+    'title' => 'Добавление лота',
+    'errors' => $errors,
+    'categories' => $categories_list,
+    'categories_list_tmpl' => $categories_list_tmpl
+];
+
+show_screen($display_params);

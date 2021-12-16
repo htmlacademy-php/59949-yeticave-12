@@ -26,4 +26,17 @@ if (!is_array($lots_list) && !$lots_list) {
     exit();
 }
 
-show_screen('main.php', 'Главная страница', 'goods_list', $lots_list, $categories_list, $pages, $cur_page );
+$pagination_tmpl = get_pagination_template($pages, $cur_page);
+$lot_cards_list_tmpl = get_lot_cards_list_template($lots_list);
+$categories_list_tmpl = get_categories_list_template($categories_list);
+
+$display_params = [
+    'file' => 'main.php',
+    'title' => 'Главная страница',
+    'categories' => $categories_list,
+    'pagination_tmpl' => $pagination_tmpl,
+    'lot_cards_list_tmpl' => $lot_cards_list_tmpl,
+    'categories_list_tmpl' => $categories_list_tmpl
+];
+
+show_screen($display_params);

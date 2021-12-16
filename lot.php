@@ -32,4 +32,13 @@ if (empty($lot)) {
     exit();
 }
 
-show_screen('lot.php', 'Страница лота', 'lot', $lot, $categories_list);
+$categories_list_tmpl = get_categories_list_template($categories_list);
+
+$display_params = [
+    'file' => 'lot.php',
+    'title' => 'Страница лота',
+    'lot' => $lot,
+    'categories_list_tmpl' => $categories_list_tmpl
+];
+
+show_screen($display_params);

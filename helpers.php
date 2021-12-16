@@ -226,7 +226,7 @@ function show_error(string $error) {
  * @param int $cur_page номер текущей страницы пагинации
  * @return void
  */
-function show_screen(string $screen_name, string $screen_title, string $data_title, array $data, array $categories, array $pages = [], int $cur_page = 1) {
+function show_screen_old(string $screen_name, string $screen_title, string $data_title, array $data, array $categories, array $pages = [], int $cur_page = 1) {
     $pagination = include_template('pagination.php', [
         'pages' => $pages,
         'cur_page' => $cur_page
@@ -256,6 +256,67 @@ function show_screen(string $screen_name, string $screen_title, string $data_tit
     ]);
 
     print($layout_content);
+}
+
+
+/**
+ * Отрисовывает экран страницы на основе переданных параметров
+ * @param array $params списое параметров
+ * @return void
+ */
+function show_screen(array $params) {
+    $page_content = include_template($params['file'], [
+        'lot' => $params['lot'],
+        'errors' => $params['errors'],
+        'categories' => $params['categories'],
+        'pagination' => $params['pagination_tmpl'],
+        'lot_cards_list' => $params['lot_cards_list_tmpl'],
+        'categories_list' => $params['categories_list_tmpl']
+    ]);
+
+    $layout_content = include_template('layout.php', [
+        'user' => get_session_user(),
+        'content' => $page_content,
+        'categories_list' => $params['categories_list_tmpl'],
+        'title' => 'GifTube - ' . $params['title']
+    ]);
+
+    print($layout_content);
+}
+
+/**
+ * @param array $pages
+ * @param int $cur_page
+ * @return string
+ */
+function get_pagination_template(array $pages = [], int $cur_page = 1) {
+    return include_template('pagination.php', [
+        'pages' => $pages,
+        'cur_page' => $cur_page
+    ]);
+}
+
+/**
+ * @param array $lots_list
+ * @return string|null
+ */
+function get_lot_cards_list_template(array $lots_list) {
+    if (!$lots_list) {
+        return null;
+    }
+    return include_template('lot-cards-list.php', [
+        'goods_list' => $lots_list
+    ]);
+}
+
+/**
+ * @param $categories
+ * @return string
+ */
+function get_categories_list_template($categories) {
+    return include_template('categories-list.php', [
+        'categories_list' => $categories,
+    ]);
 }
 
 /**
