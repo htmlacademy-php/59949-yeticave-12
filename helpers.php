@@ -217,50 +217,6 @@ function show_error(string $error) {
 
 /**
  * Отрисовывает экран страницы на основе переданных параметров
- * @param string $screen_name название файла страницы
- * @param string $screen_title заголовок страницы
- * @param string $data_title название ключа в шаблоне для обращения к данным
- * @param array $data данные для отрисовки в шаблоне
- * @param array $categories список категорий
- * @param array $pages количество страниц для пагинации
- * @param int $cur_page номер текущей страницы пагинации
- * @return void
- */
-function show_screen_old(string $screen_name, string $screen_title, string $data_title, array $data, array $categories, array $pages = [], int $cur_page = 1) {
-    $pagination = include_template('pagination.php', [
-        'pages' => $pages,
-        'cur_page' => $cur_page
-    ]);
-
-    $categories_list = include_template('categories-list.php', [
-        'categories_list' => $categories,
-    ]);
-
-    $lot_cards_list = include_template('lot-cards-list.php', [
-        'goods_list' => $data
-    ]);
-
-    $page_content = include_template($template_name, [
-        $data_title => $data,
-        'lot_cards_list' => $lot_cards_list,
-        'categories' => $categories,
-        'categories_list' => $categories_list,
-        'pagination' => $pagination
-    ]);
-
-    $layout_content = include_template('layout.php', [
-        'user' => get_session_user(),
-        'content' => $page_content,
-        'categories_list' => $categories_list,
-        'title' => 'GifTube - ' . $screen_title
-    ]);
-
-    print($layout_content);
-}
-
-
-/**
- * Отрисовывает экран страницы на основе переданных параметров
  * @param array $params списое параметров
  * @return void
  */
