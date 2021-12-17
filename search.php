@@ -1,7 +1,7 @@
 <?php
 
 $db_conn = require_once('init.php');
-require_once('queries/lots-search.php');
+require_once('queries/lots-by-search-str.php');
 
 $categories_list = get_categories($db_conn);
 
@@ -13,10 +13,10 @@ if (!$categories_list) {
 
 $lots_list = [];
 
-$search = $_GET['search'] ?? '';
+$search_str = $_GET['search'] ?? '';
 
-if ($search) {
-    $lots_list = search_lots($db_conn, $search);
+if ($search_str) {
+    $lots_list = get_lots_by_search_str($db_conn, $search_str);
 }
 
 if (!$lots_list && !is_array($lots_list)) {

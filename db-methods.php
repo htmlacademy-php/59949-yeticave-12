@@ -60,16 +60,16 @@ function fetch_one_from_db(mysqli $conn, string $sql) {
 /**
  * @param mysqli $conn
  * @param string $sql
- * @param array $search
+ * @param array $params
  * @return array|false
  */
-function get_by_search_from_db(mysqli $conn, string $sql, array $search) {
-    $stmt = db_get_prepare_stmt($conn, $sql, $search);
+function fetch_from_db_by_params(mysqli $conn, string $sql, array $params) {
+    $stmt = db_get_prepare_stmt($conn, $sql, $params);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 
     if (!$result) {
-        return  false;
+        return false;
     }
 
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -86,7 +86,7 @@ function db_insert(mysqli $conn, string $sql, array $data) {
     $result = mysqli_stmt_execute($stmt);
 
     if (!$result) {
-        return  false;
+        return false;
     }
 
     return mysqli_insert_id($conn);

@@ -2,10 +2,10 @@
 
 /**
  * @param mysqli $conn
- * @param string $search
+ * @param string $search_str
  * @return array|false
  */
-function search_lots(mysqli $conn, string $search) {
+function get_lots_by_search_str(mysqli $conn, string $search_str) {
     $sql = "SELECT l.id, l.title, description, c.title category_title, expiry_dt, initial_price, img_path
     FROM lots l
     LEFT JOIN bets b ON l.id = b.lot_id
@@ -14,5 +14,5 @@ function search_lots(mysqli $conn, string $search) {
     GROUP BY l.id
     ORDER BY l.created_at DESC";
 
-    return get_by_search_from_db($conn, $sql, [$search]);
+    return fetch_from_db_by_params($conn, $sql, [$search_str]);
 }
