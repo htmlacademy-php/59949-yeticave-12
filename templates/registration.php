@@ -1,5 +1,5 @@
 <main>
-    <?= $categories_list; ?>
+    <?= $categories_list_templ; ?>
 
     <form class="form container <?= !empty($errors) ? 'form--invalid' : ''; ?>" action="registration.php" method="post" autocomplete="off">
       <h2>Регистрация нового аккаунта</h2>

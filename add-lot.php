@@ -52,7 +52,7 @@ $display_params = [
     'file' => 'add-lot.php',
     'title' => 'Добавление лота',
     'errors' => $errors,
-    'categories' => $categories_list,
+    'categories_list' => $categories_list,
     'categories_list_tmpl' => $categories_list_tmpl
 ];
 

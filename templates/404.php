@@ -8,7 +8,7 @@
 </head>
 <body>
     <main>
-        <?= $categories_list; ?>
+        <?= $categories_list_templ; ?>
 
         <section class="lot-item container">
             <h2>404 Страница не найдена</h2>

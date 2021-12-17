@@ -1,5 +1,5 @@
 <main>
-    <?= $categories_list; ?>
+    <?= $categories_list_templ; ?>
 
     <form class="form container <?= !empty($errors) ? 'form--invalid' : ''; ?>" action="login.php" method="post">
         <h2>Вход</h2>

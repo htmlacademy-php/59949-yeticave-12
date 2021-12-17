@@ -1,5 +1,5 @@
 <main>
-    <?= $categories_list; ?>
+    <?= $categories_list_templ; ?>
 
     <section class="lot-item container">
         <h2><?= htmlspecialchars($lot['title']); ?></h2>

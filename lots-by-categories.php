@@ -19,7 +19,7 @@ $categories_list_tmpl = get_categories_list_template($categories_list);
 $display_params = [
     'file' => 'lots-by-categories.php',
     'title' => 'Лоты по категоирям',
-    'categories' => $categories_list,
+    'categories_list' => $categories_list,
     'lot_cards_list_tmpl' => $lot_cards_list_tmpl,
     'categories_list_tmpl' => $categories_list_tmpl
 ];

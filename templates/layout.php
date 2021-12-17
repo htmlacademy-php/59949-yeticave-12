@@ -49,7 +49,7 @@
 </div>
 
 <footer class="main-footer">
-    <?= $categories_list; ?>
+    <?= $categories_list_templ; ?>
 
     <div class="main-footer__bottom container">
         <div class="main-footer__copyright">

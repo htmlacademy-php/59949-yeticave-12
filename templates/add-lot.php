@@ -1,5 +1,5 @@
 <main>
-    <?= $categories_list; ?>
+    <?= $categories_list_templ; ?>
 
     <form class="form form--add-lot container <?= !empty($errors) ? 'form--invalid' : ''; ?>" action="add-lot.php" method="post" enctype="multipart/form-data">
         <h2>Добавление лота</h2>
@@ -19,7 +19,7 @@
                 <label for="category">Категория <sup>*</sup></label>
                 <select id="category" name="category">
                     <option value="" selected hidden="hidden">Выберите категорию</option>
-                    <?php foreach ($categories as $category) : ?>
+                    <?php foreach ($categories_list as $category) : ?>
                         <option
                             value="<?= htmlspecialchars($category['id']); ?>"
                             <?php if($_POST['category'] === $category['id']){echo ' selected';} ?>

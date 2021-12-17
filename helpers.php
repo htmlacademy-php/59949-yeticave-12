@@ -224,17 +224,17 @@ function show_screen(array $params) {
     $page_content = include_template($params['file'], [
         'lot' => $params['lot'],
         'errors' => $params['errors'],
-        'categories' => $params['categories'],
-        'pagination' => $params['pagination_tmpl'],
-        'lot_cards_list' => $params['lot_cards_list_tmpl'],
-        'categories_list' => $params['categories_list_tmpl']
+        'categories_list' => $params['categories_list'],
+        'pagination_templ' => $params['pagination_tmpl'],
+        'lot_cards_list_templ' => $params['lot_cards_list_tmpl'],
+        'categories_list_templ' => $params['categories_list_tmpl']
     ]);
 
     $layout_content = include_template('layout.php', [
         'user' => get_session_user(),
         'content' => $page_content,
-        'categories_list' => $params['categories_list_tmpl'],
-        'title' => 'GifTube - ' . $params['title']
+        'title' => 'GifTube - ' . $params['title'],
+        'categories_list_templ' => $params['categories_list_tmpl']
     ]);
 
     print($layout_content);
