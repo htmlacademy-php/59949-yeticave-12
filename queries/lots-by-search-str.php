@@ -8,7 +8,6 @@
 function get_lots_by_search_str(mysqli $conn, string $search_str) {
     $sql = "SELECT l.id, l.title, description, c.title category_title, expiry_dt, initial_price, img_path
     FROM lots l
-    LEFT JOIN bets b ON l.id = b.lot_id
     JOIN categories c ON l.category_id = c.id
     WHERE MATCH(l.title, description) AGAINST(? IN BOOLEAN MODE)
     GROUP BY l.id
