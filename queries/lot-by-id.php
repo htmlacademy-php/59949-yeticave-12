@@ -10,8 +10,8 @@ function get_lot_by_id(mysqli $conn, int $id) {
        (initial_price + IFNULL(SUM(b.amount), 0)) AS current_price FROM lots l
     JOIN categories c ON l.category_id = c.id
     LEFT JOIN bets b ON l.id = b.lot_id
-    WHERE l.id = $id
+    WHERE l.id = ?
     GROUP BY l.id";
 
-    return fetch_one_from_db($conn, $sql);
+    return fetch_from_db_by_params($conn, $sql, [$id])[0];
 }
