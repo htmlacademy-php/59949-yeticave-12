@@ -217,32 +217,62 @@ function show_error(string $error) {
 
 /**
  * Отрисовывает экран страницы на основе переданных параметров
- * @param string $screen_name название файла страницы
- * @param string $screen_title заголовок страницы
- * @param string $data_title название ключа в шаблоне для обращения к данным
- * @param array $data данные для отрисовки в шаблоне
- * @param array $categories список категорий
+ * @param array $params списое параметров
  * @return void
  */
-function show_screen(string $screen_name, string $screen_title, string $data_title, array $data, array $categories) {
-    $page_content = include_template($screen_name, [
-        $data_title => $data,
-        'categories_list' => $categories
+function show_screen(array $params) {
+    $page_content = include_template($params['file'], [
+        'lot' => $params['lot'],
+        'errors' => $params['errors'],
+        'categories_list' => $params['categories_list'],
+        'pagination_templ' => $params['pagination_tmpl'],
+        'lot_cards_list_templ' => $params['lot_cards_list_tmpl'],
+        'categories_list_templ' => $params['categories_list_tmpl']
     ]);
 
-    $user = null;
-    if (isset($_SESSION['user'])) {
-        $user = $_SESSION['user'][0];
-    }
-
     $layout_content = include_template('layout.php', [
-        'user' => $user,
+        'user' => get_session_user(),
         'content' => $page_content,
-        'categories_list' => $categories,
-        'title' => 'GifTube - ' . $screen_title
+        'title' => 'GifTube - ' . $params['title'],
+        'categories_list_templ' => $params['categories_list_tmpl']
     ]);
 
     print($layout_content);
+}
+
+/**
+ * @param array $pages
+ * @param int $cur_page
+ * @return string
+ */
+function get_pagination_template(array $pages = [], int $cur_page = 1) {
+    return include_template('pagination.php', [
+        'pages' => $pages,
+        'cur_page' => $cur_page
+    ]);
+}
+
+/**
+ * @param array $lots_list
+ * @return string|null
+ */
+function get_lot_cards_list_template(array $lots_list) {
+    if (!$lots_list) {
+        return null;
+    }
+    return include_template('lot-cards-list.php', [
+        'goods_list' => $lots_list
+    ]);
+}
+
+/**
+ * @param $categories
+ * @return string
+ */
+function get_categories_list_template($categories) {
+    return include_template('categories-list.php', [
+        'categories_list' => $categories,
+    ]);
 }
 
 /**
@@ -272,4 +302,34 @@ function filterDataByRules(array $data, array $rules): array {
     }
 
     return $filteredData;
+}
+
+/**
+ * Вычисляет количество страниц и смещение на основе общего количества элементов, элементов на страницу и текущей страницы
+ * @param string $items_count общее количество элементов
+ * @param int $items_per_page количество элементов на страницу
+ * @return array параметры пагинации
+ */
+function getPaginationParams(string $items_count, int $items_per_page): array {
+    $current_page = $_GET['page'] ?? 1;
+
+    $pages_count = ceil($items_count / $items_per_page);
+    $offset = ($current_page - 1) * $items_per_page;
+    $pages = range(1, $pages_count);
+
+    return [$pages, $offset, $current_page];
+}
+
+/**
+ * Проверяет наличие пользовательской сессии и возвращает данные пользователя
+ * @return array|null
+ */
+function get_session_user(): ?array {
+    $user = null;
+
+    if (isset($_SESSION['user'])) {
+        $user = $_SESSION['user'][0];
+    }
+
+    return $user;
 }

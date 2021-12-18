@@ -29,8 +29,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (empty($errors)) {
         $file_url = moveFileToLocalPath($formData['lot-img']);
 
+        $formData['file'] = $file_url;
+        $formData['user_id'] = get_session_user()['id'];
+
         if ($file_url) {
-            $lot_id = create_lot($db_conn, $formData, $file_url, $_SESSION['user'][0]['id']);
+            $lot_id = create_lot($db_conn, $formData);
 
             if (!$lot_id) {
                 $error = get_db_error($db_conn);
@@ -43,4 +46,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-show_screen('add-lot.php', 'Добавление лота', 'errors', $errors, $categories_list);
+$categories_list_tmpl = get_categories_list_template($categories_list);
+
+$display_params = [
+    'file' => 'add-lot.php',
+    'title' => 'Добавление лота',
+    'errors' => $errors,
+    'categories_list' => $categories_list,
+    'categories_list_tmpl' => $categories_list_tmpl
+];
+
+show_screen($display_params);

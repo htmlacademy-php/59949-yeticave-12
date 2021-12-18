@@ -51,4 +51,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-show_screen('registration.php', 'Регистрация', 'errors', $errors, $categories_list);
+$categories_list_tmpl = get_categories_list_template($categories_list);
+
+$display_params = [
+    'file' => 'registration.php',
+    'title' => 'Регистрация',
+    'errors' => $errors,
+    'categories_list_tmpl' => $categories_list_tmpl
+];
+
+show_screen($display_params);

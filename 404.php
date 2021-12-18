@@ -10,4 +10,12 @@ if (!$categories_list) {
     exit();
 }
 
-show_screen('404.php', '404', '', [], $categories_list);
+$categories_list_tmpl = get_categories_list_template($categories_list);
+
+$display_params = [
+    'file' => '404.php',
+    'title' => '404',
+    'categories_list_tmpl' => $categories_list_tmpl
+];
+
+show_screen($display_params);
