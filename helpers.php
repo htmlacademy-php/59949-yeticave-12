@@ -325,11 +325,5 @@ function getPaginationParams(string $items_count, int $items_per_page): array {
  * @return array|null
  */
 function get_session_user(): ?array {
-    $user = null;
-
-    if (isset($_SESSION['user'])) {
-        $user = $_SESSION['user'][0];
-    }
-
-    return $user;
+    return isset($_SESSION['user']) ? $_SESSION['user'][0] : null;
 }
