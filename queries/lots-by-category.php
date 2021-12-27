@@ -12,7 +12,6 @@ function get_lots_by_category(mysqli $conn, string $category_id) {
     LEFT JOIN categories c ON c.id = l.category_id
     WHERE l.category_id = ?
     AND l.expiry_dt > NOW()
-    GROUP BY l.id
     ORDER BY l.created_at DESC";
 
     return fetch_from_db_by_params($conn, $sql, [$category_id]);
