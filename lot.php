@@ -1,6 +1,7 @@
 <?php
 
 $db_conn = require_once('init.php');
+$rules = require_once('rules.php');
 require_once('queries/lot-by-id.php');
 
 $categories_list = get_categories($db_conn);
@@ -32,12 +33,21 @@ if (empty($lot)) {
     exit();
 }
 
+$errors = [];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $filteredData = filterDataByRules($_POST, $rules['lot-bet']);
+
+    $errors = validateForm($filteredData, $rules['lot-bet']);
+}
+
 $categories_list_tmpl = get_categories_list_template($categories_list);
 
 $display_params = [
     'file' => 'lot.php',
     'title' => 'Страница лота',
     'lot' => $lot,
+    'errors' => $errors,
     'categories_list_tmpl' => $categories_list_tmpl
 ];
 

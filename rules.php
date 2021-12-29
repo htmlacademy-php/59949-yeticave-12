@@ -1,5 +1,14 @@
 <?php
 
+$lot_bet = [
+    [
+        'field_name' => 'cost',
+        'validations' => [
+            ['method' => 'isNotEmpty', 'error_msg' => 'Укажите ставку лота']
+        ]
+    ]
+];
+
 $lot_name_min_len = 3;
 $lot_name_max_len = 50;
 
@@ -118,6 +127,7 @@ $login_validation_rules = [
 ];
 
 return [
+    'lot-bet' => $lot_bet,
     'lot-create' => $lot_create_validation_rules,
     'registration' => $registration_validation_rules,
     'login' => $login_validation_rules
