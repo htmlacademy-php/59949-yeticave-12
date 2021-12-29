@@ -224,6 +224,7 @@ function show_screen(array $params) {
     $page_content = include_template($params['file'], [
         'lot' => $params['lot'],
         'errors' => $params['errors'],
+        'category' => $params['category'],
         'categories_list' => $params['categories_list'],
         'pagination_templ' => $params['pagination_tmpl'],
         'lot_cards_list_templ' => $params['lot_cards_list_tmpl'],
