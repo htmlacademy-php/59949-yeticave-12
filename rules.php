@@ -1,10 +1,14 @@
 <?php
 
+$lot_min_bet = 12000;
+
 $lot_bet = [
     [
         'field_name' => 'cost',
         'validations' => [
-            ['method' => 'isNotEmpty', 'error_msg' => 'Укажите ставку лота']
+            ['method' => 'isNotEmpty', 'error_msg' => 'Укажите ставку лота'],
+            ['method' => 'isIntGreaterThanZero', 'error_msg' => 'Только целое, положительное число'],
+            ['method' => 'isNotLessThanNumber', 'param1' => $lot_min_bet, 'error_msg' => 'Ваша ставка ниже минимальной']
         ]
     ]
 ];
