@@ -328,3 +328,15 @@ function getPaginationParams(string $items_count, int $items_per_page): array {
 function get_session_user(): ?array {
     return isset($_SESSION['user']) ? $_SESSION['user'][0] : null;
 }
+
+/**
+ * Возвращает значение минимально допустимой ставки на лот
+ * @return int|null
+ */
+function get_lot_min_bet_value(): ?int {
+    if (isset($_SESSION['lot-info'])) {
+        return ($_SESSION['lot-info']['current_price'] + $_SESSION['lot-info']['bet_step']);
+    }
+
+    return null;
+}
