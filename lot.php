@@ -3,6 +3,7 @@
 $db_conn = require_once('init.php');
 $rules = require_once('rules.php');
 require_once('queries/lot-by-id.php');
+require_once('queries/create-bet.php');
 
 $categories_list = get_categories($db_conn);
 
@@ -41,6 +42,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filteredData = filterDataByRules($_POST, $rules['lot-bet']);
 
     $errors = validateForm($filteredData, $rules['lot-bet']);
+
+    if (empty($errors)) {
+        $data = [
+            'amount' => $filteredData['cost'],
+            'user_id' => $_SESSION['user'][0]['id'],
+            'lot_id' => $lot['id']
+        ];
+
+        $bet = create_bet($db_conn, $data);
+
+        if (!$bet) {
+            $error = get_db_error($db_conn);
+            show_error($error);
+            exit();
+        }
+
+        $_SESSION['lot-info'] = null;
+        header("Refresh: 0");
+    }
 }
 
 $categories_list_tmpl = get_categories_list_template($categories_list);
