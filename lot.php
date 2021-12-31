@@ -36,9 +36,9 @@ if (empty($lot)) {
 
 $errors = [];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $_SESSION['lot-info'] = $lot;
+$_SESSION['lot-info'] = $lot;
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $filteredData = filterDataByRules($_POST, $rules['lot-bet']);
 
     $errors = validateForm($filteredData, $rules['lot-bet']);
