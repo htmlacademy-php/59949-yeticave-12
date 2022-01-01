@@ -334,8 +334,11 @@ function get_session_user(): ?array {
  * @return int|null
  */
 function get_lot_min_bet_value(): ?int {
-    if (isset($_SESSION['lot-info'])) {
-        return ($_SESSION['lot-info']['current_price'] + $_SESSION['lot-info']['bet_step']);
+    $lot = $_SESSION['lot-info'];
+
+    if (isset($lot)) {
+        $lot_price = $lot['current_price'] ?? $lot['initial_price'];
+        return $lot_price + $lot['bet_step'];
     }
 
     return null;

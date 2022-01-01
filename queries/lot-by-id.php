@@ -7,12 +7,13 @@
  */
 function get_lot_by_id(mysqli $conn, int $id) {
     $sql = "SELECT
-    l.id, l.title, c.title AS category_title, img_path, description, expiry_dt, bet_step,
-    (initial_price + (
-        SELECT IFNULL(SUM(b.amount), 0)
+    l.id, l.title, c.title AS category_title, img_path, description, expiry_dt, bet_step, initial_price,
+    (
+        SELECT b.amount
         FROM bets b
-        WHERE l.id = b.lot_id
-        )
+        WHERE b.lot_id = l.id
+        ORDER BY b.created_at DESC
+        LIMIT 1
     ) AS current_price FROM lots l
     JOIN categories c ON l.category_id = c.id
     WHERE l.id = ?";

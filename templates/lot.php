@@ -19,13 +19,17 @@
                         </div>
                     <?php ?>
                     <div class="lot-item__cost-state">
-                        <div class="lot-item__rate">
-                            <span class="lot-item__amount">Текущая цена</span>
-                            <span class="lot-item__cost"><?= formatPrice($lot['current_price']); ?></span>
-                        </div>
-                        <div class="lot-item__min-cost">
-                            Мин. ставка <span><?= formatPrice($lot['current_price'] + $lot['bet_step']); ?></span>
-                        </div>
+                        <?php $price = $lot['current_price'] ?? $lot['initial_price'] ?>
+                            <div class="lot-item__rate">
+                                <span class="lot-item__amount">Текущая цена</span>
+                                <span class="lot-item__cost">
+                                    <?= formatPrice($price); ?>
+                                </span>
+                            </div>
+                            <div class="lot-item__min-cost">
+                                Мин. ставка <span><?= formatPrice($price + $lot['bet_step']); ?></span>
+                            </div>
+                        <?php ?>
                     </div>
                     <form class="lot-item__form" action="lot.php?id=<?= $_GET['id'] ?>" method="post" autocomplete="off">
                         <p class="lot-item__form-item form__item <?= isset($errors['cost']) ? 'form__item--invalid' : '' ?>">
