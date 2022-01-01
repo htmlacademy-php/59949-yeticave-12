@@ -3,6 +3,7 @@
 $db_conn = require_once('init.php');
 $rules = require_once('rules.php');
 require_once('queries/lot-by-id.php');
+require_once('queries/lot-bets.php');
 require_once('queries/create-bet.php');
 
 $categories_list = get_categories($db_conn);
@@ -31,6 +32,14 @@ if ($error) {
 
 if (empty($lot)) {
     header("Location: 404.php");
+    exit();
+}
+
+$bets_list = get_lot_bets($db_conn, $lot['id']);
+
+if (!is_array($bets_list) && !$bets_list) {
+    $error = get_db_error($db_conn);
+    show_error($error);
     exit();
 }
 
@@ -69,6 +78,7 @@ $display_params = [
     'file' => 'lot.php',
     'title' => 'Страница лота',
     'lot' => $lot,
+    'bets' => $bets_list,
     'errors' => $errors,
     'categories_list_tmpl' => $categories_list_tmpl
 ];

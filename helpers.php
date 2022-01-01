@@ -223,6 +223,7 @@ function show_error(string $error) {
 function show_screen(array $params) {
     $page_content = include_template($params['file'], [
         'lot' => $params['lot'],
+        'bets' => $params['bets'],
         'errors' => $params['errors'],
         'category' => $params['category'],
         'categories_list' => $params['categories_list'],

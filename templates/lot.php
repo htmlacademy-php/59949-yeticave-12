@@ -40,6 +40,23 @@
                         <button type="submit" class="button">Сделать ставку</button>
                     </form>
                 </div>
+
+                <div class="history">
+                    <?php if (empty($bets)) : ?>
+                        <h3>Ставок нет</h3>
+                    <?php else : ?>
+                        <h3>История ставок (<span><?= count($bets); ?></span>)</h3>
+                        <table class="history__list">
+                            <?php foreach ($bets as $bet) : ?>
+                                <tr class="history__item">
+                                    <td class="history__name"><?= $bet['name']; ?></td>
+                                    <td class="history__price"><?= formatPrice($bet['amount']); ?></td>
+                                    <td class="history__time"><?= $bet['created_at']; ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </table>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
     </section>
