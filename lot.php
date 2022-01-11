@@ -37,6 +37,10 @@ if (empty($lot)) {
 
 $bets_list = get_lot_bets($db_conn, $lot['id']);
 
+foreach ($bets_list as $key => $val) {
+    $bets_list[$key]['time_passed'] = calcTimeHavePassed($val);
+}
+
 if (!is_array($bets_list) && !$bets_list) {
     $error = get_db_error($db_conn);
     show_error($error);

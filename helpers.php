@@ -189,6 +189,37 @@ function lotTimeLeftCalc(string $date): array
 }
 
 /**
+ * @param array $data
+ * @return string
+ */
+function calcTimeHavePassed(array $data): string {
+    $dt_now = date_create("now");
+    $val_date = date_create($data['created_at']);
+
+    $dt_diff = date_diff($val_date, $dt_now);
+    $days_diff = date_interval_format($dt_diff, "%d");
+    $hours_diff = date_interval_format($dt_diff, "%h");
+    $mins_diff = date_interval_format($dt_diff, "%i");
+
+    $yesterday = date("d.m.y", strtotime("yesterday"));
+
+    if ($days_diff == 0 && $hours_diff == 0 && $mins_diff == 0) {
+        return 'Только что';
+    } else if ($days_diff == 0 && $hours_diff == 0 && $mins_diff > 0) {
+        $noun = get_noun_plural_form($mins_diff, 'минута', 'минуты', 'минут');
+        return "$mins_diff $noun назад";
+    } else if ($days_diff == 0 && $hours_diff == 1 && $mins_diff == 0) {
+        return 'Час назад';
+    } else if ($data['date'] == $yesterday) {
+        return 'Вчера в ' . $data['time'];
+    } else if ($days_diff == 0 && $hours_diff > 0 && $mins_diff > 0) {
+       return 'Сегодня в ' . $data['time'];
+    } else {
+      return $data['date'] . ' в ' . $data['time'];
+    }
+}
+
+/**
  * Проверяет наличие файла и переносит из временной папки в локальную
  * @param array $file
  * @return string|null вернет ссылку на файл или null
