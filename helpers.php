@@ -188,13 +188,15 @@ function lotTimeLeftCalc(string $date): array
     return [$hours_left, $minutes_left];
 }
 
+
 /**
  * @param array $data
+ * @param string $field_name
  * @return string
  */
-function calcTimeHavePassed(array $data): string {
+function calcTimeHavePassed(array $data, string $field_name): string {
     $dt_now = date_create("now");
-    $val_date = date_create($data['created_at']);
+    $val_date = date_create($data[$field_name]);
 
     $dt_diff = date_diff($val_date, $dt_now);
     $days_diff = date_interval_format($dt_diff, "%d");
@@ -206,7 +208,7 @@ function calcTimeHavePassed(array $data): string {
     if ($days_diff == 0 && $hours_diff == 0 && $mins_diff == 0) {
         return 'Только что';
     } else if ($days_diff == 0 && $hours_diff == 0 && $mins_diff > 0) {
-        $noun = get_noun_plural_form($mins_diff, 'минута', 'минуты', 'минут');
+        $noun = get_noun_plural_form($mins_diff, 'минуту', 'минуты', 'минут');
         return "$mins_diff $noun назад";
     } else if ($days_diff == 0 && $hours_diff == 1 && $mins_diff == 0) {
         return 'Час назад';

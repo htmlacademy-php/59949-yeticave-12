@@ -7,7 +7,9 @@
  */
 function get_user_bets(mysqli $conn, int $user_id) {
     $sql = "SELECT
-       l.id, contact, amount, user_id, c.title AS category, l.title AS lot_title, img_path, expiry_dt, winner, SQ.bet_created
+       l.id AS lot_id, contact, amount, user_id, c.title AS category, l.title AS lot_title, img_path, expiry_dt, winner, SQ.bet_created,
+       DATE_FORMAT(SQ.bet_created, '%d.%m.%y') AS date,
+       DATE_FORMAT(SQ.bet_created, '%H:%i') AS time
     FROM (
         SELECT lot_id, MAX(created_at) AS bet_created
         FROM bets
