@@ -7,9 +7,9 @@
  */
 function get_user_bets(mysqli $conn, int $user_id) {
     $sql = "SELECT
-       l.id, contact, amount, c.title AS category, l.title AS lot_title, img_path, expiry_dt, winner, SQ.bet_created, SQ.user_id
+       l.id, contact, amount, user_id, c.title AS category, l.title AS lot_title, img_path, expiry_dt, winner, SQ.bet_created
     FROM (
-        SELECT lot_id, user_id, MAX(created_at) AS bet_created
+        SELECT lot_id, MAX(created_at) AS bet_created
         FROM bets
         WHERE user_id = ?
         GROUP BY lot_id
