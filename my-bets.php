@@ -3,6 +3,12 @@
 $db_conn = require_once('init.php');
 require_once('queries/user-bets.php');
 
+$user = get_session_user();
+
+if (empty($user)) {
+    header("Location: index.php");
+}
+
 $categories_list = get_categories($db_conn);
 
 if (!$categories_list) {
