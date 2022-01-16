@@ -31,14 +31,16 @@
                             </div>
                         <?php ?>
                     </div>
-                    <form class="lot-item__form" action="lot.php?id=<?= $_GET['id'] ?>" method="post" autocomplete="off">
-                        <p class="lot-item__form-item form__item <?= isset($errors['cost']) ? 'form__item--invalid' : '' ?>">
-                            <label for="cost">Ваша ставка</label>
-                            <input id="cost" type="text" name="cost" placeholder="12 000" value="<?= $_POST['cost'] ?? '' ?>">
-                            <span class="form__error"><?= $errors['cost'] ?></span>
-                        </p>
-                        <button type="submit" class="button">Сделать ставку</button>
-                    </form>
+                    <?php if ($is_visible) : ?>
+                        <form class="lot-item__form" action="lot.php?id=<?= $_GET['id'] ?>" method="post" autocomplete="off">
+                            <p class="lot-item__form-item form__item <?= isset($errors['cost']) ? 'form__item--invalid' : '' ?>">
+                                <label for="cost">Ваша ставка</label>
+                                <input id="cost" type="text" name="cost" placeholder="12 000" value="<?= $_POST['cost'] ?? '' ?>">
+                                <span class="form__error"><?= $errors['cost'] ?></span>
+                            </p>
+                            <button type="submit" class="button">Сделать ставку</button>
+                        </form>
+                    <?php endif; ?>
                 </div>
 
                 <div class="history">

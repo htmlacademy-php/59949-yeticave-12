@@ -7,7 +7,7 @@
  */
 function get_lot_by_id(mysqli $conn, int $id) {
     $sql = "SELECT
-    l.id, l.title, c.title AS category_title, img_path, description, expiry_dt, bet_step, initial_price,
+    l.id, l.title, c.title AS category_title, img_path, description, expiry_dt, bet_step, initial_price, author,
     (
         SELECT b.amount
         FROM bets b

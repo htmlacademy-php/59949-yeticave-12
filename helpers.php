@@ -259,6 +259,7 @@ function show_screen(array $params) {
         'bets' => $params['bets'],
         'user_bets' => $params['user_bets'],
         'errors' => $params['errors'],
+        'is_visible' => $params['is_visible'],
         'category' => $params['category'],
         'categories_list' => $params['categories_list'],
         'pagination_templ' => $params['pagination_tmpl'],
@@ -377,4 +378,40 @@ function get_lot_min_bet_value(): ?int {
     }
 
     return null;
+}
+
+/**
+ * Проверяет условие для показа формы добавления ставки на лот
+ * Форма не показывается если:
+ * - пользователь не авторизован;
+ * - срок размещения лота истёк;
+ * - лот создан текущим пользователем;
+ * - последняя ставка сделана текущим пользователем.
+ * @param $lot
+ * @param $user
+ * @param $bets
+ * @return bool
+ */
+function betFormIsVisible($lot, $user, $bets) {
+    if (empty($user)) {
+        return false;
+    }
+
+    $last_bet_by_current_user = false;
+    $user_is_lot_author = $lot['author'] == $user['id'];
+    $lot_has_expired = lotTimeLeftCalc($lot['expiry_dt']) === ['00', '00'];
+
+    if (isset($bets)) {
+        usort($bets, function ($a, $b) {
+            return strtotime($b["created_at"]) - strtotime($a["created_at"]);
+        });
+
+        $last_bet_by_current_user = $bets[0]['user_id'] == $user['id'];
+    }
+
+    if ($user_is_lot_author || $last_bet_by_current_user || $lot_has_expired) {
+        return false;
+    }
+
+    return true;
 }

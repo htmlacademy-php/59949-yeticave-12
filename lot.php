@@ -76,6 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+$user = get_session_user();
+
 $categories_list_tmpl = get_categories_list_template($categories_list);
 
 $display_params = [
@@ -84,6 +86,7 @@ $display_params = [
     'lot' => $lot,
     'bets' => $bets_list,
     'errors' => $errors,
+    'is_visible' => betFormIsVisible($lot, $user, $bets_list),
     'categories_list_tmpl' => $categories_list_tmpl
 ];
 
