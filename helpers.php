@@ -393,7 +393,7 @@ function get_lot_min_bet_value(): ?int {
  * @return bool
  */
 function betFormIsVisible($lot, $user, $bets) {
-    if (empty($user)) {
+    if (empty($user) || isset($lot['winner'])) {
         return false;
     }
 
