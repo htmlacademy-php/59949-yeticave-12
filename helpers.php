@@ -179,7 +179,7 @@ function lotTimeLeftCalc(string $date): array
 
     $date_diff = date_diff($lot_exp_date, $current_date);
 
-    $days_left = date_interval_format($date_diff, "%d");
+    $days_left = date_interval_format($date_diff, "%a");
     $hours_left = date_interval_format($date_diff, "%H");
     $minutes_left = date_interval_format($date_diff, "%I");
 
