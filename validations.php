@@ -100,6 +100,17 @@ function isIntGreaterThanZero(string $val): bool {
     return true;
 }
 
+
+/**
+ * Проверяет что значение не меньше указанного
+ * @param string $val строковое значение
+ * @param int $number значение для сравнения
+ * @return bool результат проверки
+ */
+function isNotLessThanNumber(string $val, int $number): bool {
+    return !(empty($val) || $val < $number);
+}
+
 /**
  * Проверяет строку на соответствие заданной длине
  * @param string $val строковое значение

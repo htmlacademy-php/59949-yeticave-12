@@ -19,14 +19,45 @@
                         </div>
                     <?php ?>
                     <div class="lot-item__cost-state">
-                        <div class="lot-item__rate">
-                            <span class="lot-item__amount">Текущая цена</span>
-                            <span class="lot-item__cost"><?= formatPrice($lot['current_price']); ?></span>
-                        </div>
-                        <div class="lot-item__min-cost">
-                            Мин. ставка <span><?= formatPrice($lot['bet_step']); ?></span>
-                        </div>
+                        <?php $price = $lot['current_price'] ?? $lot['initial_price'] ?>
+                            <div class="lot-item__rate">
+                                <span class="lot-item__amount">Текущая цена</span>
+                                <span class="lot-item__cost">
+                                    <?= formatPrice($price); ?>
+                                </span>
+                            </div>
+                            <div class="lot-item__min-cost">
+                                Мин. ставка <span><?= formatPrice($price + $lot['bet_step']); ?></span>
+                            </div>
+                        <?php ?>
                     </div>
+                    <?php if ($is_visible) : ?>
+                        <form class="lot-item__form" action="lot.php?id=<?= $_GET['id'] ?>" method="post" autocomplete="off">
+                            <p class="lot-item__form-item form__item <?= isset($errors['cost']) ? 'form__item--invalid' : '' ?>">
+                                <label for="cost">Ваша ставка</label>
+                                <input id="cost" type="text" name="cost" placeholder="12 000" value="<?= $_POST['cost'] ?? '' ?>">
+                                <span class="form__error"><?= $errors['cost'] ?></span>
+                            </p>
+                            <button type="submit" class="button">Сделать ставку</button>
+                        </form>
+                    <?php endif; ?>
+                </div>
+
+                <div class="history">
+                    <?php if (empty($bets)) : ?>
+                        <h3>Ставок нет</h3>
+                    <?php else : ?>
+                        <h3>История ставок (<span><?= count($bets); ?></span>)</h3>
+                        <table class="history__list">
+                            <?php foreach ($bets as $bet) : ?>
+                                <tr class="history__item">
+                                    <td class="history__name"><?= $bet['name']; ?></td>
+                                    <td class="history__price"><?= formatPrice($bet['amount']); ?></td>
+                                    <td class="history__time"><?= $bet['time_passed']; ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </table>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

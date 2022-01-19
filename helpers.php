@@ -179,13 +179,46 @@ function lotTimeLeftCalc(string $date): array
 
     $date_diff = date_diff($lot_exp_date, $current_date);
 
-    $days_left = date_interval_format($date_diff, "%d");
+    $days_left = date_interval_format($date_diff, "%a");
     $hours_left = date_interval_format($date_diff, "%H");
     $minutes_left = date_interval_format($date_diff, "%I");
 
     $hours_left = intval($hours_left) + intval($days_left) * 24;
 
     return [$hours_left, $minutes_left];
+}
+
+
+/**
+ * @param array $data
+ * @param string $field_name
+ * @return string
+ */
+function calcTimeHavePassed(array $data, string $field_name): string {
+    $dt_now = date_create("now");
+    $val_date = date_create($data[$field_name]);
+
+    $dt_diff = date_diff($val_date, $dt_now);
+    $days_diff = date_interval_format($dt_diff, "%d");
+    $hours_diff = date_interval_format($dt_diff, "%h");
+    $mins_diff = date_interval_format($dt_diff, "%i");
+
+    $yesterday = date("d.m.y", strtotime("yesterday"));
+
+    if ($days_diff == 0 && $hours_diff == 0 && $mins_diff == 0) {
+        return 'Только что';
+    } else if ($days_diff == 0 && $hours_diff == 0 && $mins_diff > 0) {
+        $noun = get_noun_plural_form($mins_diff, 'минуту', 'минуты', 'минут');
+        return "$mins_diff $noun назад";
+    } else if ($days_diff == 0 && $hours_diff == 1 && $mins_diff == 0) {
+        return 'Час назад';
+    } else if ($data['date'] == $yesterday) {
+        return 'Вчера в ' . $data['time'];
+    } else if ($days_diff == 0 && $hours_diff > 0 && $mins_diff > 0) {
+       return 'Сегодня в ' . $data['time'];
+    } else {
+      return $data['date'] . ' в ' . $data['time'];
+    }
 }
 
 /**
@@ -223,7 +256,11 @@ function show_error(string $error) {
 function show_screen(array $params) {
     $page_content = include_template($params['file'], [
         'lot' => $params['lot'],
+        'bets' => $params['bets'],
+        'user_bets' => $params['user_bets'],
         'errors' => $params['errors'],
+        'is_visible' => $params['is_visible'],
+        'category' => $params['category'],
         'categories_list' => $params['categories_list'],
         'pagination_templ' => $params['pagination_tmpl'],
         'lot_cards_list_templ' => $params['lot_cards_list_tmpl'],
@@ -325,11 +362,56 @@ function getPaginationParams(string $items_count, int $items_per_page): array {
  * @return array|null
  */
 function get_session_user(): ?array {
-    $user = null;
+    return isset($_SESSION['user']) ? $_SESSION['user'][0] : null;
+}
 
-    if (isset($_SESSION['user'])) {
-        $user = $_SESSION['user'][0];
+/**
+ * Возвращает значение минимально допустимой ставки на лот
+ * @return int|null
+ */
+function get_lot_min_bet_value(): ?int {
+    $lot = $_SESSION['lot-info'];
+
+    if (isset($lot)) {
+        $lot_price = $lot['current_price'] ?? $lot['initial_price'];
+        return $lot_price + $lot['bet_step'];
     }
 
-    return $user;
+    return null;
+}
+
+/**
+ * Проверяет условие для показа формы добавления ставки на лот
+ * Форма не показывается если:
+ * - пользователь не авторизован;
+ * - срок размещения лота истёк;
+ * - лот создан текущим пользователем;
+ * - последняя ставка сделана текущим пользователем.
+ * @param $lot
+ * @param $user
+ * @param $bets
+ * @return bool
+ */
+function betFormIsVisible($lot, $user, $bets) {
+    if (empty($user) || isset($lot['winner'])) {
+        return false;
+    }
+
+    $last_bet_by_current_user = false;
+    $user_is_lot_author = $lot['author'] == $user['id'];
+    $lot_has_expired = lotTimeLeftCalc($lot['expiry_dt']) === ['00', '00'];
+
+    if (isset($bets)) {
+        usort($bets, function ($a, $b) {
+            return strtotime($b["created_at"]) - strtotime($a["created_at"]);
+        });
+
+        $last_bet_by_current_user = $bets[0]['user_id'] == $user['id'];
+    }
+
+    if ($user_is_lot_author || $last_bet_by_current_user || $lot_has_expired) {
+        return false;
+    }
+
+    return true;
 }

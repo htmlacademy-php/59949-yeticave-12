@@ -1,5 +1,18 @@
 <?php
 
+require_once('helpers.php');
+
+$lot_bet = [
+    [
+        'field_name' => 'cost',
+        'validations' => [
+            ['method' => 'isNotEmpty', 'error_msg' => 'Укажите ставку лота'],
+            ['method' => 'isIntGreaterThanZero', 'error_msg' => 'Только целое, положительное число'],
+            ['method' => 'isNotLessThanNumber', 'param1' => get_lot_min_bet_value(), 'error_msg' => 'Ваша ставка ниже минимальной']
+        ]
+    ]
+];
+
 $lot_name_min_len = 3;
 $lot_name_max_len = 50;
 
@@ -118,6 +131,7 @@ $login_validation_rules = [
 ];
 
 return [
+    'lot-bet' => $lot_bet,
     'lot-create' => $lot_create_validation_rules,
     'registration' => $registration_validation_rules,
     'login' => $login_validation_rules

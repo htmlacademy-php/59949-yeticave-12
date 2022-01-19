@@ -10,7 +10,6 @@ function get_lots_by_search_str(mysqli $conn, string $search_str) {
     FROM lots l
     JOIN categories c ON l.category_id = c.id
     WHERE MATCH(l.title, description) AGAINST(? IN BOOLEAN MODE)
-    GROUP BY l.id
     ORDER BY l.created_at DESC";
 
     return fetch_from_db_by_params($conn, $sql, [$search_str]);

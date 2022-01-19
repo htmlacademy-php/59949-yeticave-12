@@ -1,7 +1,10 @@
 <?php
 
 $db_conn = require_once('init.php');
+$rules = require_once('rules.php');
 require_once('queries/lot-by-id.php');
+require_once('queries/lot-bets.php');
+require_once('queries/create-bet.php');
 
 $categories_list = get_categories($db_conn);
 
@@ -32,12 +35,58 @@ if (empty($lot)) {
     exit();
 }
 
+$bets_list = get_lot_bets($db_conn, $lot['id']);
+
+foreach ($bets_list as $key => $val) {
+    $bets_list[$key]['time_passed'] = calcTimeHavePassed($val, 'created_at');
+}
+
+if (!is_array($bets_list) && !$bets_list) {
+    $error = get_db_error($db_conn);
+    show_error($error);
+    exit();
+}
+
+$errors = [];
+
+$_SESSION['lot-info'] = $lot;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $filteredData = filterDataByRules($_POST, $rules['lot-bet']);
+
+    $errors = validateForm($filteredData, $rules['lot-bet']);
+
+    if (empty($errors)) {
+        $data = [
+            'amount' => $filteredData['cost'],
+            'user_id' => $_SESSION['user'][0]['id'],
+            'lot_id' => $lot['id']
+        ];
+
+        $bet = create_bet($db_conn, $data);
+
+        if (!$bet) {
+            $error = get_db_error($db_conn);
+            show_error($error);
+            exit();
+        }
+
+        $_SESSION['lot-info'] = null;
+        header("Refresh: 0");
+    }
+}
+
+$user = get_session_user();
+
 $categories_list_tmpl = get_categories_list_template($categories_list);
 
 $display_params = [
     'file' => 'lot.php',
     'title' => 'Страница лота',
     'lot' => $lot,
+    'bets' => $bets_list,
+    'errors' => $errors,
+    'is_visible' => betFormIsVisible($lot, $user, $bets_list),
     'categories_list_tmpl' => $categories_list_tmpl
 ];
 
