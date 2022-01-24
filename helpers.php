@@ -237,8 +237,9 @@ function moveFileToLocalPath(array $file): ?string
     $file_path = __DIR__ . '/uploads/';
     $file_url = '/uploads/' . $file_name;
 
-    move_uploaded_file($file['tmp_name'], $file_path . $file_name);
-    return $file_url;
+    $is_success = move_uploaded_file($file['tmp_name'], $file_path . $file_name);
+
+    return $is_success ? $file_url : null;
 }
 
 /**

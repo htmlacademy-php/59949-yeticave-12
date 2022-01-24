@@ -29,10 +29,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (empty($errors)) {
         $file_url = moveFileToLocalPath($formData['lot-img']);
 
-        $filteredData['file'] = $file_url;
-        $filteredData['user_id'] = getSessionUser()['id'];
-
         if ($file_url) {
+            $filteredData['file'] = $file_url;
+            $filteredData['user_id'] = getSessionUser()['id'];
+
             $lot_id = createLot($db_conn, $filteredData);
 
             if (!$lot_id) {
@@ -42,6 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
 
             header("Location: lot.php?id=" . $lot_id);
+        } else {
+            $errors['lot-img'] = 'Ошибка записи файла';
         }
     }
 }
