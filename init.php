@@ -7,11 +7,11 @@ require_once('queries/categories.php');
 
 session_start();
 
-$db_conn = get_db_connect();
+$db_conn = getDbConnect();
 
 if (!$db_conn) {
-    $error = get_db_connection_error();
-    show_error($error);
+    $error = getDbConnectionError();
+    showError($error);
     exit();
 }
 

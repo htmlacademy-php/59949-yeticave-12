@@ -5,7 +5,7 @@
  * @param array $data
  * @return false|int|string
  */
-function create_lot(mysqli $conn, array $data)
+function createLot(mysqli $conn, array $data)
 {
     $data_list = [
         'expiry_dt' => $data['lot-date'],
@@ -24,5 +24,5 @@ function create_lot(mysqli $conn, array $data)
 
     $sql = "INSERT INTO lots ($columns) VALUES ($placeholders)";
 
-    return db_insert($conn, $sql, $data_list);
+    return dbInsert($conn, $sql, $data_list);
 }

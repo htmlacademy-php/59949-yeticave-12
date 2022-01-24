@@ -6,15 +6,15 @@ require_once('queries/create-lot.php');
 
 if (empty($_SESSION['user'])) {
     http_response_code(403);
-    show_error('Доступ запрещен ' . http_response_code());
+    showError('Доступ запрещен ' . http_response_code());
     exit();
 }
 
-$categories_list = get_categories($db_conn);
+$categories_list = getCategories($db_conn);
 
 if (!$categories_list) {
-    $error = get_db_error($db_conn);
-    show_error($error);
+    $error = getDbError($db_conn);
+    showError($error);
     exit();
 }
 
@@ -30,14 +30,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $file_url = moveFileToLocalPath($formData['lot-img']);
 
         $filteredData['file'] = $file_url;
-        $filteredData['user_id'] = get_session_user()['id'];
+        $filteredData['user_id'] = getSessionUser()['id'];
 
         if ($file_url) {
-            $lot_id = create_lot($db_conn, $filteredData);
+            $lot_id = createLot($db_conn, $filteredData);
 
             if (!$lot_id) {
-                $error = get_db_error($db_conn);
-                show_error($error);
+                $error = getDbError($db_conn);
+                showError($error);
                 exit();
             }
 
@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-$categories_list_tmpl = get_categories_list_template($categories_list);
+$categories_list_tmpl = getCategoriesListTemplate($categories_list);
 
 $display_params = [
     'file' => 'add-lot.php',
@@ -56,4 +56,4 @@ $display_params = [
     'categories_list_tmpl' => $categories_list_tmpl
 ];
 
-show_screen($display_params);
+showScreen($display_params);

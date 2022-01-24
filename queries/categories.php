@@ -4,9 +4,9 @@
  * @param mysqli $conn
  * @return array|false
  */
-function get_categories(mysqli $conn)
+function getCategories(mysqli $conn)
 {
     $sql = 'SELECT * FROM categories';
 
-    return fetch_from_db($conn, $sql);
+    return fetchFromDb($conn, $sql);
 }
