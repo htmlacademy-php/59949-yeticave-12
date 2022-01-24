@@ -5,7 +5,8 @@
  * @param null|string $val строкове значение
  * @return bool результат проверки
  */
-function isNotEmpty(?string $val): bool {
+function isNotEmpty(?string $val): bool
+{
     if (empty($val) && $val !== '0') {
         return false;
     }
@@ -17,8 +18,9 @@ function isNotEmpty(?string $val): bool {
  * @param string $email адрес электронной почты
  * @return bool результат проверки
  */
-function isCorrectEmailFormat(string $email): bool {
-    return (boolean)filter_var($email, FILTER_VALIDATE_EMAIL);
+function isCorrectEmailFormat(string $email): bool
+{
+    return (bool)filter_var($email, FILTER_VALIDATE_EMAIL);
 }
 
 /**
@@ -38,7 +40,8 @@ function isCorrectDateFormat(string $date, string $format): bool
  * @param null|array $file
  * @return bool
  */
-function isFileSelected(?array $file): bool {
+function isFileSelected(?array $file): bool
+{
     $UPLOAD_ERR_NO_FILE = 4;
 
     if (!$file || $file['error'] && $file['error'] === $UPLOAD_ERR_NO_FILE) {
@@ -54,7 +57,8 @@ function isFileSelected(?array $file): bool {
  * @param string $type2
  * @return bool
  */
-function isFileTypeCorrect(array $file, string $type1, string $type2): bool {
+function isFileTypeCorrect(array $file, string $type1, string $type2): bool
+{
     $fileType = mime_content_type($file['tmp_name']);
 
     if ($fileType !== $type1 && $fileType !== $type2) {
@@ -69,7 +73,8 @@ function isFileTypeCorrect(array $file, string $type1, string $type2): bool {
  * @param int $maxSize
  * @return bool
  */
-function isFileSizeCorrect(array $file, int $maxSize):bool {
+function isFileSizeCorrect(array $file, int $maxSize): bool
+{
     if ($file['size'] > $maxSize) {
         return false;
     }
@@ -81,7 +86,8 @@ function isFileSizeCorrect(array $file, int $maxSize):bool {
  * @param string $val строковое значение
  * @return boolean результат проверки
  */
-function isNumGreaterThanZero(string $val): bool {
+function isNumGreaterThanZero(string $val): bool
+{
     if (empty($val) || !is_numeric($val) || $val <= 0) {
         return false;
     }
@@ -93,7 +99,8 @@ function isNumGreaterThanZero(string $val): bool {
  * @param string $val строковое значение
  * @return boolean результат проверки
  */
-function isIntGreaterThanZero(string $val): bool {
+function isIntGreaterThanZero(string $val): bool
+{
     if (empty($val) || !ctype_digit($val) || $val <= 0) {
         return false;
     }
@@ -107,7 +114,8 @@ function isIntGreaterThanZero(string $val): bool {
  * @param int $number значение для сравнения
  * @return bool результат проверки
  */
-function isNotLessThanNumber(string $val, int $number): bool {
+function isNotLessThanNumber(string $val, int $number): bool
+{
     return !(empty($val) || $val < $number);
 }
 
@@ -118,7 +126,8 @@ function isNotLessThanNumber(string $val, int $number): bool {
  * @param int $max значение максимальной длины строки
  * @return boolean
  */
-function isCorrectLength(string $val, int $min, int $max): bool {
+function isCorrectLength(string $val, int $min, int $max): bool
+{
     $len = mb_strlen($val, "UTF-8");
 
     if (!$len || $len < $min || $len > $max) {
@@ -133,7 +142,8 @@ function isCorrectLength(string $val, int $min, int $max): bool {
  * @param string $val дата в виде строки
  * @return boolean
  */
-function isDateMinOneDayGreater(string $val): bool {
+function isDateMinOneDayGreater(string $val): bool
+{
     $date_now = date("Y-m-d");
 
     if (!$val || $val <= $date_now) {
@@ -149,7 +159,8 @@ function isDateMinOneDayGreater(string $val): bool {
  * @param array $rules правила
  * @return array массив ошибок
  */
-function validateForm(array $data, array $rules): array {
+function validateForm(array $data, array $rules): array
+{
     $errors = [];
 
     foreach ($rules as $rule) {

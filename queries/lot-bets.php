@@ -5,7 +5,8 @@
  * @param int $lot_id
  * @return array|false
  */
-function get_lot_bets(mysqli $conn, int $lot_id) {
+function get_lot_bets(mysqli $conn, int $lot_id)
+{
     $sql = "SELECT b.id, b.amount, u.name, user_id, b.created_at,
        DATE_FORMAT(b.created_at, '%d.%m.%y') AS date,
        DATE_FORMAT(b.created_at, '%H:%i') AS time

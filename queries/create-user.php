@@ -5,7 +5,8 @@
  * @param array $data
  * @return false|int|string
  */
-function create_user(mysqli $conn, array $data) {
+function create_user(mysqli $conn, array $data)
+{
     $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
     $data['contact'] = $data['message'];

@@ -5,7 +5,8 @@
  * @param array $data
  * @return false|int|string
  */
-function create_lot(mysqli $conn, array $data) {
+function create_lot(mysqli $conn, array $data)
+{
     $data_list = [
         'expiry_dt' => $data['lot-date'],
         'title' => $data['lot-name'],

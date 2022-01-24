@@ -5,7 +5,8 @@
  * @param string $category_id
  * @return array|false
  */
-function get_lots_by_category(mysqli $conn, string $category_id) {
+function get_lots_by_category(mysqli $conn, string $category_id)
+{
     $sql = "SELECT
        l.id, l.title, img_path, expiry_dt, initial_price, c.title category_title
     FROM lots l

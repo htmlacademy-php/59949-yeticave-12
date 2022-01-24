@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (empty($user)) {
             $errors['email'] = 'Пользователь с такой почтой не найден';
-        } else if (password_verify($filteredData['password'], $user[0]['password'])) {
+        } elseif (password_verify($filteredData['password'], $user[0]['password'])) {
             $_SESSION['user'] = $user;
             header("Location: index.php");
         } else {

@@ -5,7 +5,8 @@
  * @param string $search_str
  * @return array|false
  */
-function get_lots_by_search_str(mysqli $conn, string $search_str) {
+function get_lots_by_search_str(mysqli $conn, string $search_str)
+{
     $sql = "SELECT l.id, l.title, description, c.title category_title, expiry_dt, initial_price, img_path
     FROM lots l
     JOIN categories c ON l.category_id = c.id
