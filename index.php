@@ -3,6 +3,8 @@
 $db_conn = require_once('init.php');
 require_once('queries/lots.php');
 require_once('queries/lots-count.php');
+require_once('get-winner.php');
+
 
 $lots_per_page = 6;
 
