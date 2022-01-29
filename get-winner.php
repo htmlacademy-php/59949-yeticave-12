@@ -1,9 +1,11 @@
 <?php
+require_once('queries/set-lots-without-winner.php');
 require_once('queries/set-var.php');
 require_once('queries/get-var-value.php');
 require_once('queries/set-winners.php');
 require_once('queries/get-winners-by-ids.php');
 
+setExpiredLotsWithoutWinner($db_conn);
 
 mysqli_query($db_conn, "START TRANSACTION");
 
