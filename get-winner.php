@@ -1,4 +1,6 @@
 <?php
+require_once('mailer.php');
+
 require_once('queries/set-lots-without-winner.php');
 require_once('queries/set-var.php');
 require_once('queries/get-var-value.php');
@@ -16,11 +18,9 @@ $result3 = getVarValue($db_conn);
 if ($result1 && $result2 && $result3 && isset($result3['@var'])) {
     mysqli_query($db_conn, "COMMIT");
 
-    $result = getWinnersInfoByIds($db_conn, $result3['@var']);
+    $winnersInfo = getWinnersInfoByIds($db_conn, $result3['@var']);
 
-    echo '<pre>';
-    print_r($result);
-    echo '</pre>';
+    sendLettersToTheWinners($winnersInfo);
 }
 else {
     mysqli_query($db_conn, "ROLLBACK");

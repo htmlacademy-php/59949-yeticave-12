@@ -429,3 +429,26 @@ function betFormIsVisible($lot, $user, $bets)
 
     return true;
 }
+
+/**
+ * Отправка писем победителям аукциона
+ * Генерирует текст из шаблона писмьа на основе переданных данных
+ * Создает транспорт
+ * Создает сообщение
+ * Отправляет сообщение
+ * @param array $data данные по выигравшим лотам и победителям
+ * @return void
+ */
+function sendLettersToTheWinners(array $data)
+{
+    foreach($data as $value) {
+        $email_layout = includeTemplate('email.php', [
+            'data' => $value
+        ]);
+
+        $transport = configTransport();
+        $message = createMessage($value, $email_layout);
+
+        sendEmail($transport, $message);
+    }
+}
