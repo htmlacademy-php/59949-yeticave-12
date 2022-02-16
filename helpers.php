@@ -13,7 +13,8 @@
  *
  * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
-function is_date_valid(string $date) : bool {
+function isDateValid(string $date): bool
+{
     $format_to_check = 'Y-m-d';
     $dateTimeObj = date_create_from_format($format_to_check, $date);
 
@@ -29,7 +30,8 @@ function is_date_valid(string $date) : bool {
  *
  * @return mysqli_stmt Подготовленное выражение
  */
-function db_get_prepare_stmt($link, $sql, $data = []) {
+function dbGetPrepareStmt($link, $sql, $data = [])
+{
     $stmt = mysqli_prepare($link, $sql);
 
     if ($stmt === false) {
@@ -46,11 +48,9 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
 
             if (is_int($value)) {
                 $type = 'i';
-            }
-            else if (is_string($value)) {
+            } elseif (is_string($value)) {
                 $type = 's';
-            }
-            else if (is_double($value)) {
+            } elseif (is_double($value)) {
                 $type = 'd';
             }
 
@@ -96,7 +96,7 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
  *
  * @return string Рассчитанная форма множественнго числа
  */
-function get_noun_plural_form (int $number, string $one, string $two, string $many): string
+function getNounPluralForm(int $number, string $one, string $two, string $many): string
 {
     $number = (int) $number;
     $mod10 = $number % 10;
@@ -126,7 +126,8 @@ function get_noun_plural_form (int $number, string $one, string $two, string $ma
  * @param array $data Ассоциативный массив с данными для шаблона
  * @return string Итоговый HTML
  */
-function include_template($name, array $data = []) {
+function includeTemplate($name, array $data = [])
+{
     $name = 'templates/' . $name;
     $result = '';
 
@@ -194,7 +195,8 @@ function lotTimeLeftCalc(string $date): array
  * @param string $field_name
  * @return string
  */
-function calcTimeHavePassed(array $data, string $field_name): string {
+function calcTimeHavePassed(array $data, string $field_name): string
+{
     $dt_now = date_create("now");
     $val_date = date_create($data[$field_name]);
 
@@ -207,17 +209,17 @@ function calcTimeHavePassed(array $data, string $field_name): string {
 
     if ($days_diff == 0 && $hours_diff == 0 && $mins_diff == 0) {
         return 'Только что';
-    } else if ($days_diff == 0 && $hours_diff == 0 && $mins_diff > 0) {
-        $noun = get_noun_plural_form($mins_diff, 'минуту', 'минуты', 'минут');
+    } elseif ($days_diff == 0 && $hours_diff == 0 && $mins_diff > 0) {
+        $noun = getNounPluralForm($mins_diff, 'минуту', 'минуты', 'минут');
         return "$mins_diff $noun назад";
-    } else if ($days_diff == 0 && $hours_diff == 1 && $mins_diff == 0) {
+    } elseif ($days_diff == 0 && $hours_diff == 1 && $mins_diff == 0) {
         return 'Час назад';
-    } else if ($data['date'] == $yesterday) {
+    } elseif ($data['date'] == $yesterday) {
         return 'Вчера в ' . $data['time'];
-    } else if ($days_diff == 0 && $hours_diff > 0 && $mins_diff > 0) {
-       return 'Сегодня в ' . $data['time'];
+    } elseif ($days_diff == 0 && $hours_diff > 0 && $mins_diff > 0) {
+        return 'Сегодня в ' . $data['time'];
     } else {
-      return $data['date'] . ' в ' . $data['time'];
+        return $data['date'] . ' в ' . $data['time'];
     }
 }
 
@@ -235,8 +237,9 @@ function moveFileToLocalPath(array $file): ?string
     $file_path = __DIR__ . '/uploads/';
     $file_url = '/uploads/' . $file_name;
 
-    move_uploaded_file($file['tmp_name'], $file_path . $file_name);
-    return $file_url;
+    $is_success = move_uploaded_file($file['tmp_name'], $file_path . $file_name);
+
+    return $is_success ? $file_url : null;
 }
 
 /**
@@ -244,8 +247,9 @@ function moveFileToLocalPath(array $file): ?string
  * @param string $error текст ошибки в виде строки
  * @return void
  */
-function show_error(string $error) {
-    print(include_template('error.php', ['error' => $error, 'title' => 'GifTube - Страница ошибки']));
+function showError(string $error)
+{
+    print(includeTemplate('error.php', ['error' => $error, 'title' => 'GifTube - Страница ошибки']));
 }
 
 /**
@@ -253,8 +257,9 @@ function show_error(string $error) {
  * @param array $params списое параметров
  * @return void
  */
-function show_screen(array $params) {
-    $page_content = include_template($params['file'], [
+function showScreen(array $params)
+{
+    $page_content = includeTemplate($params['file'], [
         'lot' => $params['lot'],
         'bets' => $params['bets'],
         'user_bets' => $params['user_bets'],
@@ -267,8 +272,8 @@ function show_screen(array $params) {
         'categories_list_templ' => $params['categories_list_tmpl']
     ]);
 
-    $layout_content = include_template('layout.php', [
-        'user' => get_session_user(),
+    $layout_content = includeTemplate('layout.php', [
+        'user' => getSessionUser(),
         'content' => $page_content,
         'title' => 'GifTube - ' . $params['title'],
         'categories_list_templ' => $params['categories_list_tmpl']
@@ -282,8 +287,9 @@ function show_screen(array $params) {
  * @param int $cur_page
  * @return string
  */
-function get_pagination_template(array $pages = [], int $cur_page = 1) {
-    return include_template('pagination.php', [
+function getPaginationTemplate(array $pages = [], int $cur_page = 1)
+{
+    return includeTemplate('pagination.php', [
         'pages' => $pages,
         'cur_page' => $cur_page
     ]);
@@ -293,11 +299,12 @@ function get_pagination_template(array $pages = [], int $cur_page = 1) {
  * @param array $lots_list
  * @return string|null
  */
-function get_lot_cards_list_template(array $lots_list) {
+function getLotCardsListTemplate(array $lots_list)
+{
     if (!$lots_list) {
         return null;
     }
-    return include_template('lot-cards-list.php', [
+    return includeTemplate('lot-cards-list.php', [
         'goods_list' => $lots_list
     ]);
 }
@@ -306,8 +313,9 @@ function get_lot_cards_list_template(array $lots_list) {
  * @param $categories
  * @return string
  */
-function get_categories_list_template($categories) {
-    return include_template('categories-list.php', [
+function getCategoriesListTemplate($categories)
+{
+    return includeTemplate('categories-list.php', [
         'categories_list' => $categories,
     ]);
 }
@@ -317,7 +325,8 @@ function get_categories_list_template($categories) {
  * @param string $name имя переменной в url
  * @return string|null
  */
-function get_by_name_from_url(string $name): ?string {
+function getByNameFromUrl(string $name): ?string
+{
     return filter_input(INPUT_GET, $name, FILTER_SANITIZE_NUMBER_INT);
 }
 
@@ -327,7 +336,8 @@ function get_by_name_from_url(string $name): ?string {
  * @param array $rules
  * @return array
  */
-function filterDataByRules(array $data, array $rules): array {
+function filterDataByRules(array $data, array $rules): array
+{
     $filteredData = [];
 
     foreach ($rules as $rule) {
@@ -347,7 +357,8 @@ function filterDataByRules(array $data, array $rules): array {
  * @param int $items_per_page количество элементов на страницу
  * @return array параметры пагинации
  */
-function getPaginationParams(string $items_count, int $items_per_page): array {
+function getPaginationParams(string $items_count, int $items_per_page): array
+{
     $current_page = $_GET['page'] ?? 1;
 
     $pages_count = ceil($items_count / $items_per_page);
@@ -361,7 +372,8 @@ function getPaginationParams(string $items_count, int $items_per_page): array {
  * Проверяет наличие пользовательской сессии и возвращает данные пользователя
  * @return array|null
  */
-function get_session_user(): ?array {
+function getSessionUser(): ?array
+{
     return isset($_SESSION['user']) ? $_SESSION['user'][0] : null;
 }
 
@@ -369,7 +381,8 @@ function get_session_user(): ?array {
  * Возвращает значение минимально допустимой ставки на лот
  * @return int|null
  */
-function get_lot_min_bet_value(): ?int {
+function getLotMinBetValue(): ?int
+{
     $lot = $_SESSION['lot-info'];
 
     if (isset($lot)) {
@@ -392,7 +405,8 @@ function get_lot_min_bet_value(): ?int {
  * @param $bets
  * @return bool
  */
-function betFormIsVisible($lot, $user, $bets) {
+function betFormIsVisible($lot, $user, $bets)
+{
     if (empty($user) || isset($lot['winner'])) {
         return false;
     }
@@ -414,4 +428,27 @@ function betFormIsVisible($lot, $user, $bets) {
     }
 
     return true;
+}
+
+/**
+ * Отправка писем победителям аукциона
+ * Генерирует текст из шаблона писмьа на основе переданных данных
+ * Создает транспорт
+ * Создает сообщение
+ * Отправляет сообщение
+ * @param array $data данные по выигравшим лотам и победителям
+ * @return void
+ */
+function sendLettersToTheWinners(array $data)
+{
+    foreach($data as $value) {
+        $email_layout = includeTemplate('email.php', [
+            'data' => $value
+        ]);
+
+        $transport = configTransport();
+        $message = createMessage($value, $email_layout);
+
+        sendEmail($transport, $message);
+    }
 }

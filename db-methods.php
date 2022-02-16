@@ -3,7 +3,8 @@
 /**
  * @return mysqli|false|null
  */
-function get_db_connect() {
+function getDbConnect()
+{
     $config = require('db-config.php');
     $conn = mysqli_connect($config['host'], $config['username'], $config['password'], $config['db_name']);
 
@@ -15,7 +16,8 @@ function get_db_connect() {
 /**
  * @return string|null
  */
-function get_db_connection_error(): ?string {
+function getDbConnectionError(): ?string
+{
     return mysqli_connect_error();
 }
 
@@ -23,7 +25,8 @@ function get_db_connection_error(): ?string {
  * @param mysqli $conn
  * @return string
  */
-function get_db_error(mysqli $conn): string {
+function getDbError(mysqli $conn): string
+{
     return mysqli_error($conn);
 }
 
@@ -32,7 +35,8 @@ function get_db_error(mysqli $conn): string {
  * @param string $sql
  * @return array|false
  */
-function fetch_from_db(mysqli $conn, string $sql) {
+function fetchFromDb(mysqli $conn, string $sql)
+{
     $result = mysqli_query($conn, $sql);
 
     if (!$result) {
@@ -47,7 +51,8 @@ function fetch_from_db(mysqli $conn, string $sql) {
  * @param string $sql
  * @return false|mixed|string
  */
-function fetch_one_from_db(mysqli $conn, string $sql) {
+function fetchOneFromDb(mysqli $conn, string $sql)
+{
     $result = mysqli_query($conn, $sql);
 
     if (!$result) {
@@ -63,8 +68,9 @@ function fetch_one_from_db(mysqli $conn, string $sql) {
  * @param array $params
  * @return array|false
  */
-function fetch_from_db_by_params(mysqli $conn, string $sql, array $params) {
-    $stmt = db_get_prepare_stmt($conn, $sql, $params);
+function fetchFromDbByParams(mysqli $conn, string $sql, array $params)
+{
+    $stmt = dbGetPrepareStmt($conn, $sql, $params);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 
@@ -81,8 +87,9 @@ function fetch_from_db_by_params(mysqli $conn, string $sql, array $params) {
  * @param array $data
  * @return false|int|string
  */
-function db_insert(mysqli $conn, string $sql, array $data) {
-    $stmt = db_get_prepare_stmt($conn, $sql, $data);
+function dbInsert(mysqli $conn, string $sql, array $data)
+{
+    $stmt = dbGetPrepareStmt($conn, $sql, $data);
     $result = mysqli_stmt_execute($stmt);
 
     if (!$result) {

@@ -6,27 +6,27 @@ require_once('queries/lot-by-id.php');
 require_once('queries/lot-bets.php');
 require_once('queries/create-bet.php');
 
-$categories_list = get_categories($db_conn);
+$categories_list = getCategories($db_conn);
 
 if (!$categories_list) {
-    $error = get_db_error($db_conn);
-    show_error($error);
+    $error = getDbError($db_conn);
+    showError($error);
     exit();
 }
 
-$lot_id = get_by_name_from_url('id');
+$lot_id = getByNameFromUrl('id');
 
 if (!$lot_id) {
     header("Location: 404.php");
     exit();
 }
 
-$lot = get_lot_by_id($db_conn, $lot_id);
+$lot = getLotById($db_conn, $lot_id);
 
-$error = get_db_error($db_conn);
+$error = getDbError($db_conn);
 
 if ($error) {
-    show_error($error);
+    showError($error);
     exit();
 }
 
@@ -35,15 +35,15 @@ if (empty($lot)) {
     exit();
 }
 
-$bets_list = get_lot_bets($db_conn, $lot['id']);
+$bets_list = getLotBets($db_conn, $lot['id']);
 
 foreach ($bets_list as $key => $val) {
     $bets_list[$key]['time_passed'] = calcTimeHavePassed($val, 'created_at');
 }
 
 if (!is_array($bets_list) && !$bets_list) {
-    $error = get_db_error($db_conn);
-    show_error($error);
+    $error = getDbError($db_conn);
+    showError($error);
     exit();
 }
 
@@ -63,11 +63,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'lot_id' => $lot['id']
         ];
 
-        $bet = create_bet($db_conn, $data);
+        $bet = createBet($db_conn, $data);
 
         if (!$bet) {
-            $error = get_db_error($db_conn);
-            show_error($error);
+            $error = getDbError($db_conn);
+            showError($error);
             exit();
         }
 
@@ -76,9 +76,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$user = get_session_user();
+$user = getSessionUser();
 
-$categories_list_tmpl = get_categories_list_template($categories_list);
+$categories_list_tmpl = getCategoriesListTemplate($categories_list);
 
 $display_params = [
     'file' => 'lot.php',
@@ -90,4 +90,4 @@ $display_params = [
     'categories_list_tmpl' => $categories_list_tmpl
 ];
 
-show_screen($display_params);
+showScreen($display_params);

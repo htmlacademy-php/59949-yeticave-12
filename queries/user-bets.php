@@ -5,7 +5,8 @@
  * @param int $user_id
  * @return array|false
  */
-function get_user_bets(mysqli $conn, int $user_id) {
+function getUserBets(mysqli $conn, int $user_id)
+{
     $sql = "SELECT
        l.id AS lot_id, contact, amount, user_id, c.title AS category, l.title AS lot_title, img_path, expiry_dt, winner, SQ.bet_created,
        DATE_FORMAT(SQ.bet_created, '%d.%m.%y') AS date,
@@ -22,5 +23,5 @@ function get_user_bets(mysqli $conn, int $user_id) {
     JOIN users u ON u.id = l.author
     ORDER BY SQ.bet_created DESC";
 
-    return fetch_from_db_by_params($conn, $sql, [$user_id]);
+    return fetchFromDbByParams($conn, $sql, [$user_id]);
 }

@@ -5,7 +5,8 @@
  * @param array $data
  * @return false|int|string
  */
-function create_user(mysqli $conn, array $data) {
+function createUser(mysqli $conn, array $data)
+{
     $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
     $data['contact'] = $data['message'];
@@ -17,5 +18,5 @@ function create_user(mysqli $conn, array $data) {
 
     $sql = "INSERT INTO users ($columns) VALUES ($placeholders)";
 
-    return db_insert($conn, $sql, $data);
+    return dbInsert($conn, $sql, $data);
 }
