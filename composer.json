@@ -3,6 +3,9 @@
   "description": "description",
   "minimum-stability": "stable",
   "license": "proprietary",
+  "config": {
+    "platform-check": false
+  },
   "authors": [
     {
       "name": "MI",
