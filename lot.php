@@ -8,7 +8,7 @@ require_once('queries/create-bet.php');
 
 $categories_list = getCategories($db_conn);
 
-if (!$categories_list) {
+if (!is_array($categories_list) && !$categories_list) {
     $error = getDbError($db_conn);
     showError($error);
     exit();
