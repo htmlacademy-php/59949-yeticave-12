@@ -363,7 +363,7 @@ function getPaginationParams(string $items_count, int $items_per_page): array
 
     $pages_count = ceil($items_count / $items_per_page);
     $offset = ($current_page - 1) * $items_per_page;
-    $pages = range(1, $pages_count);
+    $pages = range(1, $pages_count > 1 ? $pages_count : 1);
 
     return [$pages, $offset, $current_page];
 }
