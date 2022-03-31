@@ -5,7 +5,6 @@ require_once('queries/lots.php');
 require_once('queries/lots-count.php');
 require_once('get-winner.php');
 
-
 $lots_per_page = 6;
 
 $lots_count = getLotsCount($db_conn);
@@ -14,7 +13,7 @@ list($pages, $offset, $cur_page) = getPaginationParams($lots_count, $lots_per_pa
 
 $categories_list = getCategories($db_conn);
 
-if (!$categories_list) {
+if (!is_array($categories_list) && !$categories_list) {
     $error = getDbError($db_conn);
     showError($error);
     exit();
