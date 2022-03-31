@@ -168,7 +168,7 @@ function validateForm(array $data, array $rules): array
         $data_value = $data[$key];
 
         foreach ($rule['validations'] as $validation) {
-            $is_valid = $validation['method']($data_value, $validation['param1'], $validation['param2']);
+            $is_valid = $validation['method']($data_value, $validation['param1'] ?? '', $validation['param2'] ?? '');
 
             if (!$is_valid) {
                 $errors[$key] = $validation['error_msg'];

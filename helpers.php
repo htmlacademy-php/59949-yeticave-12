@@ -260,16 +260,16 @@ function showError(string $error)
 function showScreen(array $params)
 {
     $page_content = includeTemplate($params['file'], [
-        'lot' => $params['lot'],
-        'bets' => $params['bets'],
-        'user_bets' => $params['user_bets'],
-        'errors' => $params['errors'],
-        'is_visible' => $params['is_visible'],
-        'category' => $params['category'],
-        'categories_list' => $params['categories_list'],
-        'pagination_templ' => $params['pagination_tmpl'],
-        'lot_cards_list_templ' => $params['lot_cards_list_tmpl'],
-        'categories_list_templ' => $params['categories_list_tmpl']
+        'lot' => $params['lot'] ?? '',
+        'bets' => $params['bets'] ?? '',
+        'user_bets' => $params['user_bets'] ?? '',
+        'errors' => $params['errors'] ?? '',
+        'is_visible' => $params['is_visible'] ?? '',
+        'category' => $params['category'] ?? '',
+        'categories_list' => $params['categories_list'] ?? '',
+        'pagination_templ' => $params['pagination_tmpl'] ?? '',
+        'lot_cards_list_templ' => $params['lot_cards_list_tmpl'] ?? '',
+        'categories_list_templ' => $params['categories_list_tmpl'] ?? ''
     ]);
 
     $layout_content = includeTemplate('layout.php', [
@@ -383,9 +383,9 @@ function getSessionUser(): ?array
  */
 function getLotMinBetValue(): ?int
 {
-    $lot = $_SESSION['lot-info'];
+    if (isset($_SESSION['lot-info'])) {
+        $lot = $_SESSION['lot-info'];
 
-    if (isset($lot)) {
         $lot_price = $lot['current_price'] ?? $lot['initial_price'];
         return $lot_price + $lot['bet_step'];
     }
@@ -411,19 +411,19 @@ function betFormIsVisible($lot, $user, $bets)
         return false;
     }
 
-    $last_bet_by_current_user = false;
+    $user_is_last_bet_author = false;
     $user_is_lot_author = $lot['author'] == $user['id'];
     $lot_has_expired = lotTimeLeftCalc($lot['expiry_dt']) === ['00', '00'];
 
-    if (isset($bets)) {
+    if (!empty($bets)) {
         usort($bets, function ($a, $b) {
             return strtotime($b["created_at"]) - strtotime($a["created_at"]);
         });
 
-        $last_bet_by_current_user = $bets[0]['user_id'] == $user['id'];
+        $user_is_last_bet_author = $bets[0]['user_id'] == $user['id'];
     }
 
-    if ($user_is_lot_author || $last_bet_by_current_user || $lot_has_expired) {
+    if ($user_is_lot_author || $user_is_last_bet_author || $lot_has_expired) {
         return false;
     }
 
