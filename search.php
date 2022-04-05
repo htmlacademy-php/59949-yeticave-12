@@ -13,7 +13,7 @@ if (!is_array($categories_list) && !$categories_list) {
 
 $lots_list = [];
 
-$search_str = $_GET['search'] ?? '';
+$search_str = sanitize($_GET['search'] ?? '');
 
 if ($search_str) {
     $lots_list = getLotsBySearchStr($db_conn, $search_str);

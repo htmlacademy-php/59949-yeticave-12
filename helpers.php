@@ -430,3 +430,13 @@ function sendLettersToTheWinners(array $data)
         sendEmail($transport, $message);
     }
 }
+
+/**
+ * Принимает на вход строку, удаляет пробелы по краям и экранирует спец.символы
+ * @param string|null $input
+ * @return string
+ */
+function sanitize(?string $input):string
+{
+    return htmlspecialchars(trim($input));
+}
