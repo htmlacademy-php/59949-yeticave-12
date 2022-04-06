@@ -440,3 +440,17 @@ function sanitize(?string $input):string
 {
     return htmlspecialchars(trim($input));
 }
+
+/**
+ * Принимает на вход номер страницы и возвращает текущий адрес с измененным/добавленным параметром page
+ * @param int $page
+ * @return string
+ */
+function calcPageUrl(int $page):string
+{
+    parse_str($_SERVER['QUERY_STRING'], $query_string);
+    $query_string['page'] = $page;
+    $rdr_str = http_build_query($query_string);
+
+    return $_SERVER['PHP_SELF'] . '?' . $rdr_str;
+}
