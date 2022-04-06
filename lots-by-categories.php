@@ -13,10 +13,15 @@ if (!is_array($categories_list) && !$categories_list) {
 }
 
 $category_id = getByNameFromUrl('category');
+$category = null;
 
-$category = getCategoryById($db_conn, $category_id);
+foreach ($categories_list as $val) {
+    if ($category_id === $val['id']) {
+        $category = getCategoryById($db_conn, $category_id);
+    }
+}
 
-if (!$category_id || !$category) {
+if (!$category) {
     header("Location: 404.php");
     exit();
 }
