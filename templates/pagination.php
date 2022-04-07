@@ -1,4 +1,4 @@
-<?php if (count($pages) > 1): ?>
+<?php if (count($pages) > 1 && in_array($cur_page, $pages)): ?>
     <ul class="pagination-list">
         <li class="pagination-item pagination-item-prev">
             <?php if ($cur_page <= 1): ?>
