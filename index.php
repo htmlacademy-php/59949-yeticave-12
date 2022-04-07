@@ -5,11 +5,11 @@ require_once('queries/lots.php');
 require_once('queries/lots-count.php');
 require_once('get-winner.php');
 
-$lots_per_page = 6;
+$LOTS_PER_PAGE = 9;
 
 $lots_count = getLotsCount($db_conn);
 
-list($pages, $offset, $cur_page) = getPaginationParams($lots_count, $lots_per_page);
+list($pages, $offset, $cur_page) = getPaginationParams($lots_count, $LOTS_PER_PAGE);
 
 $categories_list = getCategories($db_conn);
 
@@ -19,7 +19,7 @@ if (!is_array($categories_list) && !$categories_list) {
     exit();
 }
 
-$lots_list = getLots($db_conn, $lots_per_page, $offset);
+$lots_list = getLots($db_conn, $LOTS_PER_PAGE, $offset);
 
 if (!is_array($lots_list) && !$lots_list) {
     $error = getDbError($db_conn);

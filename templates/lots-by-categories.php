@@ -11,6 +11,8 @@
                     <?= $lot_cards_list_templ; ?>
                 <?php endif; ?>
             </ul>
+
+            <?= $pagination_templ; ?>
         </section>
     </div>
 </main>
