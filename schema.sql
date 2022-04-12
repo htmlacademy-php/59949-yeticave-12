@@ -18,6 +18,18 @@ CREATE TABLE users (
     deleted_at   DATETIME
 );
 
+
+CREATE TABLE categories (
+    PRIMARY KEY (id),
+    id     INT                  AUTO_INCREMENT,
+    title  VARCHAR(255),
+    code   VARCHAR(255),
+
+    created_at   DATETIME       NOT NULL          DEFAULT NOW(),
+    updated_at   DATETIME,
+    deleted_at   DATETIME
+);
+
 CREATE TABLE lots (
     PRIMARY KEY (id),
     id              INT           AUTO_INCREMENT,
@@ -39,18 +51,6 @@ CREATE TABLE lots (
 CREATE INDEX lot_id ON lots(id, category_id);
 CREATE INDEX lot_title ON lots(title);
 CREATE FULLTEXT INDEX lot_ft_search ON lots(title, description);
-
-CREATE TABLE categories (
-    PRIMARY KEY (id),
-    id     INT                  AUTO_INCREMENT,
-    title  VARCHAR(255),
-    code   VARCHAR(255),
-
-    created_at   DATETIME       NOT NULL          DEFAULT NOW(),
-    updated_at   DATETIME,
-    deleted_at   DATETIME
-);
-
 
 CREATE TABLE bets (
     PRIMARY KEY (id),
