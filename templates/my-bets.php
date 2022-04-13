@@ -8,9 +8,9 @@
                 <h3>У вас пока нет ставок</h3>
             <?php else : ?>
                 <?php foreach ($user_bets as $item) : ?>
-                    <?php if (isset($item['winner']) && $item['winner'] == $item['user_id']) : ?>
+                    <?php if (isset($item['winner']) && $item['winner'] === $item['user_id']) : ?>
                         <tr class="rates__item rates__item--win">
-                    <?php elseif (isset($item['winner']) || lotTimeLeftCalc($item['expiry_dt']) == ['00', '00']) : ?>
+                    <?php elseif (isset($item['winner']) || lotTimeLeftCalc($item['expiry_dt']) === ['00', '00']) : ?>
                         <tr class="rates__item rates__item--end">
                     <?php else : ?>
                         <tr class="rates__item">
@@ -25,7 +25,7 @@
                                         <?= htmlspecialchars($item['lot_title']); ?>
                                     </a>
                                 </h3>
-                                <?php if (isset($item['winner']) && $item['winner'] == $item['user_id']) : ?>
+                                <?php if (isset($item['winner']) && $item['winner'] === $item['user_id']) : ?>
                                     <p><?= htmlspecialchars($item['contact']); ?></p>
                                 <?php endif; ?>
                             </div>
@@ -34,9 +34,9 @@
                             <?= htmlspecialchars($item['category']); ?>
                         </td>
                         <td class="rates__timer">
-                            <?php if (isset($item['winner']) && $item['winner'] == $item['user_id']) : ?>
+                            <?php if (isset($item['winner']) && $item['winner'] === $item['user_id']) : ?>
                                 <div class="timer timer--win">Ставка выиграла</div>
-                            <?php elseif (isset($item['winner']) || lotTimeLeftCalc($item['expiry_dt']) == ['00', '00']) : ?>
+                            <?php elseif (isset($item['winner']) || lotTimeLeftCalc($item['expiry_dt']) === ['00', '00']) : ?>
                                 <div class="timer timer--end">Торги окончены</div>
                             <?php else : ?>
                                 <?php [$hours, $minutes] = lotTimeLeftCalc($item['expiry_dt']) ?>

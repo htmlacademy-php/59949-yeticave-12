@@ -183,22 +183,22 @@ function calcTimeHavePassed(array $data, string $field_name): ?string
     $val_date = date_create($data[$field_name]);
 
     $dt_diff = date_diff($val_date, $dt_now);
-    $days_diff = date_interval_format($dt_diff, "%d");
-    $hours_diff = date_interval_format($dt_diff, "%h");
-    $mins_diff = date_interval_format($dt_diff, "%i");
+    $days_diff = intval(date_interval_format($dt_diff, "%d"));
+    $hours_diff = intval(date_interval_format($dt_diff, "%h"));
+    $mins_diff = intval(date_interval_format($dt_diff, "%i"));
 
     $yesterday = date("d.m.y", strtotime("yesterday"));
 
-    if ($days_diff == 0 && $hours_diff == 0 && $mins_diff == 0) {
+    if ($days_diff === 0 && $hours_diff === 0 && $mins_diff === 0) {
         return 'Только что';
-    } elseif ($days_diff == 0 && $hours_diff == 0 && $mins_diff > 0) {
+    } elseif ($days_diff === 0 && $hours_diff === 0 && $mins_diff > 0) {
         $noun = getNounPluralForm($mins_diff, 'минуту', 'минуты', 'минут');
         return "$mins_diff $noun назад";
-    } elseif ($days_diff == 0 && $hours_diff == 1 && $mins_diff == 0) {
+    } elseif ($days_diff === 0 && $hours_diff === 1 && $mins_diff === 0) {
         return 'Час назад';
-    } elseif ($data['date'] == $yesterday) {
+    } elseif ($data['date'] === $yesterday) {
         return 'Вчера в ' . $data['time'];
-    } elseif ($days_diff == 0 && $hours_diff > 0 && $mins_diff > 0) {
+    } elseif ($days_diff === 0 && $hours_diff > 0 && $mins_diff > 0) {
         return 'Сегодня в ' . $data['time'];
     } else {
         return $data['date'] . ' в ' . $data['time'];
