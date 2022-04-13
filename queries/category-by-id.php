@@ -9,5 +9,5 @@ function getCategoryById(mysqli $conn, string $category_id)
 {
     $sql = "SELECT id, title FROM categories c WHERE c.id = ?";
 
-    return fetchFromDbByParams($conn, $sql, [$category_id])[0];
+    return fetchFromDbByParams($conn, $sql, [$category_id])[0] ?? null;
 }

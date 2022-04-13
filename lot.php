@@ -30,7 +30,7 @@ if ($error) {
     exit();
 }
 
-if (empty($lot)) {
+if (empty($lot) || empty($lot['id'])) {
     header("Location: 404.php");
     exit();
 }
@@ -52,15 +52,15 @@ $errors = [];
 $_SESSION['lot-info'] = $lot;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $filteredData = filterDataByRules($_POST, $rules['lot-bet']);
+    $filteredData = filterDataByRules($_POST, $rules['lot-bet'] ?? []);
 
-    $errors = validateForm($filteredData, $rules['lot-bet']);
+    $errors = validateForm($filteredData, $rules['lot-bet'] ?? []);
 
     if (empty($errors)) {
         $data = [
-            'amount' => $filteredData['cost'],
-            'user_id' => $_SESSION['user'][0]['id'],
-            'lot_id' => $lot['id']
+            'amount' => $filteredData['cost'] ?? null,
+            'user_id' => $_SESSION['user'][0]['id'] ?? null,
+            'lot_id' => $lot['id'] ?? null
         ];
 
         $bet = createBet($db_conn, $data);

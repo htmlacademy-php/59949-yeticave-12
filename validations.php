@@ -75,7 +75,7 @@ function isFileTypeCorrect(array $file, string $type1, string $type2): bool
  */
 function isFileSizeCorrect(array $file, int $maxSize): bool
 {
-    if ($file['size'] > $maxSize) {
+    if (isset($file['size']) && $file['size'] > $maxSize) {
         return false;
     }
     return true;

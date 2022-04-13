@@ -171,10 +171,14 @@ function lotTimeLeftCalc(string $date): array
 /**
  * @param array $data
  * @param string $field_name
- * @return string
+ * @return null|string
  */
-function calcTimeHavePassed(array $data, string $field_name): string
+function calcTimeHavePassed(array $data, string $field_name): ?string
 {
+    if (empty($data[$field_name]) || empty($data['date']) || empty($data['time'])) {
+        return null;
+    }
+
     $dt_now = date_create("now");
     $val_date = date_create($data[$field_name]);
 
@@ -385,20 +389,24 @@ function getLotMinBetValue(): ?int
  */
 function betFormIsVisible($lot, $user, $bets)
 {
-    if (empty($user) || isset($lot['winner'])) {
+    if (empty($user) || empty($user['id']) || empty($lot['author']) || empty($lot['expiry_dt']) || isset($lot['winner'])) {
         return false;
     }
 
     $user_is_last_bet_author = false;
-    $user_is_lot_author = $lot['author'] == $user['id'];
+    $user_is_lot_author = $lot['author'] === intval($user['id']);
+
     $lot_has_expired = lotTimeLeftCalc($lot['expiry_dt']) === ['00', '00'];
 
     if (!empty($bets)) {
         usort($bets, function ($a, $b) {
+            if (empty($a['created_at']) || empty($b['created_at'])) {
+                return null;
+            }
             return strtotime($b["created_at"]) - strtotime($a["created_at"]);
         });
 
-        $user_is_last_bet_author = $bets[0]['user_id'] == $user['id'];
+        $user_is_last_bet_author = ($bets[0]['user_id'] ?? null) === intval($user['id']);
     }
 
     if ($user_is_lot_author || $user_is_last_bet_author || $lot_has_expired) {

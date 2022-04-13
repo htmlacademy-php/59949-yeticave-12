@@ -19,5 +19,5 @@ function getLotById(mysqli $conn, int $id)
     JOIN categories c ON l.category_id = c.id
     WHERE l.id = ?";
 
-    return fetchFromDbByParams($conn, $sql, [$id])[0];
+    return fetchFromDbByParams($conn, $sql, [$id])[0] ?? null;
 }

@@ -5,7 +5,7 @@ require_once('queries/user-bets.php');
 
 $user = getSessionUser();
 
-if (empty($user)) {
+if (empty($user) || empty($user['id'])) {
     header("Location: index.php");
 }
 
@@ -17,7 +17,7 @@ if (!is_array($categories_list) && !$categories_list) {
     exit();
 }
 
-$user_bets = getUserBets($db_conn, getSessionUser()['id']);
+$user_bets = getUserBets($db_conn, $user['id']);
 
 if (!is_array($user_bets) && !$user_bets) {
     $error = getDbError($db_conn);

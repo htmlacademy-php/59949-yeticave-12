@@ -22,12 +22,12 @@ if (!is_array($categories_list) && !$categories_list) {
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $filteredData = filterDataByRules($_POST, $rules['registration']);
+    $filteredData = filterDataByRules($_POST, $rules['registration'] ?? []);
 
-    $errors = validateForm($filteredData, $rules['registration']);
+    $errors = validateForm($filteredData, $rules['registration'] ?? []);
 
     if (empty($errors)) {
-        $user = getUserByEmail($db_conn, $filteredData['email']);
+        $user = getUserByEmail($db_conn, $filteredData['email'] ?? '');
 
         if (!is_array($user) && !$user) {
             $error = getDbError($db_conn);
