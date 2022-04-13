@@ -59,7 +59,7 @@ function isFileSelected(?array $file): bool
  */
 function isFileTypeCorrect(array $file, string $type1, string $type2): bool
 {
-    $fileType = mime_content_type($file['tmp_name']);
+    $fileType = mime_content_type($file['tmp_name'] ?? '');
 
     if ($fileType !== $type1 && $fileType !== $type2) {
         return false;
@@ -75,7 +75,7 @@ function isFileTypeCorrect(array $file, string $type1, string $type2): bool
  */
 function isFileSizeCorrect(array $file, int $maxSize): bool
 {
-    if ($file['size'] > $maxSize) {
+    if (isset($file['size']) && $file['size'] > $maxSize) {
         return false;
     }
     return true;
@@ -164,14 +164,18 @@ function validateForm(array $data, array $rules): array
     $errors = [];
 
     foreach ($rules as $rule) {
-        $key = $rule['field_name'];
-        $data_value = $data[$key];
+        $key = $rule['field_name'] ?? '';
+        $data_value = $data[$key] ?? '';
 
-        foreach ($rule['validations'] as $validation) {
+        foreach ($rule['validations'] ?? [] as $validation) {
+            if (empty($validation['method']) || !function_exists($validation['method'])) {
+                break;
+            }
+
             $is_valid = $validation['method']($data_value, $validation['param1'] ?? '', $validation['param2'] ?? '');
 
             if (!$is_valid) {
-                $errors[$key] = $validation['error_msg'];
+                $errors[$key] = $validation['error_msg'] ?? '';
                 break;
             }
         }

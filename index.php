@@ -9,7 +9,7 @@ $LOTS_PER_PAGE = 9;
 
 $lots_count = getLotsCount($db_conn);
 
-list($pages, $offset, $cur_page) = getPaginationParams($lots_count, $LOTS_PER_PAGE);
+list($pages, $offset, $cur_page) = getPaginationParams(intval($lots_count), $LOTS_PER_PAGE);
 
 $categories_list = getCategories($db_conn);
 

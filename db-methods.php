@@ -72,7 +72,14 @@ function fetchFromDbByParams(mysqli $conn, string $sql, array $params)
 {
     $stmt = dbGetPrepareStmt($conn, $sql, $params);
     mysqli_stmt_execute($stmt);
+
     $result = mysqli_stmt_get_result($stmt);
+    $error = mysqli_stmt_error($stmt);
+
+    if ($error) {
+        showError($error);
+        exit();
+    }
 
     if (!$result) {
         return false;
@@ -90,8 +97,14 @@ function fetchFromDbByParams(mysqli $conn, string $sql, array $params)
 function dbInsert(mysqli $conn, string $sql, array $data)
 {
     $stmt = dbGetPrepareStmt($conn, $sql, $data);
-    $result = mysqli_stmt_execute($stmt);
 
+    $result = mysqli_stmt_execute($stmt);
+    $error = mysqli_stmt_error($stmt);
+
+    if ($error) {
+        showError($error);
+        exit();
+    }
     if (!$result) {
         return false;
     }

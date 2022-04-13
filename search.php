@@ -24,7 +24,7 @@ $search_str = sanitize($_GET['search'] ?? '');
 
 if ($search_str) {
     $lots_count = getLotsCountBySearch($db_conn, $search_str);
-    list($pages, $offset, $cur_page) = getPaginationParams($lots_count, $LOTS_PER_PAGE);
+    list($pages, $offset, $cur_page) = getPaginationParams(intval($lots_count), $LOTS_PER_PAGE);
     $lots_list = getLotsBySearchStr($db_conn, $search_str, $LOTS_PER_PAGE, $offset);
 }
 

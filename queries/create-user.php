@@ -7,9 +7,13 @@
  */
 function createUser(mysqli $conn, array $data)
 {
-    $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+    if (isset($data['password'])) {
+        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+    } else {
+        $data['password'] = null;
+    }
 
-    $data['contact'] = $data['message'];
+    $data['contact'] = $data['message'] ?? null;
     unset($data['message']);
 
     $placeholders_list = array_fill(0, count($data), '?');

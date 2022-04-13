@@ -22,16 +22,16 @@ $errors = [];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $formData = array_merge($_POST, $_FILES);
-    $filteredData = filterDataByRules($formData, $rules['lot-create']);
+    $filteredData = filterDataByRules($formData, $rules['lot-create'] ?? []);
 
-    $errors = validateForm($filteredData, $rules['lot-create']);
+    $errors = validateForm($filteredData, $rules['lot-create'] ?? []);
 
     if (empty($errors)) {
-        $file_url = moveFileToLocalPath($formData['lot-img']);
+        $file_url = isset($formData['lot-img']) ? moveFileToLocalPath($formData['lot-img']) : null;
 
         if ($file_url) {
             $filteredData['file'] = $file_url;
-            $filteredData['user_id'] = getSessionUser()['id'];
+            $filteredData['user_id'] = getSessionUser()['id'] ?? null;
 
             $lot_id = createLot($db_conn, $filteredData);
 

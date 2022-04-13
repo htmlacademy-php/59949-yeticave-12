@@ -20,12 +20,12 @@ if (!is_array($categories_list) && !$categories_list) {
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $filteredData = filterDataByRules($_POST, $rules['login']);
+    $filteredData = filterDataByRules($_POST, $rules['login'] ?? []);
 
-    $errors = validateForm($filteredData, $rules['login']);
+    $errors = validateForm($filteredData, $rules['login'] ?? []);
 
     if (empty($errors)) {
-        $user = getUserByEmail($db_conn, $filteredData['email']);
+        $user = getUserByEmail($db_conn, $filteredData['email'] ?? '');
 
         if (!is_array($user) && !$user) {
             $error = getDbError($db_conn);
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (empty($user)) {
             $errors['email'] = 'Пользователь с такой почтой не найден';
-        } elseif (password_verify($filteredData['password'], $user[0]['password'])) {
+        } elseif (password_verify($filteredData['password'] ?? '', $user[0]['password'] ?? '')) {
             $_SESSION['user'] = $user;
             header("Location: index.php");
         } else {

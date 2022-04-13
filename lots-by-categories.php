@@ -31,7 +31,7 @@ if (!$category) {
 
 $lots_count = getLotsCountByCategory($db_conn, $category_id);
 
-list($pages, $offset, $cur_page) = getPaginationParams($lots_count, $LOTS_PER_PAGE);
+list($pages, $offset, $cur_page) = getPaginationParams(intval($lots_count), $LOTS_PER_PAGE);
 
 $lots_list = getLotsByCategory($db_conn, $category_id, $LOTS_PER_PAGE, $offset);
 

@@ -171,30 +171,34 @@ function lotTimeLeftCalc(string $date): array
 /**
  * @param array $data
  * @param string $field_name
- * @return string
+ * @return null|string
  */
-function calcTimeHavePassed(array $data, string $field_name): string
+function calcTimeHavePassed(array $data, string $field_name): ?string
 {
+    if (empty($data[$field_name]) || empty($data['date']) || empty($data['time'])) {
+        return null;
+    }
+
     $dt_now = date_create("now");
     $val_date = date_create($data[$field_name]);
 
     $dt_diff = date_diff($val_date, $dt_now);
-    $days_diff = date_interval_format($dt_diff, "%d");
-    $hours_diff = date_interval_format($dt_diff, "%h");
-    $mins_diff = date_interval_format($dt_diff, "%i");
+    $days_diff = intval(date_interval_format($dt_diff, "%d"));
+    $hours_diff = intval(date_interval_format($dt_diff, "%h"));
+    $mins_diff = intval(date_interval_format($dt_diff, "%i"));
 
     $yesterday = date("d.m.y", strtotime("yesterday"));
 
-    if ($days_diff == 0 && $hours_diff == 0 && $mins_diff == 0) {
+    if ($days_diff === 0 && $hours_diff === 0 && $mins_diff === 0) {
         return 'Только что';
-    } elseif ($days_diff == 0 && $hours_diff == 0 && $mins_diff > 0) {
+    } elseif ($days_diff === 0 && $hours_diff === 0 && $mins_diff > 0) {
         $noun = getNounPluralForm($mins_diff, 'минуту', 'минуты', 'минут');
         return "$mins_diff $noun назад";
-    } elseif ($days_diff == 0 && $hours_diff == 1 && $mins_diff == 0) {
+    } elseif ($days_diff === 0 && $hours_diff === 1 && $mins_diff === 0) {
         return 'Час назад';
-    } elseif ($data['date'] == $yesterday) {
+    } elseif ($data['date'] === $yesterday) {
         return 'Вчера в ' . $data['time'];
-    } elseif ($days_diff == 0 && $hours_diff > 0 && $mins_diff > 0) {
+    } elseif ($days_diff === 0 && $hours_diff > 0 && $mins_diff > 0) {
         return 'Сегодня в ' . $data['time'];
     } else {
         return $data['date'] . ' в ' . $data['time'];
@@ -211,11 +215,11 @@ function moveFileToLocalPath(array $file): ?string
     if (!isset($file) || $file['size'] === 0) {
         return null;
     }
-    $file_name = $file['name'];
+    $file_name = $file['name'] ?? '';
     $file_path = __DIR__ . '/uploads/';
     $file_url = '/uploads/' . $file_name;
 
-    $is_success = move_uploaded_file($file['tmp_name'], $file_path . $file_name);
+    $is_success = move_uploaded_file($file['tmp_name'] ?? '', $file_path . $file_name);
 
     return $is_success ? $file_url : null;
 }
@@ -319,7 +323,7 @@ function filterDataByRules(array $data, array $rules): array
     $filteredData = [];
 
     foreach ($rules as $rule) {
-        $key = $rule['field_name'];
+        $key = $rule['field_name'] ?? '';
 
         if (array_key_exists($key, $data)) {
             $filteredData[$key] = $data[$key];
@@ -331,11 +335,11 @@ function filterDataByRules(array $data, array $rules): array
 
 /**
  * Вычисляет количество страниц и смещение на основе общего количества элементов, элементов на страницу и текущей страницы
- * @param string $items_count общее количество элементов
+ * @param int $items_count общее количество элементов
  * @param int $items_per_page количество элементов на страницу
  * @return array параметры пагинации
  */
-function getPaginationParams(string $items_count, int $items_per_page): array
+function getPaginationParams(int $items_count, int $items_per_page): array
 {
     $current_page = $_GET['page'] ?? 1;
 
@@ -385,20 +389,24 @@ function getLotMinBetValue(): ?int
  */
 function betFormIsVisible($lot, $user, $bets)
 {
-    if (empty($user) || isset($lot['winner'])) {
+    if (empty($user) || empty($user['id']) || empty($lot['author']) || empty($lot['expiry_dt']) || isset($lot['winner'])) {
         return false;
     }
 
     $user_is_last_bet_author = false;
-    $user_is_lot_author = $lot['author'] == $user['id'];
+    $user_is_lot_author = $lot['author'] === intval($user['id']);
+
     $lot_has_expired = lotTimeLeftCalc($lot['expiry_dt']) === ['00', '00'];
 
     if (!empty($bets)) {
         usort($bets, function ($a, $b) {
+            if (empty($a['created_at']) || empty($b['created_at'])) {
+                return null;
+            }
             return strtotime($b["created_at"]) - strtotime($a["created_at"]);
         });
 
-        $user_is_last_bet_author = $bets[0]['user_id'] == $user['id'];
+        $user_is_last_bet_author = ($bets[0]['user_id'] ?? null) === intval($user['id']);
     }
 
     if ($user_is_lot_author || $user_is_last_bet_author || $lot_has_expired) {
