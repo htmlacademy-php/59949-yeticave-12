@@ -20,6 +20,12 @@ if ($result1 && $result2 && $result3 && isset($result3['@var'])) {
 
     $winnersInfo = getWinnersInfoByIds($db_conn, $result3['@var']);
 
+    if (!$winnersInfo && !is_array($winnersInfo)) {
+        $error = getDbError($db_conn);
+        showError($error);
+        exit();
+    }
+
     sendLettersToTheWinners($winnersInfo);
 }
 else {
