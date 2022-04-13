@@ -211,11 +211,11 @@ function moveFileToLocalPath(array $file): ?string
     if (!isset($file) || $file['size'] === 0) {
         return null;
     }
-    $file_name = $file['name'];
+    $file_name = $file['name'] ?? '';
     $file_path = __DIR__ . '/uploads/';
     $file_url = '/uploads/' . $file_name;
 
-    $is_success = move_uploaded_file($file['tmp_name'], $file_path . $file_name);
+    $is_success = move_uploaded_file($file['tmp_name'] ?? '', $file_path . $file_name);
 
     return $is_success ? $file_url : null;
 }
@@ -319,7 +319,7 @@ function filterDataByRules(array $data, array $rules): array
     $filteredData = [];
 
     foreach ($rules as $rule) {
-        $key = $rule['field_name'];
+        $key = $rule['field_name'] ?? '';
 
         if (array_key_exists($key, $data)) {
             $filteredData[$key] = $data[$key];
